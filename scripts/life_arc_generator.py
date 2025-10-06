@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """
 Life Arc Generator
-Unified timeline combining annual profections and zodiacal releasing.
+Unified timeline combining all timing techniques.
 
 Creates comprehensive life arc report showing:
 - Annual profections (yearly house activation)
 - Zodiacal releasing from Fortune (body/livelihood)
 - Zodiacal releasing from Spirit (mind/career)
+- Secondary progressions (inner development)
+- Solar returns (annual forecast)
+- Current transits (real-time triggers)
 - Major transitions and peak periods
 - Integrated narrative view
 
@@ -14,6 +17,7 @@ Usage:
     python life_arc_generator.py --profile darren --start-age 0 --end-age 40
     python life_arc_generator.py --profile darren --current-age 35
     python life_arc_generator.py --profile darren --age-range 30-50 --format summary
+    python life_arc_generator.py --profile darren --current-age 36 --include-progressions --include-sr
 """
 
 import argparse
@@ -26,6 +30,9 @@ sys.path.insert(0, str(Path(__file__).parent))
 from profile_loader import load_profile, list_profiles
 from profections_calculator import calculate_profection_with_natal
 from zodiacal_releasing import calculate_zr_from_lot, find_current_period
+from secondary_progressions import calculate_progressed_positions, find_progressed_aspects_to_natal
+from solar_returns import calculate_solar_return_chart, find_sr_to_natal_aspects
+from transits import calculate_transiting_positions, find_transit_aspects_to_natal, find_transits_in_natal_houses
 
 
 def generate_life_arc_timeline(
@@ -33,7 +40,10 @@ def generate_life_arc_timeline(
     start_age: int = 0,
     end_age: int = 100,
     include_fortune: bool = True,
-    include_spirit: bool = True
+    include_spirit: bool = True,
+    include_progressions: bool = False,
+    include_solar_returns: bool = False,
+    current_date: Optional[str] = None
 ) -> Dict[str, Any]:
     """
     Generate complete life arc timeline combining all techniques.
@@ -44,6 +54,9 @@ def generate_life_arc_timeline(
         end_age: Ending age
         include_fortune: Include ZR from Fortune
         include_spirit: Include ZR from Spirit
+        include_progressions: Include secondary progressions
+        include_solar_returns: Include solar return charts
+        current_date: Date for current transits (YYYY-MM-DD or None)
 
     Returns:
         Dictionary with unified timeline data
@@ -68,6 +81,45 @@ def generate_life_arc_timeline(
     if include_spirit:
         zr_spirit = calculate_zr_from_lot(profile_name, 'spirit', max_age=end_age + 10)
 
+    # Calculate progressions (if requested)
+    progressions = None
+    if include_progressions:
+        progressions = {}
+        for age in range(start_age, end_age + 1):
+            prog = calculate_progressed_positions(profile_name, float(age))
+            prog_aspects = find_progressed_aspects_to_natal(profile_name, float(age), orb=3.0)
+            progressions[age] = {
+                'positions': prog,
+                'aspects': prog_aspects
+            }
+
+    # Calculate solar returns (if requested)
+    solar_returns = None
+    if include_solar_returns:
+        solar_returns = {}
+        for age in range(start_age, end_age + 1):
+            try:
+                sr = calculate_solar_return_chart(profile_name, age=age)
+                sr_aspects = find_sr_to_natal_aspects(sr, profile_name, orb=3.0)
+                solar_returns[age] = {
+                    'chart': sr,
+                    'aspects': sr_aspects
+                }
+            except Exception as e:
+                # Skip if SR calculation fails (e.g., age beyond valid range)
+                pass
+
+    # Calculate current transits (if date provided)
+    transits = None
+    if current_date:
+        transits_data = calculate_transiting_positions(current_date, include_modern=True)
+        transits_data = find_transits_in_natal_houses(transits_data, profile_name)
+        transit_aspects = find_transit_aspects_to_natal(transits_data, profile_name, orb=3.0)
+        transits = {
+            'positions': transits_data,
+            'aspects': transit_aspects
+        }
+
     return {
         'profile': profile_name,
         'birth_data': birth_data,
@@ -75,6 +127,9 @@ def generate_life_arc_timeline(
         'profections': profections,
         'zr_fortune': zr_fortune,
         'zr_spirit': zr_spirit,
+        'progressions': progressions,
+        'solar_returns': solar_returns,
+        'transits': transits,
     }
 
 
@@ -87,6 +142,8 @@ def get_year_snapshot(timeline: Dict[str, Any], age: int) -> Dict[str, Any]:
         'fortune_l2': None,
         'spirit_l1': None,
         'spirit_l2': None,
+        'progressions': None,
+        'solar_return': None,
     }
 
     # Find profection
@@ -112,6 +169,14 @@ def get_year_snapshot(timeline: Dict[str, Any], age: int) -> Dict[str, Any]:
         snapshot['spirit_l2'] = find_current_period(
             timeline['zr_spirit']['l2_periods'], float(age)
         )
+
+    # Find progressions
+    if timeline['progressions'] and age in timeline['progressions']:
+        snapshot['progressions'] = timeline['progressions'][age]
+
+    # Find solar return
+    if timeline['solar_returns'] and age in timeline['solar_returns']:
+        snapshot['solar_return'] = timeline['solar_returns'][age]
 
     return snapshot
 
@@ -152,6 +217,37 @@ def format_year_summary(snapshot: Dict[str, Any]) -> str:
         peak = " *** PEAK ***" if snapshot['spirit_l2'].get('is_peak') else ""
         output.append(f"   L2: {snapshot['spirit_l2']['sign']} "
                      f"(Ages {snapshot['spirit_l2']['start_age']:.1f}-{snapshot['spirit_l2']['end_age']:.1f}){peak}")
+
+    # Secondary Progressions
+    if snapshot['progressions']:
+        prog = snapshot['progressions']
+        output.append(f"\n🌙 SECONDARY PROGRESSIONS:")
+        # Show key progressed planets (Sun and Moon)
+        prog_sun = next((p for p in prog['positions']['progressed_planets'] if p['name'] == 'Sun'), None)
+        prog_moon = next((p for p in prog['positions']['progressed_planets'] if p['name'] == 'Moon'), None)
+        if prog_sun:
+            output.append(f"   Progressed Sun: {prog_sun['sign']} {prog_sun['degree']:.1f}°")
+        if prog_moon:
+            output.append(f"   Progressed Moon: {prog_moon['sign']} {prog_moon['degree']:.1f}°")
+        # Show major progressed aspects (tight orbs only)
+        tight_aspects = [a for a in prog['aspects'] if a['orb'] < 1.0]
+        if tight_aspects:
+            output.append(f"   Major Aspects:")
+            for asp in tight_aspects[:3]:  # Show top 3
+                output.append(f"      Prog {asp['progressed_planet']} {asp['aspect_type']} Natal {asp['natal_planet']} (orb {asp['orb']:.2f}°)")
+
+    # Solar Return
+    if snapshot['solar_return']:
+        sr = snapshot['solar_return']
+        output.append(f"\n☀️ SOLAR RETURN:")
+        output.append(f"   SR Ascendant: {sr['chart']['ascendant']['sign']} {sr['chart']['ascendant']['degree']:.1f}°")
+        output.append(f"   SR MC: {sr['chart']['midheaven']['sign']} {sr['chart']['midheaven']['degree']:.1f}°")
+        # Show major SR-to-natal aspects (tight orbs only)
+        tight_aspects = [a for a in sr['aspects'] if a['orb'] < 1.0]
+        if tight_aspects:
+            output.append(f"   Major Aspects:")
+            for asp in tight_aspects[:3]:  # Show top 3
+                output.append(f"      SR {asp['sr_planet']} {asp['aspect_type']} Natal {asp['natal_planet']} (orb {asp['orb']:.2f}°)")
 
     return "\n".join(output)
 
@@ -286,7 +382,7 @@ def format_transitions(timeline: Dict[str, Any]) -> str:
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Generate life arc timeline')
+    parser = argparse.ArgumentParser(description='Generate complete life arc timeline with all timing techniques')
     parser.add_argument('--profile', required=True, help='Profile name')
     parser.add_argument('--current-age', type=int, help='Show current snapshot at this age')
     parser.add_argument('--start-age', type=int, default=0, help='Start age (default 0)')
@@ -298,6 +394,9 @@ def main():
                        help='Year interval for detailed output (default 1)')
     parser.add_argument('--no-fortune', action='store_true', help='Exclude Fortune ZR')
     parser.add_argument('--no-spirit', action='store_true', help='Exclude Spirit ZR')
+    parser.add_argument('--include-progressions', action='store_true', help='Include secondary progressions')
+    parser.add_argument('--include-sr', action='store_true', help='Include solar returns')
+    parser.add_argument('--current-date', help='Date for current transits (YYYY-MM-DD or "today")')
     parser.add_argument('--list-profiles', action='store_true', help='List available profiles')
 
     args = parser.parse_args()
@@ -322,6 +421,11 @@ def main():
         else:
             args.end_age = 40
 
+    # Handle "today" for current_date
+    if args.current_date == 'today':
+        from datetime import datetime
+        args.current_date = datetime.now().strftime('%Y-%m-%d')
+
     try:
         # Generate timeline
         timeline = generate_life_arc_timeline(
@@ -329,7 +433,10 @@ def main():
             args.start_age,
             args.end_age,
             include_fortune=not args.no_fortune,
-            include_spirit=not args.no_spirit
+            include_spirit=not args.no_spirit,
+            include_progressions=args.include_progressions,
+            include_solar_returns=args.include_sr,
+            current_date=args.current_date
         )
 
         # Format output based on format choice
@@ -345,6 +452,27 @@ def main():
             else:
                 # Show full timeline
                 print(format_detailed_timeline(timeline, args.interval))
+
+        # Show current transits if provided
+        if timeline['transits']:
+            print(f"\n{'='*80}")
+            print(f"CURRENT TRANSITS - {timeline['transits']['positions']['date']}")
+            print(f"{'='*80}\n")
+            tight_aspects = [a for a in timeline['transits']['aspects'] if a['orb'] < 1.0]
+            if tight_aspects:
+                print("🌟 EXACT TRANSITS (< 1° orb):")
+                for asp in tight_aspects:
+                    exact_marker = " *** EXACT ***" if asp['exact'] else ""
+                    print(f"   {asp['transiting_planet']} {asp['aspect_type']} "
+                          f"Natal {asp['natal_planet']} (orb {asp['orb']:.2f}°){exact_marker}")
+
+            # Show wider orb aspects
+            wider_aspects = [a for a in timeline['transits']['aspects'] if 1.0 <= a['orb'] < 3.0]
+            if wider_aspects:
+                print(f"\n🌙 APPLYING TRANSITS (1-3° orb):")
+                for asp in wider_aspects[:5]:  # Top 5
+                    print(f"   {asp['transiting_planet']} {asp['aspect_type']} "
+                          f"Natal {asp['natal_planet']} (orb {asp['orb']:.2f}°)")
 
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)

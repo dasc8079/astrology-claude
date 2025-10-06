@@ -217,6 +217,9 @@ All sources cataloged in RAG database with full attribution and page citations.
 - `/profiles/mom/output/natal_horoscope_synthesis.pdf` (synthesis only)
 - `/profiles/sister/output/natal_horoscope_synthesis.pdf` (synthesis only)
 
+**Life Arc Interpretation Outputs**:
+- `/output/life_arc_interpretation_darren_ages_0-46.md` (comprehensive 5-technique synthesis)
+
 **Profile Settings**:
 - Adjustable depth (minimal, standard, deep, comprehensive)
 - Toggleable house rulers analysis

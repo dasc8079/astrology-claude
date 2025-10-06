@@ -213,24 +213,28 @@ def calculate_houses(jd, lat, lon):
     }
 
 
-def determine_sect(planet_data, asc_data):
-    """Determine if chart is day or night sect."""
+def determine_sect(planet_data, asc_data, jd, latitude, longitude):
+    """
+    Determine if chart is day or night sect.
+
+    Uses Sun's altitude: above horizon = day, below horizon = night.
+    """
     sun = next(p for p in planet_data if p['name'] == 'Sun')
-    sun_longitude = sun['longitude']
-    asc_longitude = asc_data['longitude']
 
-    # Calculate if Sun is above horizon
-    # Sun above horizon = day chart, below = night chart
-    desc_longitude = (asc_longitude + 180) % 360
+    # Calculate Sun's altitude (angle above/below horizon)
+    # azalt returns (azimuth, true_altitude, apparent_altitude)
+    geopos = (longitude, latitude, 0)  # longitude, latitude, altitude in meters
+    azalt_result = swe.azalt(jd, swe.ECL2HOR, geopos, 0, 0, [sun['longitude'], 0, 1.0])
 
-    if asc_longitude < desc_longitude:
-        is_day = asc_longitude < sun_longitude < desc_longitude
-    else:
-        is_day = not (desc_longitude < sun_longitude < asc_longitude)
+    # true_altitude is index 1
+    # Positive = above horizon (day), Negative = below horizon (night)
+    sun_altitude = azalt_result[1]
+
+    is_day = sun_altitude > 0
 
     return {
         'type': 'day' if is_day else 'night',
-        'determined_by': f"Sun {'above' if is_day else 'below'} horizon"
+        'determined_by': f"Sun {'above' if is_day else 'below'} horizon (altitude: {sun_altitude:.2f}°)"
     }
 
 
@@ -369,12 +373,22 @@ def calculate_aspects(planet_data):
 
 
 def calculate_lots(jd, asc_longitude, planet_data, sect_type):
-    """Calculate Hermetic lots (Fortune and Spirit)."""
+    """Calculate Hermetic lots (Fortune, Spirit, and 5 additional lots)."""
     sun = next(p for p in planet_data if p['name'] == 'Sun')
     moon = next(p for p in planet_data if p['name'] == 'Moon')
+    mercury = next(p for p in planet_data if p['name'] == 'Mercury')
+    venus = next(p for p in planet_data if p['name'] == 'Venus')
+    mars = next(p for p in planet_data if p['name'] == 'Mars')
+    jupiter = next(p for p in planet_data if p['name'] == 'Jupiter')
+    saturn = next(p for p in planet_data if p['name'] == 'Saturn')
 
     sun_lon = sun['longitude']
     moon_lon = moon['longitude']
+    mercury_lon = mercury['longitude']
+    venus_lon = venus['longitude']
+    mars_lon = mars['longitude']
+    jupiter_lon = jupiter['longitude']
+    saturn_lon = saturn['longitude']
 
     # Lot of Fortune
     # Day: ASC + Moon - Sun
@@ -395,6 +409,56 @@ def calculate_lots(jd, asc_longitude, planet_data, sect_type):
         spirit_lon = (asc_longitude + moon_lon - sun_lon) % 360
 
     spirit_sign, spirit_degree = get_sign_and_degree(spirit_lon)
+
+    # Lot of Eros (desires, love, passionate attachment)
+    # Day: ASC + Venus - Spirit
+    # Night: ASC + Spirit - Venus
+    if sect_type == 'day':
+        eros_lon = (asc_longitude + venus_lon - spirit_lon) % 360
+    else:
+        eros_lon = (asc_longitude + spirit_lon - venus_lon) % 360
+
+    eros_sign, eros_degree = get_sign_and_degree(eros_lon)
+
+    # Lot of Necessity (fate, constraint, compulsion)
+    # Day: ASC + Fortune - Mercury
+    # Night: ASC + Mercury - Fortune
+    if sect_type == 'day':
+        necessity_lon = (asc_longitude + fortune_lon - mercury_lon) % 360
+    else:
+        necessity_lon = (asc_longitude + mercury_lon - fortune_lon) % 360
+
+    necessity_sign, necessity_degree = get_sign_and_degree(necessity_lon)
+
+    # Lot of Courage (Mars activity, bravery, assertion)
+    # Day: ASC + Fortune - Mars
+    # Night: ASC + Mars - Fortune
+    if sect_type == 'day':
+        courage_lon = (asc_longitude + fortune_lon - mars_lon) % 360
+    else:
+        courage_lon = (asc_longitude + mars_lon - fortune_lon) % 360
+
+    courage_sign, courage_degree = get_sign_and_degree(courage_lon)
+
+    # Lot of Victory (Jupiter success, expansion, recognition)
+    # Day: ASC + Spirit - Jupiter
+    # Night: ASC + Jupiter - Spirit
+    if sect_type == 'day':
+        victory_lon = (asc_longitude + spirit_lon - jupiter_lon) % 360
+    else:
+        victory_lon = (asc_longitude + jupiter_lon - spirit_lon) % 360
+
+    victory_sign, victory_degree = get_sign_and_degree(victory_lon)
+
+    # Lot of Basis/Foundation (Saturn structure, foundation, stability)
+    # Day: ASC + Fortune - Saturn
+    # Night: ASC + Saturn - Fortune
+    if sect_type == 'day':
+        basis_lon = (asc_longitude + fortune_lon - saturn_lon) % 360
+    else:
+        basis_lon = (asc_longitude + saturn_lon - fortune_lon) % 360
+
+    basis_sign, basis_degree = get_sign_and_degree(basis_lon)
 
     return [
         {
@@ -423,6 +487,76 @@ def calculate_lots(jd, asc_longitude, planet_data, sect_type):
                 'formula': 'ASC + Sun - Moon (day) / ASC + Moon - Sun (night)',
                 'day_formula': 'ASC + Sun - Moon',
                 'night_formula': 'ASC + Moon - Sun',
+            }
+        },
+        {
+            'name': 'Lot of Eros',
+            'symbol': '♡',
+            'position': {
+                'sign': eros_sign,
+                'degree': round(eros_degree, 4),
+                'dms': decimal_to_dms(eros_degree),
+            },
+            'calculation': {
+                'formula': 'ASC + Venus - Spirit (day) / ASC + Spirit - Venus (night)',
+                'day_formula': 'ASC + Venus - Spirit',
+                'night_formula': 'ASC + Spirit - Venus',
+            }
+        },
+        {
+            'name': 'Lot of Necessity',
+            'symbol': '⚙',
+            'position': {
+                'sign': necessity_sign,
+                'degree': round(necessity_degree, 4),
+                'dms': decimal_to_dms(necessity_degree),
+            },
+            'calculation': {
+                'formula': 'ASC + Fortune - Mercury (day) / ASC + Mercury - Fortune (night)',
+                'day_formula': 'ASC + Fortune - Mercury',
+                'night_formula': 'ASC + Mercury - Fortune',
+            }
+        },
+        {
+            'name': 'Lot of Courage',
+            'symbol': '⚔',
+            'position': {
+                'sign': courage_sign,
+                'degree': round(courage_degree, 4),
+                'dms': decimal_to_dms(courage_degree),
+            },
+            'calculation': {
+                'formula': 'ASC + Fortune - Mars (day) / ASC + Mars - Fortune (night)',
+                'day_formula': 'ASC + Fortune - Mars',
+                'night_formula': 'ASC + Mars - Fortune',
+            }
+        },
+        {
+            'name': 'Lot of Victory',
+            'symbol': '🏆',
+            'position': {
+                'sign': victory_sign,
+                'degree': round(victory_degree, 4),
+                'dms': decimal_to_dms(victory_degree),
+            },
+            'calculation': {
+                'formula': 'ASC + Spirit - Jupiter (day) / ASC + Jupiter - Spirit (night)',
+                'day_formula': 'ASC + Spirit - Jupiter',
+                'night_formula': 'ASC + Jupiter - Spirit',
+            }
+        },
+        {
+            'name': 'Lot of Basis',
+            'symbol': '⚓',
+            'position': {
+                'sign': basis_sign,
+                'degree': round(basis_degree, 4),
+                'dms': decimal_to_dms(basis_degree),
+            },
+            'calculation': {
+                'formula': 'ASC + Fortune - Saturn (day) / ASC + Saturn - Fortune (night)',
+                'day_formula': 'ASC + Fortune - Saturn',
+                'night_formula': 'ASC + Saturn - Fortune',
             }
         }
     ]
@@ -477,7 +611,7 @@ def generate_seed_data(args):
     # Calculate chart components
     planet_data = calculate_planets(jd)
     house_info = calculate_houses(jd, args.lat, args.lon)
-    sect = determine_sect(planet_data, house_info['ascendant'])
+    sect = determine_sect(planet_data, house_info['ascendant'], jd, args.lat, args.lon)
 
     # Assign planets to houses
     planet_data = assign_planets_to_houses(planet_data, house_info['houses'])
