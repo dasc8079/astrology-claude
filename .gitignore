@@ -47,3 +47,6 @@ env/
 # Temporary files
 *.tmp
 .cache/
+
+# Profile data (contains personal birth information)
+profiles/

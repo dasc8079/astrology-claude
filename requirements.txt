@@ -1,0 +1,10 @@
+# Astrology Horoscope Generation System - Python Dependencies
+
+# Astronomical calculations
+pyswisseph==2.10.3.2
+
+# Data formats
+PyYAML==6.0.3
+
+# Timezone handling
+pytz==2025.2

@@ -1,0 +1,217 @@
+# Seed Data Schema
+# Complete structure for natal chart seed data (YAML format)
+# Used by seed_data_generator.py to produce master_seed_data.yaml
+
+metadata:
+  profile_name: "string"        # Profile identifier
+  generated_at: "ISO8601"        # Timestamp of generation
+  schema_version: "1.0"          # Schema version for compatibility
+
+birth_data:
+  date: "YYYY-MM-DD"             # Birth date
+  time: "HH:MM:SS"               # Birth time (24-hour)
+  location: "string"             # City, State/Country
+  latitude: float                # Decimal degrees
+  longitude: float               # Decimal degrees
+  timezone: "string"             # Timezone abbreviation (e.g., "EST")
+  utc_offset: float              # Hours from UTC
+
+chart_framework:
+  house_system: "whole_sign"     # Fixed: whole-sign houses (Hellenistic)
+  ayanamsa: "tropical"           # Fixed: tropical zodiac
+  sect:
+    type: "day" | "night"        # Day chart or night chart
+    determined_by: "string"      # Explanation (e.g., "Sun above horizon")
+
+  ascendant:
+    sign: "string"               # Rising sign (1st house)
+    degree: float                # Exact degree within sign
+    dms: "string"                # Degree-minute-second format
+
+  midheaven:
+    sign: "string"               # MC sign
+    degree: float                # Exact degree within sign
+    dms: "string"                # Degree-minute-second format
+
+planets:
+  # Traditional 7 planets (Sun through Saturn)
+  # Modern planets (Uranus, Neptune, Pluto) - optional overlay
+
+  - name: "string"               # Planet name (e.g., "Sun", "Moon")
+    symbol: "string"             # Unicode symbol (e.g., "☉", "☽")
+    traditional: boolean         # true for traditional 7, false for modern
+
+    position:
+      sign: "string"             # Zodiac sign
+      degree: float              # Exact degree within sign
+      dms: "string"              # Degree-minute-second
+      retrograde: boolean        # Retrograde status
+
+    house: int                   # House number (1-12)
+
+    dignities:
+      essential:
+        domicile: boolean        # In own sign
+        exaltation: boolean      # In exaltation
+        detriment: boolean       # In detriment
+        fall: boolean            # In fall
+        triplicity: "day" | "night" | "participating" | null
+        term: "string" | null    # Egyptian term ruler
+        face: "string" | null    # Face/decan ruler
+
+      accidental:
+        angular: boolean         # In angular house (1, 4, 7, 10)
+        succedent: boolean       # In succedent house (2, 5, 8, 11)
+        cadent: boolean          # In cadent house (3, 6, 9, 12)
+        rejoicing: boolean       # In house of rejoicing
+
+    condition:
+      sect_status: "sect_light" | "contrary_light" | "benefic" | "malefic" | "neutral"
+      bonified: boolean          # Configured with benefic
+      maltreated: boolean        # Configured with malefic
+      speed: "fast" | "average" | "slow" | "stationary"
+      combust: boolean           # Within 8° of Sun
+      cazimi: boolean            # Within 17' of Sun (heart of Sun)
+      under_beams: boolean       # Within 15° of Sun
+
+houses:
+  # Whole-sign house system: each house = complete 30° sign
+
+  - number: int                  # House number (1-12)
+    sign: "string"               # Zodiac sign (entire house)
+    cusp_degree: float           # Beginning of sign (0° of sign)
+
+    ruler:
+      planet: "string"           # House ruler planet
+      position:
+        sign: "string"           # Where ruler is located
+        house: int               # Which house ruler is in
+        dignities: "string"      # Essential dignity summary
+
+    planets_in_house: []         # List of planets in this house
+      # - name: "string"
+      # - degree: float
+
+aspects:
+  # Traditional Ptolemaic aspects + modern
+
+  - aspect_type: "conjunction" | "sextile" | "square" | "trine" | "opposition"
+    orb: float                   # Exact orb in degrees
+    planet_1: "string"           # First planet
+    planet_2: "string"           # Second planet
+    applying: boolean            # Approaching or separating
+    traditional: boolean         # true for traditional aspects, false for modern
+
+    interpretation_notes:
+      nature: "harmonious" | "challenging" | "neutral"
+      strength: "strong" | "moderate" | "weak"
+
+lots:
+  # Hermetic lots (traditional)
+
+  - name: "string"               # Lot name (e.g., "Lot of Fortune")
+    symbol: "string"             # Symbol if applicable
+
+    position:
+      sign: "string"             # Zodiac sign
+      degree: float              # Exact degree
+      dms: "string"              # Degree-minute-second
+
+    house: int                   # House number
+
+    calculation:
+      formula: "string"          # e.g., "ASC + Moon - Sun (day)"
+      day_formula: "string"      # Day chart formula
+      night_formula: "string"    # Night chart formula
+
+receptions:
+  # Mutual receptions (planets in each other's signs)
+
+  - planet_1: "string"
+    planet_2: "string"
+    type: "mutual_domicile" | "mutual_exaltation" | "mixed"
+    description: "string"        # Natural language summary
+
+lunar_nodes:
+  north_node:
+    sign: "string"
+    degree: float
+    dms: "string"
+    house: int
+
+  south_node:
+    sign: "string"
+    degree: float
+    dms: "string"
+    house: int
+
+angles:
+  # Chart angles as aspectable points
+
+  ascendant:
+    sign: "string"
+    degree: float
+    dms: "string"
+    aspects: []                  # Aspects to ASC
+
+  midheaven:
+    sign: "string"
+    degree: float
+    dms: "string"
+    aspects: []                  # Aspects to MC
+
+  descendant:
+    sign: "string"
+    degree: float
+    dms: "string"
+    aspects: []                  # Aspects to DSC
+
+  imum_coeli:
+    sign: "string"
+    degree: float
+    dms: "string"
+    aspects: []                  # Aspects to IC
+
+# MODERN OVERLAYS (toggleable - marked clearly)
+
+modern_points:
+  # Only included if enabled in profile settings
+
+  chiron:
+    enabled: boolean
+    position:
+      sign: "string"
+      degree: float
+      dms: "string"
+      house: int
+    interpretation_context: "wounded_healer"  # Fixed context label
+
+  lilith:
+    enabled: boolean
+    position:
+      sign: "string"
+      degree: float
+      dms: "string"
+      house: int
+    interpretation_context: "primal_power"    # Fixed context label
+
+# EXTENDED ANALYSIS (optional)
+
+elemental_balance:
+  fire: int                      # Count of planets in fire signs
+  earth: int                     # Count of planets in earth signs
+  air: int                       # Count of planets in air signs
+  water: int                     # Count of planets in water signs
+
+modality_balance:
+  cardinal: int                  # Count of planets in cardinal signs
+  fixed: int                     # Count of planets in fixed signs
+  mutable: int                   # Count of planets in mutable signs
+
+interpretation_flags:
+  # Flags for interpretation layer to use
+
+  emphasize_house_rulers: boolean     # Include house ruler analysis
+  include_lots: "basic" | "extended" | "full" | false
+  psychological_depth: "none" | "basic" | "deep"
+  modern_overlay: boolean             # Include modern points
