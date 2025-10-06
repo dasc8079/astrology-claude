@@ -283,6 +283,54 @@ def assign_planets_to_houses(planet_data, house_data):
     return planet_data
 
 
+def calculate_house_rulers(house_data, planet_data):
+    """Calculate ruler for each house and track its position."""
+    for house in house_data:
+        house_sign = house['sign']
+        ruler_name = DOMICILE.get(house_sign)
+
+        if ruler_name:
+            # Find the ruling planet's position
+            ruler_planet = next((p for p in planet_data if p['name'] == ruler_name), None)
+
+            if ruler_planet:
+                # Get essential dignity summary for the ruler
+                dignities = ruler_planet.get('dignities', {}).get('essential', {})
+                dignity_summary = []
+
+                if dignities.get('domicile'):
+                    dignity_summary.append('domicile')
+                if dignities.get('exaltation'):
+                    dignity_summary.append('exaltation')
+                if dignities.get('detriment'):
+                    dignity_summary.append('detriment')
+                if dignities.get('fall'):
+                    dignity_summary.append('fall')
+                if dignities.get('triplicity'):
+                    dignity_summary.append(f"triplicity ({dignities['triplicity']})")
+
+                dignity_str = ', '.join(dignity_summary) if dignity_summary else 'peregrine'
+
+                house['ruler'] = {
+                    'planet': ruler_name,
+                    'position': {
+                        'sign': ruler_planet['sign'],
+                        'house': ruler_planet['house'],
+                        'dignities': dignity_str,
+                    }
+                }
+
+                # List planets in this house
+                planets_in_house = [
+                    {'name': p['name'], 'degree': round(p['degree'], 2)}
+                    for p in planet_data
+                    if p['house'] == house['number'] and p['traditional']  # Only traditional planets
+                ]
+                house['planets_in_house'] = planets_in_house
+
+    return house_data
+
+
 def calculate_aspects(planet_data):
     """Calculate aspects between planets."""
     aspects = []
@@ -446,6 +494,9 @@ def generate_seed_data(args):
             planet['dignities']['accidental']['succedent'] = True
         else:
             planet['dignities']['accidental']['cadent'] = True
+
+    # Calculate house rulers (must be after dignities are assigned)
+    house_info['houses'] = calculate_house_rulers(house_info['houses'], planet_data)
 
     # Calculate aspects
     aspects = calculate_aspects(planet_data)
