@@ -25,12 +25,21 @@
 - ✅ Created comprehensive PROFILES_GUIDE.md documentation
 - ✅ Tested all functionality successfully
 
-**Current Task**: Stage 3 - Life Arc Calculations (Beginning)
-- Research profections calculation method (annual technique)
-- Implement annual profections (age-based house activation)
-- Research zodiacal releasing from Fortune/Spirit
-- Begin life arc timeline structure
-- Test with real birth data
+**Stage 3 Progress** (PARTIAL COMPLETE):
+- ✅ Annual Profections - COMPLETE
+  - Implemented profections_calculator.py (standalone + Python API)
+  - Calculate profection for any age, profection ranges
+  - Shows profected house, sign, Lord of Year
+  - Shows Lord's natal position and dignities
+  - Shows planets in profected house
+  - Created comprehensive PROFECTIONS_GUIDE.md
+  - Tested successfully (ages 0-3, age 35)
+
+**Current Task**: Stage 3 - Zodiacal Releasing (Next)
+- Research zodiacal releasing from Stage 0 notes
+- Implement ZR calculator (Fortune/Spirit, L1/L2/L3 periods)
+- Build life arc timeline combining profections + ZR
+- Test full system with real birth data
 
 ---
 
@@ -65,21 +74,22 @@ See `/history/` for detailed archives:
 - ✅ `requirements.txt` - Updated with pyswisseph, PyYAML, pytz
 - ✅ `.gitignore` - Excludes profiles/ directory
 
-**Next to Build** (Stage 3):
-- Life arc calculation engine (profections, zodiacal releasing)
-- Annual profections calculator (age-based house activation)
-- Zodiacal releasing from Fortune/Spirit
-- Life arc timeline structure
+**Stage 3 In Progress**:
+- ✅ `/scripts/profections_calculator.py` - Annual profections COMPLETE
+- ✅ `/docs/PROFECTIONS_GUIDE.md` - Profections usage guide COMPLETE
+- ⏳ `/scripts/zodiacal_releasing.py` - ZR calculator (NEXT)
+- ⏳ `/scripts/life_arc_generator.py` - Timeline structure (AFTER ZR)
+- ⏳ Life arc report design integration
 
 ---
 
 ## 🎬 Next Steps
 
-1. **Research profections** - Study annual profections calculation method
-2. **Implement profections calculator** - Age-based house activation system
-3. **Research zodiacal releasing** - From Fortune and Spirit
-4. **Build life arc timeline** - Structure for major periods
-5. **Test with real birth data** - Validate calculations with profiles
+1. **Research zodiacal releasing** - Study ZR from Stage 0 notes and RAG database
+2. **Implement ZR calculator** - Fortune/Spirit, L1/L2/L3 periods, loosing of the bond
+3. **Build life arc timeline** - Combine profections + ZR into unified timeline
+4. **Design report output** - How to present 100-year life arc narrative
+5. **Test full system** - Validate with real birth data from profiles
 
 ---
 
