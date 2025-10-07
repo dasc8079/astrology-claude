@@ -101,10 +101,33 @@ When a stage is complete:
 4. Update this index with summary and key outcomes
 5. Move on to next stage
 
+---
+
+## Archives
+
+### [CLAUDE.md Archive - 2025-10-06](CLAUDE_ARCHIVE_2025_10_06.md)
+**Date**: 2025-10-06
+**Type**: Documentation Archive
+**Status**: Archived for reference
+
+**Summary**: Full archive of CLAUDE.md before transitioning to global Claude Code framework structure. Original file was 89KB (2,705 lines) with extensive technical details that have been moved to appropriate documentation locations.
+
+**Content Relocated**:
+- Swiss Ephemeris Integration → `/docs/` or DEVELOPMENT.md
+- Static Astrology Reference Data → REFERENCE.md
+- RAG Database sections → `/docs/` or archived
+- Development Guidelines → DEVELOPMENT.md
+- Glossary → REFERENCE.md
+- Detailed stage history → Kept in /history/STAGE_*.md files
+
+**New Structure**: CLAUDE.md is now a navigation hub (~10KB) pointing to CURRENT_WORK.md, session_goals.md, /docs/, and /history/
+
+---
+
 ## Current Work
 
 For active work in progress, see **CURRENT_WORK.md** in the project root.
 
 ---
 
-*Last updated: 2025-10-05*
+*Last updated: 2025-10-06*
