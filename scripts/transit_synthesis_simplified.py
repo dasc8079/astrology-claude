@@ -120,8 +120,9 @@ def synthesize_report(json_data: dict) -> str:
 
     profection = timing.get('profection', {})
     if profection:
-        lord = profection.get('lord_of_year')
-        house = profection.get('profected_house')
+        profection_data = profection.get('profection', {})
+        lord = profection_data.get('lord_of_year')
+        house = profection_data.get('profected_house')
         report += f"This period occurs during your **{age}th year**, with **{lord} as Lord of the Year**. "
         report += f"This activates your natal **{house} house**, making {lord} themes particularly significant.\n\n"
 
@@ -203,9 +204,11 @@ def synthesize_report(json_data: dict) -> str:
         report += "as these have the greatest impact during this timeframe. "
 
     if timing.get('profection'):
-        lord = timing['profection'].get('lord_of_year')
-        report += f"Throughout this period, remember that **{lord}** is your Lord of the Year, "
-        report += f"making transits involving {lord} especially significant.\n\n"
+        profection_data = timing['profection'].get('profection', {})
+        lord = profection_data.get('lord_of_year')
+        if lord:
+            report += f"Throughout this period, remember that **{lord}** is your Lord of the Year, "
+            report += f"making transits involving {lord} especially significant.\n\n"
 
     report += f"\n*Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')}*\n"
     report += f"*Source: Simplified synthesis (template-based, no RAG)*\n"

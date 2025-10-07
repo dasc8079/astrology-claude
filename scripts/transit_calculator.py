@@ -238,7 +238,8 @@ def tier_transit(
     orb = transit.get('orb', 5.0)
 
     # Get timing lords
-    lord_of_year = timing_context.get('profection', {}).get('lord_of_year')
+    profection_data = timing_context.get('profection', {}).get('profection', {})
+    lord_of_year = profection_data.get('lord_of_year')
     ascendant_ruler = natal_chart.get('chart_ruler')
     sect = natal_chart.get('sect', 'day')
     sect_light = 'Sun' if sect == 'day' else 'Moon'
@@ -269,6 +270,168 @@ def tier_transit(
 
     # NOTABLE tier (everything else)
     return 'notable'
+
+
+def calculate_transit_duration(
+    transiting_planet: str,
+    natal_longitude: float,
+    aspect_type: str,
+    snapshot_date: str,
+    orb: float,
+    include_modern: bool = True,
+    max_scan_days: int = 180
+) -> Dict[str, Any]:
+    """
+    Calculate full duration arc of a transit (applying → exact → separating).
+
+    Scans day-by-day around snapshot date to find:
+    - When transit first enters orb (applying_date)
+    - When transit becomes exact (exact_dates - list, may be multiple if retrograde)
+    - When transit leaves orb (separating_date)
+    - Total duration in days
+    - Whether transit involves retrograde loop
+
+    Args:
+        transiting_planet: Name of transiting planet
+        natal_longitude: Longitude of natal planet
+        aspect_type: Type of aspect (conjunction, sextile, square, trine, opposition)
+        snapshot_date: Date when transit was detected
+        orb: Orb in degrees
+        include_modern: Include modern planets
+        max_scan_days: Maximum days to scan forward/backward
+
+    Returns:
+        {
+            'applying_date': str,
+            'exact_dates': [str, ...],
+            'separating_date': str,
+            'duration_days': int,
+            'has_retrograde_loop': bool,
+            'stations': [{'date': str, 'motion': 'retrograde'/'direct'}, ...]
+        }
+    """
+    from transits import calculate_transiting_positions, find_transit_aspects_to_natal
+    from datetime import datetime, timedelta
+
+    # Calculate target aspect longitude
+    aspect_degrees = {
+        'conjunction': 0,
+        'sextile': 60,
+        'square': 90,
+        'trine': 120,
+        'opposition': 180
+    }
+    aspect_deg = aspect_degrees.get(aspect_type, 0)
+    target_longitude = (natal_longitude + aspect_deg) % 360
+
+    snapshot_dt = datetime.strptime(snapshot_date, '%Y-%m-%d')
+
+    # Helper function to calculate orb for a given date
+    def get_orb_for_date(date_dt):
+        try:
+            trans_data = calculate_transiting_positions(
+                date_dt.strftime('%Y-%m-%d'),
+                include_modern=include_modern
+            )
+            trans_planet = next(
+                (p for p in trans_data['planets'] if p['name'] == transiting_planet),
+                None
+            )
+            if not trans_planet:
+                return None
+
+            # Calculate orb to target aspect longitude
+            trans_long = trans_planet['longitude']
+            orb_calc = abs(trans_long - target_longitude)
+            if orb_calc > 180:
+                orb_calc = 360 - orb_calc
+
+            speed = trans_planet['speed']
+            return {'orb': orb_calc, 'speed': speed, 'longitude': trans_long}
+        except:
+            return None
+
+    # Scan backward to find applying date (when first enters orb)
+    applying_date = None
+    current_dt = snapshot_dt
+    for i in range(max_scan_days):
+        current_dt = snapshot_dt - timedelta(days=i)
+        result = get_orb_for_date(current_dt)
+        if result is None:
+            break
+        if result['orb'] > orb:
+            # Just exited orb going backward, so previous day was applying date
+            applying_date = (current_dt + timedelta(days=1)).strftime('%Y-%m-%d')
+            break
+
+    if not applying_date:
+        # Didn't find entry - transit may have started before scan window
+        applying_date = (snapshot_dt - timedelta(days=max_scan_days)).strftime('%Y-%m-%d')
+
+    # Scan forward to find exact dates and separating date
+    exact_dates = []
+    separating_date = None
+    stations = []
+    has_retrograde_loop = False
+
+    current_dt = snapshot_dt
+    prev_orb = None
+    prev_speed = None
+
+    for i in range(max_scan_days):
+        current_dt = snapshot_dt + timedelta(days=i)
+        result = get_orb_for_date(current_dt)
+        if result is None:
+            break
+
+        current_orb = result['orb']
+        current_speed = result['speed']
+
+        # Detect stations (retrograde/direct changes)
+        if prev_speed is not None:
+            if prev_speed > 0 and current_speed < 0:
+                stations.append({'date': current_dt.strftime('%Y-%m-%d'), 'motion': 'retrograde'})
+                has_retrograde_loop = True
+            elif prev_speed < 0 and current_speed > 0:
+                stations.append({'date': current_dt.strftime('%Y-%m-%d'), 'motion': 'direct'})
+                has_retrograde_loop = True
+
+        # Detect exact dates (orb crosses through minimum, allowing 0.3° threshold)
+        if prev_orb is not None:
+            if current_orb < 0.3 and current_orb <= prev_orb:
+                # Approaching exact
+                if current_dt.strftime('%Y-%m-%d') not in exact_dates:
+                    exact_dates.append(current_dt.strftime('%Y-%m-%d'))
+            elif prev_orb < 0.3 and current_orb > prev_orb:
+                # Just passed exact
+                if (current_dt - timedelta(days=1)).strftime('%Y-%m-%d') not in exact_dates:
+                    exact_dates.append((current_dt - timedelta(days=1)).strftime('%Y-%m-%d'))
+
+        # Detect separating date (when exits orb)
+        if current_orb > orb:
+            separating_date = current_dt.strftime('%Y-%m-%d')
+            break
+
+        prev_orb = current_orb
+        prev_speed = current_speed
+
+    if not separating_date:
+        # Transit still in orb at end of scan window
+        separating_date = (snapshot_dt + timedelta(days=max_scan_days)).strftime('%Y-%m-%d')
+
+    # Calculate total duration
+    apply_dt = datetime.strptime(applying_date, '%Y-%m-%d')
+    separate_dt = datetime.strptime(separating_date, '%Y-%m-%d')
+    duration_days = (separate_dt - apply_dt).days
+
+    return {
+        'applying_date': applying_date,
+        'exact_dates': exact_dates if exact_dates else [snapshot_date],  # Default to snapshot if no exact found
+        'separating_date': separating_date,
+        'duration_days': duration_days,
+        'has_retrograde_loop': has_retrograde_loop,
+        'stations': stations
+    }
 
 
 def calculate_transit_report_data(
@@ -517,6 +680,25 @@ def calculate_transit_report_data(
                     # Assign tier
                     aspect['tier'] = tier_transit(aspect, timing_context, natal_chart)
 
+                    # Calculate duration for CRITICAL and IMPORTANT transits only (optimization)
+                    if aspect['tier'] in ['critical', 'important']:
+                        try:
+                            duration_data = calculate_transit_duration(
+                                transiting_planet=trans_name,
+                                natal_longitude=natal_planet['longitude'],
+                                aspect_type=asp['aspect_type'],
+                                snapshot_date=date_str,
+                                orb=asp['orb'],
+                                include_modern=include_modern,
+                                max_scan_days=180
+                            )
+                            aspect['duration'] = duration_data
+                        except Exception as e:
+                            print(f"Warning: Could not calculate duration for {trans_name} {asp['aspect_type']} {natal_name}: {e}")
+                            aspect['duration'] = None
+                    else:
+                        aspect['duration'] = None
+
                     all_transits.append(aspect)
 
         except Exception as e:
@@ -546,6 +728,156 @@ def calculate_transit_report_data(
     convergences = []
     print("Convergence detection not yet implemented (TODO)")
 
+    # Peak/Low Period Detection and Auspicious/Challenging Day Analysis
+    print("Analyzing daily quality scores for peak/low periods...")
+
+    # Calculate daily quality scores by summing all active transits for each day
+    daily_scores = {}
+    current_scan_dt = start_dt
+    while current_scan_dt <= end_dt:
+        date_key = current_scan_dt.strftime('%Y-%m-%d')
+        day_score = 0
+        day_transits = []
+
+        # Find all transits active on this day
+        for transit in all_transits:
+            if transit.get('duration'):
+                applying = transit['duration']['applying_date']
+                separating = transit['duration']['separating_date']
+
+                # Check if this day is within the transit's duration
+                try:
+                    apply_dt = datetime.strptime(applying, '%Y-%m-%d')
+                    separate_dt = datetime.strptime(separating, '%Y-%m-%d')
+
+                    if apply_dt <= current_scan_dt <= separate_dt:
+                        transit_score = transit['quality_score']['score']
+                        day_score += transit_score
+                        day_transits.append({
+                            'transiting': transit['transiting_planet'],
+                            'natal': transit['natal_planet'],
+                            'aspect': transit['aspect_type'],
+                            'score': transit_score
+                        })
+                except:
+                    pass
+
+        daily_scores[date_key] = {
+            'score': day_score,
+            'transits': day_transits
+        }
+
+        current_scan_dt += timedelta(days=1)
+
+    # Sort days by score to find most auspicious/challenging
+    sorted_days = sorted(daily_scores.items(), key=lambda x: x[1]['score'], reverse=True)
+
+    # THE most auspicious day (single highest score)
+    most_auspicious_day = None
+    if sorted_days and sorted_days[0][1]['score'] > 0:
+        most_auspicious_day = {
+            'date': sorted_days[0][0],
+            'score': sorted_days[0][1]['score'],
+            'transits': sorted_days[0][1]['transits']
+        }
+
+    # Top 10-20 auspicious days (threshold > +10 or top 20, whichever is fewer)
+    auspicious_days = []
+    for date, data in sorted_days:
+        if data['score'] > 10 or (len(auspicious_days) < 20 and data['score'] > 5):
+            auspicious_days.append({
+                'date': date,
+                'score': data['score'],
+                'transits': data['transits']
+            })
+        if len(auspicious_days) >= 20:
+            break
+
+    # THE most challenging day (single lowest score)
+    most_challenging_day = None
+    if sorted_days and sorted_days[-1][1]['score'] < 0:
+        most_challenging_day = {
+            'date': sorted_days[-1][0],
+            'score': sorted_days[-1][1]['score'],
+            'transits': sorted_days[-1][1]['transits']
+        }
+
+    # Top 10-20 challenging days (threshold < -10 or bottom 20, whichever is fewer)
+    challenging_days = []
+    for date, data in reversed(sorted_days):
+        if data['score'] < -10 or (len(challenging_days) < 20 and data['score'] < -5):
+            challenging_days.append({
+                'date': date,
+                'score': data['score'],
+                'transits': data['transits']
+            })
+        if len(challenging_days) >= 20:
+            break
+
+    # Detect peak periods (consecutive days with total score > +12)
+    peak_periods = []
+    current_peak = None
+    for date_key in sorted(daily_scores.keys()):
+        score = daily_scores[date_key]['score']
+
+        if score > 12:
+            if current_peak is None:
+                current_peak = {
+                    'start_date': date_key,
+                    'end_date': date_key,
+                    'total_score': score,
+                    'peak_score': score,
+                    'days': [date_key]
+                }
+            else:
+                current_peak['end_date'] = date_key
+                current_peak['total_score'] += score
+                current_peak['peak_score'] = max(current_peak['peak_score'], score)
+                current_peak['days'].append(date_key)
+        else:
+            if current_peak is not None:
+                peak_periods.append(current_peak)
+                current_peak = None
+
+    # Add final peak if exists
+    if current_peak is not None:
+        peak_periods.append(current_peak)
+
+    # Detect low periods (consecutive days with total score < -12)
+    low_periods = []
+    current_low = None
+    for date_key in sorted(daily_scores.keys()):
+        score = daily_scores[date_key]['score']
+
+        if score < -12:
+            if current_low is None:
+                current_low = {
+                    'start_date': date_key,
+                    'end_date': date_key,
+                    'total_score': score,
+                    'low_score': score,
+                    'days': [date_key]
+                }
+            else:
+                current_low['end_date'] = date_key
+                current_low['total_score'] += score
+                current_low['low_score'] = min(current_low['low_score'], score)
+                current_low['days'].append(date_key)
+        else:
+            if current_low is not None:
+                low_periods.append(current_low)
+                current_low = None
+
+    # Add final low if exists
+    if current_low is not None:
+        low_periods.append(current_low)
+
+    print(f"Found {len(peak_periods)} peak periods and {len(low_periods)} low periods")
+    if most_auspicious_day:
+        print(f"Most auspicious day: {most_auspicious_day['date']} (score: {most_auspicious_day['score']:+d})")
+    if most_challenging_day:
+        print(f"Most challenging day: {most_challenging_day['date']} (score: {most_challenging_day['score']:+d})")
+
     # Build final data structure
     report_data = {
         'profile': profile_name,
@@ -561,6 +893,13 @@ def calculate_transit_report_data(
         'all_transits': all_transits,
         'eclipses': eclipses,
         'convergences': convergences,
+        'peak_periods': peak_periods,
+        'low_periods': low_periods,
+        'most_auspicious_day': most_auspicious_day,
+        'auspicious_days': auspicious_days,
+        'most_challenging_day': most_challenging_day,
+        'challenging_days': challenging_days,
+        'daily_scores': daily_scores,
         'metadata': {
             'generated': datetime.now().isoformat(),
             'orb_defaults': DEFAULT_ORBS,
