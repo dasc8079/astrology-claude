@@ -33,6 +33,245 @@ from zodiacal_releasing import calculate_zr_from_lot, find_current_period
 from secondary_progressions import calculate_progressed_positions, find_progressed_aspects_to_natal
 from solar_returns import calculate_solar_return_chart, find_sr_to_natal_aspects
 from transits import calculate_transiting_positions, find_transit_aspects_to_natal, find_transits_in_natal_houses
+from firdaria_calculator import calculate_major_periods, calculate_sub_periods, find_active_periods
+
+
+def calculate_planetary_returns(start_age: int = 0, end_age: int = 100) -> List[Dict[str, Any]]:
+    """
+    Calculate major planetary return milestones.
+
+    Jupiter return: ~12 years (expansion/growth cycles)
+    Saturn return: ~29.5 years (maturity/restructuring)
+    Uranus opposition: ~42 years (midlife awakening)
+
+    Returns:
+        List of return events with age, planet, and return number
+    """
+    returns = []
+
+    # Jupiter returns (~11.86 years - approximated to 12)
+    jupiter_cycle = 11.86
+    jupiter_count = 0
+    age = jupiter_cycle
+    while age <= end_age:
+        if age >= start_age:
+            jupiter_count += 1
+            returns.append({
+                'age': round(age, 1),
+                'planet': 'Jupiter',
+                'event': f'Jupiter Return #{jupiter_count}',
+                'cycle': jupiter_cycle,
+                'significance': 'Expansion, growth, opportunity'
+            })
+        age += jupiter_cycle
+
+    # Saturn returns (~29.46 years - approximated to 29.5)
+    saturn_cycle = 29.46
+    saturn_count = 0
+    age = saturn_cycle
+    while age <= end_age:
+        if age >= start_age:
+            saturn_count += 1
+            returns.append({
+                'age': round(age, 1),
+                'planet': 'Saturn',
+                'event': f'Saturn Return #{saturn_count}',
+                'cycle': saturn_cycle,
+                'significance': 'Maturity, responsibility, restructuring'
+            })
+        age += saturn_cycle
+
+    # Uranus opposition (~42 years - half of 84-year cycle)
+    uranus_opposition = 42.0
+    if start_age <= uranus_opposition <= end_age:
+        returns.append({
+            'age': uranus_opposition,
+            'planet': 'Uranus',
+            'event': 'Uranus Opposition',
+            'cycle': 84.0,  # Full cycle
+            'significance': 'Midlife crisis/awakening, radical change'
+        })
+
+    # Sort by age
+    returns.sort(key=lambda x: x['age'])
+
+    return returns
+
+
+def calculate_progression_sign_changes(profile_name: str, start_age: int = 0, end_age: int = 100) -> List[Dict[str, Any]]:
+    """
+    Calculate major progressed sign changes (Sun and angles only).
+
+    These are RARE events marking major identity evolution:
+    - Progressed Sun changes sign every ~30 years (only 2-3 times in life)
+    - Progressed ASC/MC change signs (timing varies by birth location)
+
+    Returns:
+        List of sign change events
+    """
+    sign_changes = []
+
+    # Get natal positions
+    profile = load_profile(profile_name)
+    natal_planets = profile.get_planets()
+    natal_houses = profile.get_houses()
+
+    # Find natal Sun sign
+    natal_sun = next((p for p in natal_planets if p['name'] == 'Sun'), None)
+    if not natal_sun:
+        return sign_changes
+
+    natal_sun_sign = natal_sun['sign']
+    natal_sun_degree = natal_sun['degree']
+
+    # Calculate when progressed Sun changes signs
+    # Progressed Sun moves ~1 degree per year
+    # Need to reach 30 degrees to change sign
+    degrees_to_next_sign = 30.0 - natal_sun_degree
+    age_at_first_change = degrees_to_next_sign
+
+    # Track sign changes
+    current_age = age_at_first_change
+    sign_count = 0
+
+    while current_age <= end_age:
+        if current_age >= start_age:
+            sign_count += 1
+            # Calculate which sign we're entering
+            signs = [
+                'Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo',
+                'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'
+            ]
+            natal_sign_index = signs.index(natal_sun_sign)
+            new_sign_index = (natal_sign_index + sign_count) % 12
+            new_sign = signs[new_sign_index]
+
+            sign_changes.append({
+                'age': round(current_age, 1),
+                'point': 'Progressed Sun',
+                'event': f'Progressed Sun enters {new_sign}',
+                'old_sign': signs[(new_sign_index - 1) % 12],
+                'new_sign': new_sign,
+                'significance': 'Major identity evolution, new life chapter begins'
+            })
+
+        # Each sign takes ~30 years
+        current_age += 30.0
+
+    # Sort by age
+    sign_changes.sort(key=lambda x: x['age'])
+
+    return sign_changes
+
+
+def calculate_convergence_score(age: int, snapshot: Dict[str, Any], timeline: Dict[str, Any]) -> tuple[int, List[str]]:
+    """
+    Calculate convergence score for a given age.
+
+    Scoring system:
+    - TIER 1 (20pts): ZR L1 transitions, Progressed Sun sign changes (rare, decades apart)
+    - TIER 2 (10-15pts): Saturn return, Uranus opp, Firdaria major transitions
+    - TIER 3 (1-5pts): Jupiter return, Firdaria sub, profection
+
+    Thresholds:
+    - 25+ points = MAJOR LIFE EVENT (chapter-defining)
+    - 15-24 points = SIGNIFICANT TRANSITION (major milestone)
+    - 8-14 points = NOTABLE PERIOD (worth mentioning)
+    - <8 points = background (don't highlight)
+
+    Returns:
+        Tuple of (score, list of reasons)
+    """
+    score = 0
+    reasons = []
+
+    # TIER 1 - RARE MULTI-DECADE EVENTS (20 points)
+    # ZR L1 transitions (sign changes)
+    if snapshot['fortune_l1']:
+        fortune_start = snapshot['fortune_l1'].get('start_age', 0)
+        if abs(age - fortune_start) < 0.5:
+            score += 20
+            reasons.append(f"ZR Fortune L1 → {snapshot['fortune_l1']['sign']}")
+
+    if snapshot['spirit_l1']:
+        spirit_start = snapshot['spirit_l1'].get('start_age', 0)
+        if abs(age - spirit_start) < 0.5:
+            score += 20
+            reasons.append(f"ZR Spirit L1 → {snapshot['spirit_l1']['sign']}")
+
+    # Progressed Sun sign changes
+    for prog_change in timeline.get('progression_sign_changes', []):
+        if abs(age - prog_change['age']) < 0.5:
+            score += 20
+            reasons.append(f"Progressed Sun → {prog_change['new_sign']}")
+
+    # TIER 2 - MAJOR MILESTONES (10-15 points)
+    for return_event in timeline.get('planetary_returns', []):
+        if abs(age - return_event['age']) < 0.5:
+            if return_event['planet'] in ['Saturn', 'Uranus']:
+                score += 15
+                reasons.append(return_event['event'])
+            elif return_event['planet'] == 'Jupiter':
+                score += 5
+                reasons.append(return_event['event'])
+
+    # Firdaria major transitions
+    if snapshot['firdaria_major']:
+        fir_start = snapshot['firdaria_major'].get('start_age', 0)
+        if abs(age - fir_start) < 0.5:
+            score += 10
+            reasons.append(f"Firdaria → {snapshot['firdaria_major']['planet']}")
+
+    # TIER 3 - REGULAR CYCLES (1-2 points)
+    if snapshot['firdaria_sub']:
+        sub_start = snapshot['firdaria_sub'].get('start_age', 0)
+        if abs(age - sub_start) < 0.5:
+            score += 2
+            reasons.append(f"Firdaria sub → {snapshot['firdaria_sub']['sub_planet']}")
+
+    # Always add 1 point for profection (baseline)
+    score += 1
+
+    return score, reasons
+
+
+def identify_convergence_events(timeline: Dict[str, Any]) -> Dict[str, List[Dict[str, Any]]]:
+    """
+    Identify all convergence events in timeline.
+
+    Returns:
+        Dictionary with 'major', 'significant', and 'notable' event lists
+    """
+    major_events = []
+    significant_events = []
+    notable_events = []
+
+    start_age = timeline['age_range']['start']
+    end_age = timeline['age_range']['end']
+
+    for age in range(start_age, end_age + 1):
+        snapshot = get_year_snapshot(timeline, age)
+        score, reasons = calculate_convergence_score(age, snapshot, timeline)
+
+        event = {
+            'age': age,
+            'score': score,
+            'reasons': reasons,
+            'snapshot': snapshot
+        }
+
+        if score >= 25:
+            major_events.append(event)
+        elif score >= 15:
+            significant_events.append(event)
+        elif score >= 8:
+            notable_events.append(event)
+
+    return {
+        'major': major_events,
+        'significant': significant_events,
+        'notable': notable_events,
+    }
 
 
 def generate_life_arc_timeline(
@@ -81,6 +320,29 @@ def generate_life_arc_timeline(
     if include_spirit:
         zr_spirit = calculate_zr_from_lot(profile_name, 'spirit', max_age=end_age + 10)
 
+    # Calculate Firdaria (75-year planetary period system)
+    framework = profile.get_chart_framework()
+    sect = framework.get('sect', {}).get('type', 'day')
+    firdaria_major = calculate_major_periods(sect)
+
+    # Calculate all sub-periods for timeline
+    firdaria_all_subs = []
+    for major in firdaria_major:
+        subs = calculate_sub_periods(major, sect)
+        firdaria_all_subs.extend(subs)
+
+    firdaria = {
+        'sect': sect,
+        'major_periods': firdaria_major,
+        'sub_periods': firdaria_all_subs,
+    }
+
+    # Calculate planetary returns (Jupiter, Saturn, Uranus opposition)
+    planetary_returns = calculate_planetary_returns(start_age, end_age)
+
+    # Calculate progressed Sun/angles sign changes (CORE - always included)
+    progression_sign_changes = calculate_progression_sign_changes(profile_name, start_age, end_age)
+
     # Calculate progressions (if requested)
     progressions = None
     if include_progressions:
@@ -120,17 +382,31 @@ def generate_life_arc_timeline(
             'aspects': transit_aspects
         }
 
-    return {
+    # Get all calculated lots
+    lots = profile.get_lots()
+
+    # Build timeline data structure first
+    timeline = {
         'profile': profile_name,
         'birth_data': birth_data,
         'age_range': {'start': start_age, 'end': end_age},
         'profections': profections,
         'zr_fortune': zr_fortune,
         'zr_spirit': zr_spirit,
+        'firdaria': firdaria,
+        'planetary_returns': planetary_returns,
+        'progression_sign_changes': progression_sign_changes,
         'progressions': progressions,
         'solar_returns': solar_returns,
         'transits': transits,
+        'lots': lots,
     }
+
+    # Calculate convergence events (needs complete timeline data)
+    convergence = identify_convergence_events(timeline)
+    timeline['convergence'] = convergence
+
+    return timeline
 
 
 def get_year_snapshot(timeline: Dict[str, Any], age: int) -> Dict[str, Any]:
@@ -142,6 +418,8 @@ def get_year_snapshot(timeline: Dict[str, Any], age: int) -> Dict[str, Any]:
         'fortune_l2': None,
         'spirit_l1': None,
         'spirit_l2': None,
+        'firdaria_major': None,
+        'firdaria_sub': None,
         'progressions': None,
         'solar_return': None,
     }
@@ -169,6 +447,13 @@ def get_year_snapshot(timeline: Dict[str, Any], age: int) -> Dict[str, Any]:
         snapshot['spirit_l2'] = find_current_period(
             timeline['zr_spirit']['l2_periods'], float(age)
         )
+
+    # Find Firdaria periods
+    if timeline['firdaria']:
+        firdaria_data = find_active_periods(float(age), timeline['firdaria']['sect'])
+        if firdaria_data and not firdaria_data.get('beyond_firdaria'):
+            snapshot['firdaria_major'] = firdaria_data.get('major_period')
+            snapshot['firdaria_sub'] = firdaria_data.get('sub_period')
 
     # Find progressions
     if timeline['progressions'] and age in timeline['progressions']:

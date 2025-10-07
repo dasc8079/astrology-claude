@@ -1,7 +1,7 @@
 # Astrology Application - Session Goals
 
-**Last Updated**: 2025-10-04
-**Status**: Planning Stage
+**Last Updated**: 2025-10-07
+**Status**: Mode 2 Complete - Ready for Mode 3
 
 ---
 
@@ -283,220 +283,113 @@ Session Manager (Orchestrator)
 
 ---
 
-### Stage 1: Build CLI with All Modes
-**Timeline**: 1-2 weeks
-**Goal**: Working CLI interface for horoscope, transits, and all timing techniques
-**Current Sub-Stage**: 1.3 - Natal Interpretation Enhancement Research (IN PROGRESS 🔄)
+### Stage 1: Build Natal Horoscope System (Mode 1) ✅
+**Timeline**: COMPLETE
+**Goal**: Working natal horoscope generator with PDF output
+**Status**: ✅ COMPLETE - Multi-profile support, automated generation, PDF output working
 
 **IMPORTANT**: All agent instructions (for horoscope generation, transit reports, chat responses) must be shown to user for approval before agents are created. Agent instructions serve as the "prompts" that control output quality and style.
 
 **Sub-stages**:
 
-#### 1.1: CLI Session System Foundation ✅
-- Build `astrology_session.py` orchestrator (~200 lines)
-  - Loads natal chart at session start
-  - Maintains session state
-  - Routes commands to mode handlers
-  - Manages `/reports/` folder output
-- **Status**: COMPLETE (natal-interpreter agent created and tested)
+### Stage 2: Build Life Arc Report System (Mode 2) ✅
+**Timeline**: COMPLETE
+**Goal**: Working life arc timeline generator (ages 0-100) with narrative interpretation
+**Status**: ✅ COMPLETE - Enhanced with convergence detection and narrative chapter structure
 
-#### 1.2: Mode 1 - Natal Horoscope Generator
-- **First**: Create natal-interpreter agent using agent-creator
-  - Define agent role, tone, output style → User approves agent instructions
-  - Agent instructions control quality, citations, traditional compliance
-- **Then**: Build `horoscope_generator.py` (~150-200 lines)
-  - Script calculates positions and dignities
-  - Script queries RAG for interpretations
-  - Script calls natal-interpreter agent to synthesize
-  - Script formats and saves report
-- **Research during build**:
-  - **Tone**: Plain language, moderate astrology terminology
-  - **Best practices**: Use Brennan and Liz Greene methods from RAG database
-  - **Length**: Research what makes a comprehensive horoscope (don't pre-specify)
-  - **Sections**: Overview → Planets (by strength) → Aspects → Synthesis?
-  - **Format**:
-    - Planetary strength table
-    - No chart diagram
-    - Citations from sources
-  - **Output**: Save to `/reports/natal_horoscope_[name]_[date].md`
-- **Testing phase**: Generate test horoscope, evaluate quality, refine agent instructions if needed
-- **Status**: Pending (will proceed after Stage 1.3 research complete)
+**Major Accomplishments**:
+1. ✅ **Timing Technique Calculators Built**:
+   - Annual profections (12-year cycles)
+   - Zodiacal Releasing Fortune/Spirit L1 (skip L2 for noise reduction)
+   - Firdaria (75-year Persian time-lord system, major + sub-periods)
+   - Planetary returns (Jupiter, Saturn, Uranus opposition)
+   - Progressed Sun sign changes (every ~30 years)
 
-#### 1.3: Natal Interpretation Enhancement Research 🔄
-**Status**: IN PROGRESS
-**Goal**: Expand natal interpretation depth and thoroughness while protecting traditional foundation
+2. ✅ **Unified Timeline Generator**:
+   - `life_arc_generator.py` integrates 5 core timing techniques
+   - Returns unified timeline data with all techniques synchronized
+   - Includes convergence detection (point-based scoring)
 
-**Enhancement Initiative Overview**:
-This research phase explores 15 additional astrology methods (9 traditional + 6 modern) to increase horoscope depth and customization options.
+3. ✅ **Convergence Detection System**:
+   - TIER 1 (20pts): ZR L1 transitions, Progressed Sun sign changes
+   - TIER 2 (10-15pts): Saturn return, Uranus opposition, Firdaria major
+   - TIER 3 (1-5pts): Jupiter return, Firdaria sub, annual profection
+   - Thresholds: 25+ = MAJOR, 15-24 = SIGNIFICANT, 8-14 = NOTABLE
+   - Tested: 6 major, 11 significant, 7 notable events in 100-year lifespan
 
-**Settings Block System Design**:
-- Replaces CLI input flags with file-based settings block
-- Allows fine-grained control over interpretation depth and methods
-- Lives in birth data file (`Darren_Profile.txt`)
+4. ✅ **Narrative Interpretation Agent**:
+   - life-arc-interpreter agent rewritten for storytelling approach
+   - Chapter structure: Each ZR L1 period = one chapter
+   - Convergent events = subheadings within chapters
+   - "Current Situation: Age X" sub-chapter for present moment
+   - Ages 0-100 treated equally (past and future both narrative)
+   - RAG-integrated for traditional grounding
 
-**Settings Block Format**:
-```
-[SETTINGS]
-interpretation_depth: standard|deep|comprehensive
-include_house_rulers: true|false
-include_lots: basic|extended|full
-include_angles_aspects: true|false (toggle if birth time uncertain)
-include_nodes: true|false
-include_lilith: true|false (default: true, but toggleable)
-include_chiron: true|false (default: true, but toggleable)
-include_receptions: true|false
-include_psychological: basic|deep
-modern_methods: conservative|moderate|extensive
-```
+5. ✅ **Profile Settings Simplified**:
+   - Single-line format: `variable: true|false // description`
+   - Easier scanning and modification
+   - Lives in profile.md file
 
-**Traditional Foundation Protection** (CRITICAL):
-- All modern methods clearly labeled as supplementary
-- Hierarchical interpretation: Traditional primary, modern secondary
-- Modern additions never override traditional dignities or core methods
-- Hellenistic/traditional foundation remains unchanged
-- User can disable modern methods entirely via settings
-- Traditional methods seamlessly integrate with existing foundation
+6. ✅ **10 Lots Integrated**:
+   - All calculated lots accessible in timeline
+   - 3 new lots added: Exaltation, Marriage, Children
+   - 7 existing lots: Fortune, Spirit, Eros, Necessity, Courage, Victory, Basis
 
-**Topics Being Researched** (15 total):
+7. ✅ **Complete Testing**:
+   - Full 0-100 report generated for darren profile
+   - 6 chapters organized by ZR L1 periods
+   - PDF output working (157.9 KB)
+   - Output directory structure corrected: `profiles/{profile}/output/`
 
-**Traditional Methods** (fits current Hellenistic foundation):
-1. House Rulers / Derivative Houses
-2. Lots / Arabic Parts (extended system beyond Fortune/Spirit)
-3. Angles as Chart Points (ASC/MC/DC/IC aspects)
-4. Lunar Nodes (North/South Node meanings)
-5. Receptions (Mutual, Mixed)
-6. Bonification / Maltreatment (benefic/malefic helping/harming)
-7. Triplicities (detailed elemental dignity analysis)
-8. Egyptian Bounds (detailed bounds ruler analysis)
-9. Antiscia (zodiacal reflection points)
+**Files Created**:
+- `/scripts/profections_calculator.py`
+- `/scripts/zodiacal_releasing.py`
+- `/scripts/firdaria_calculator.py`
+- `/scripts/life_arc_generator.py` (enhanced)
+- `/scripts/life_arc_synthesis_simplified.py`
+- `/scripts/test_convergence.py`
+- `/scripts/seed_data_generator.py` (enhanced with 3 new lots)
+- `/.claude/agents/life-arc-interpreter.md` (rewritten for narrative structure)
+- `/docs/PROFECTIONS_GUIDE.md`
+- `/docs/ZODIACAL_RELEASING_GUIDE.md`
+- `/docs/LIFE_ARC_GUIDE.md`
 
-**Modern Methods** (supplementary only, clearly labeled):
-10. Lilith (Black Moon) - toggleable, default ON
-11. Chiron (Wounded Healer) - toggleable, default ON
-12. Psychological/Jungian depth (Liz Greene methods from RAG)
-13. Harmonic/Minor Aspects (quintile, septile, etc.)
-14. Midpoints (Ebertin method)
-15. Vertex (fated encounters point)
+### Stage 3: Build Transit Report System (Mode 3) ⏳
+**Timeline**: PENDING
+**Goal**: Working transit report generator with current and future transit analysis
+**Status**: ⏳ PENDING - Ready to begin after Mode 2 completion
+**Design Documents Available**:
+- `/docs/transit_interpretation_design.md` - Transit enhancement research
+- `/docs/transit_staged_implementation.md` - Transit rollout plan
 
-**Implementation Phases**:
-- **Phase 1**: Documentation update ✅ (this update)
-- **Phase 2**: RAG agent debug/fix (ensure query tool working)
-- **Phase 3**: RAG database coverage scan (check coverage for all 15 topics)
-- **Phase 4**: Ultrathink workflow & architecture design
-- **Phase 5**: Create enhancement deliverables:
-  - Design document (`/docs/natal_interpretation_enhancement.md`)
-  - Implementation plan (staged rollout)
-  - Settings parser specification
-  - Agent instruction updates (if needed)
-
-**Success Criteria**:
-- RAG database coverage assessed for all 15 topics
-- Settings block system designed and documented
-- Traditional foundation protection verified
-- Clear hierarchical interpretation approach defined
-- Implementation roadmap ready
-
-**Deliverables**:
-- [ ] Phase 1: Documentation update (CLAUDE.md + session_goals.md)
-- [ ] Phase 2: RAG agent debugging complete
-- [ ] Phase 3: Coverage assessment report for 15 topics
-- [ ] Phase 4: Architecture and workflow design
-- [ ] Phase 5: Enhancement design document created
-- [ ] Phase 5: Implementation plan created
-- [ ] Phase 5: Settings parser specification
-
-**Next Actions**:
-1. Debug RAG agent query functionality
-2. Scan RAG database for coverage of 15 topics
-3. Design ultrathink workflow for research and synthesis
-4. Create comprehensive enhancement design document
-
-#### 1.4: Mode 2 - Transit Report Generator
+**Transit Report Requirements**:
 - **First**: Create transit-analyzer agent using agent-creator
   - Define agent role, advice style, prioritization approach → User approves agent instructions
   - Agent instructions control how transits are synthesized and advice is given
 - **Then**: Build `transit_report.py` (~200 lines)
   - Script calculates transits to natal
-  - Script filters by area of life + timeframe
+  - Script filters by importance and timeframe
+  - Script uses annual profections for transit priority (lord of year = critical tier)
   - Script queries RAG for transit interpretations
   - Script calls transit-analyzer agent to synthesize
   - Script formats and saves report
 - **Research during build**:
   - **Format**: How to structure transit report?
-  - **Prioritization**: How many transits to include?
-  - **Area filtering**: Map areas to houses effectively
-  - **Advice format**: Actionable steps? General guidance?
-  - **Timeframe handling**: Exact dates vs. ongoing transits?
-  - **Output**: Save to `/reports/transit_report_[name]_[date].md`
+  - **Prioritization**: Use Hephaestio's 7-factor system + lord of year
+  - **Timeframe handling**: Current transits + upcoming (30-90 days)
+  - **Advice format**: Actionable guidance grounded in traditional texts
+  - **Output**: Save to `profiles/{profile}/output/transit_report_[date].md`
 - **Testing phase**: Generate test reports, evaluate quality, refine agent instructions if needed
-- **Status**: Pending
+- **Status**: PENDING - Design documents complete, ready for implementation
 
-#### 1.5: Mode 3+ - Additional Timing Techniques
-- Build CLI command for each technique identified in Stage 0
-- Example: `zodiacal_releasing.py`, `profections.py`, `progressions.py`
-- Each module (~100-200 lines):
-  1. Calculate technique-specific data
-  2. Query RAG for interpretations
-  3. Format and generate report (may be simple formatting, may need agent synthesis)
-  4. Save to `/reports/`
-- **Agent decision**: Determine per technique if synthesis agent needed or simple formatting sufficient
-- **Testing phase**: Test each technique, validate calculations, iterate if needed
-- **Status**: Pending
-
-#### 1.6: CLI Interface
-**Commands**:
-```bash
-$ python astrology_session.py Darren_Profile.txt
-
-Loading natal chart for Darren...
-✓ Natal analysis complete
-✓ Session started
-
-Commands:
-  horoscope - Generate full natal horoscope
-  transits <area> <days> - Transit report (e.g., "transits career 30")
-  zodiacal - Zodiacal releasing periods
-  profections - Annual profections
-  [other timing techniques]
-  help - Show all commands
-  exit - End session
-
-> horoscope
-Generating comprehensive natal horoscope...
-Saved to: /reports/natal_horoscope_Darren_2025-10-04.md
-[Display preview or full output]
-
-> transits career 30
-Analyzing transits for career over next 30 days...
-Saved to: /reports/transit_report_career_2025-10-04.md
-[Display preview or full output]
-
-> zodiacal
-Calculating zodiacal releasing periods...
-[Output or saved report]
-
-> exit
-Session ended. Goodbye!
-```
-
-**Success Criteria**:
-- All CLI modes working
-- Reports save to `/reports/` folder
-- Output quality acceptable for initial use
-- Can use the app yourself immediately
-- GPT-5 settings validated
-- No crashes or major bugs
-
-**Testing Phase**:
-- Test each mode with your chart
-- Evaluate output quality
-- Tweak GPT-5 settings if needed (temperature, top_p, etc.)
-- Iterate on prompts
-- Document what works and what doesn't
+### Stage 4: Build Interactive Chat Modes ⏳
+**Timeline**: PENDING
+**Goal**: Rolling conversation interfaces for natal chart and transit questions
+**Status**: ⏳ PENDING - To be implemented after Mode 3 complete
 
 ---
 
-### Stage 3: Build Two Separate Rolling Chats
+### Stage 5: Build Two Separate Rolling Chats
 **Timeline**: 1-2 weeks
 **Goal**: Interactive conversation modes for natal chart and transits
 
@@ -817,10 +710,14 @@ Sun       Libra     2      Detriment  4.25/10
 
 ## Current Status
 
-**Stage**: Stage 1 implementation (Sub-stage 1.3 IN PROGRESS 🔄)
-**Completed Stages**: Stage -1 ✅, Stage 0 ✅, Stage 1.1 ✅
-**Current Work**: Stage 1.3 - Natal Interpretation Enhancement Research
-**Next Action**: Debug RAG agent, scan database coverage for 15 enhancement topics
+**Stage**: Mode 2 Complete - Ready for Mode 3
+**Completed Stages**:
+- Stage -1 ✅ (RAG Database Enhancement)
+- Stage 0 ✅ (Research Timing Techniques)
+- Stage 1 ✅ (Build Natal Horoscope System - Mode 1)
+- Stage 2 ✅ (Build Life Arc Report System - Mode 2)
+**Current Work**: Documentation updates complete
+**Next Action**: Begin Mode 3 (Transit Report System) when ready
 **Recent Infrastructure Improvements** (2025-10-04):
 - Strengthened documentation automation system
 - Added proactive triggers to docs-updater-astrology agent ✅

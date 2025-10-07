@@ -47,8 +47,8 @@ This project creates a comprehensive traditional/Hellenistic astrology applicati
 | Mode | Name | Status | Stage | Notes |
 |------|------|--------|-------|-------|
 | 1 | Natal Horoscope | ✅ COMPLETE | 1.4 pending | Fully functional, enhancements planned |
-| 2 | Life Arc Report | 🔄 IN PROGRESS | Stage 0 complete | Research done, ready for Stage 1 |
-| 3 | Transit Report | ⏳ PENDING | Design complete | Awaiting Mode 2 completion |
+| 2 | Life Arc Report | ✅ COMPLETE | Stage 4 complete | Full pipeline: calculator + RAG-integrated interpreter |
+| 3 | Transit Report | ⏳ PENDING | Design complete | Ready to begin |
 | 4+ | Additional Timing | ⏳ PENDING | Research complete | Profections, ZR, progressions |
 
 **Legend**: ✅ Complete | 🔄 In Progress | ⏳ Pending
@@ -85,9 +85,9 @@ See [CURRENT_WORK.md](CURRENT_WORK.md) for detailed status and next steps.
 - `astrology-output-debugger` - Debug interpretation issues, data quality, workflow problems
 
 **Interpretation & Synthesis**:
-- `natal-interpreter` - Natal chart synthesis using traditional Hellenistic methods
-- `life-arc-synthesizer` - Life timeline synthesis (in development)
-- `transit-analyzer` - Transit analysis and timing (planned)
+- `natal-interpreter` - Natal chart synthesis using traditional Hellenistic methods (Mode 1) ✅
+- `life-arc-interpreter` - Life timeline synthesis (Mode 2) ✅ WORKING (fixed 2025-10-07)
+- `transit-analyzer` - Transit analysis and timing (Mode 3) ⏳ Planned
 
 See [.claude/agents/](.claude/agents/) for individual agent configuration files.
 

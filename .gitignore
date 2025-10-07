@@ -2,7 +2,8 @@
 .DS_Store
 
 # Claude Code
-.claude/
+.claude/*
+!.claude/agents/
 
 # Python
 __pycache__/

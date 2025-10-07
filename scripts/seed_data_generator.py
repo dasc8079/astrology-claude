@@ -460,6 +460,25 @@ def calculate_lots(jd, asc_longitude, planet_data, sect_type):
 
     basis_sign, basis_degree = get_sign_and_degree(basis_lon)
 
+    # Lot of Exaltation (career peak, honors, public recognition)
+    # Same formula for day and night charts
+    exaltation_lon = (asc_longitude + mars_lon - sun_lon) % 360
+    exaltation_sign, exaltation_degree = get_sign_and_degree(exaltation_lon)
+
+    # Lot of Marriage (partnership, committed relationships)
+    # Same formula for day and night charts
+    marriage_lon = (asc_longitude + venus_lon - saturn_lon) % 360
+    marriage_sign, marriage_degree = get_sign_and_degree(marriage_lon)
+
+    # Lot of Children (offspring, generativity, legacy)
+    # Day (masculine): ASC + Jupiter - Saturn
+    # Night (feminine): ASC + Saturn - Jupiter
+    if sect_type == 'day':
+        children_lon = (asc_longitude + jupiter_lon - saturn_lon) % 360
+    else:
+        children_lon = (asc_longitude + saturn_lon - jupiter_lon) % 360
+    children_sign, children_degree = get_sign_and_degree(children_lon)
+
     return [
         {
             'name': 'Lot of Fortune',
@@ -557,6 +576,48 @@ def calculate_lots(jd, asc_longitude, planet_data, sect_type):
                 'formula': 'ASC + Fortune - Saturn (day) / ASC + Saturn - Fortune (night)',
                 'day_formula': 'ASC + Fortune - Saturn',
                 'night_formula': 'ASC + Saturn - Fortune',
+            }
+        },
+        {
+            'name': 'Lot of Exaltation',
+            'symbol': '👑',
+            'position': {
+                'sign': exaltation_sign,
+                'degree': round(exaltation_degree, 4),
+                'dms': decimal_to_dms(exaltation_degree),
+            },
+            'calculation': {
+                'formula': 'ASC + Mars - Sun',
+                'day_formula': 'ASC + Mars - Sun',
+                'night_formula': 'ASC + Mars - Sun',
+            }
+        },
+        {
+            'name': 'Lot of Marriage',
+            'symbol': '💍',
+            'position': {
+                'sign': marriage_sign,
+                'degree': round(marriage_degree, 4),
+                'dms': decimal_to_dms(marriage_degree),
+            },
+            'calculation': {
+                'formula': 'ASC + Venus - Saturn',
+                'day_formula': 'ASC + Venus - Saturn',
+                'night_formula': 'ASC + Venus - Saturn',
+            }
+        },
+        {
+            'name': 'Lot of Children',
+            'symbol': '👶',
+            'position': {
+                'sign': children_sign,
+                'degree': round(children_degree, 4),
+                'dms': decimal_to_dms(children_degree),
+            },
+            'calculation': {
+                'formula': 'ASC + Jupiter - Saturn (day) / ASC + Saturn - Jupiter (night)',
+                'day_formula': 'ASC + Jupiter - Saturn',
+                'night_formula': 'ASC + Saturn - Jupiter',
             }
         }
     ]
