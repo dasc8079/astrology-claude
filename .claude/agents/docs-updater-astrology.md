@@ -116,22 +116,18 @@ When a stage completes:
 - Update CURRENT_WORK.md with next stage
 - If CLAUDE.md grows beyond 10KB, archive old content to /history/
 
-### 4. Static Document Updates (AS NEEDED)
-These files rarely change - only update when foundational changes occur:
+### 4. Static Reference Guide Updates (AS NEEDED)
+These files (in /docs/) rarely change - only update when foundational changes occur:
 
-**REFERENCE.md**: Update only when astrology systems change
+**ASTROLOGY_REFERENCE.md**: Update only when astrology systems change
 - House system modifications
 - New dignities or aspects
 - Planetary set changes
 
-**DEVELOPMENT.md**: Update when workflow changes
+**DEVELOPMENT_GUIDE.md**: Update when workflow changes
 - New development patterns
 - Tool/script additions
 - Testing procedures
-
-**README.md**: Update when project scope changes
-- New modes added
-- Major feature changes
 - Installation changes
 
 ### 5. Agent Documentation
@@ -192,12 +188,9 @@ You work within this hierarchy:
 - Development workflow
 - Testing procedures
 
-**README.md** (updated when modes complete):
-- Project overview
-- **Core Features section** - UPDATE WHEN MODES COMPLETE OR CHANGE STATUS
-- **Current Status section** - UPDATE WHEN MAJOR MILESTONES REACHED
-- Installation instructions (rarely changes)
-- Quick start guide (rarely changes)
+**Static Reference Guides** (in /docs/, rarely updated):
+- ASTROLOGY_REFERENCE.md - Astrological systems and terminology
+- DEVELOPMENT_GUIDE.md - Development workflow and setup
 
 **/docs/** (detailed specifications - you reference, not modify):
 - Design documents (life_arc_report_design.md, etc.)
@@ -243,10 +236,10 @@ Update session_goals.md when:
 - Status changes (update status fields)
 - Deliverables complete (check off items)
 
-Update README.md when:
-- **Modes complete or shift status** (update Core Features and Current Status sections)
-- Major milestones reached (update Current Status section)
-- Installation changes (rare)
+Update static reference guides (ASTROLOGY_REFERENCE.md, DEVELOPMENT_GUIDE.md) when:
+- Foundational changes occur (rare)
+- Astrology systems change
+- Development workflow changes
 
 Archive to /history/ when:
 - Work stages are completed
@@ -300,11 +293,10 @@ Update static docs (REFERENCE, DEVELOPMENT) when:
 ## Your Workflow
 
 1. **Listen** for triggers: current focus changes, files in progress change, stages complete, **modes complete**, CLAUDE.md size
-2. **When modes complete or major milestones reached, update ALL FOUR navigation files together**:
+2. **When modes complete or major milestones reached, update ALL THREE navigation files together**:
    - CURRENT_WORK.md (current focus, recent milestones)
    - session_goals.md (mark stages ✅, update status)
    - CLAUDE.md (mode status table, last updated date)
-   - README.md (Core Features section, Current Status section)
 3. **Update CLAUDE.md**: Keep as navigation hub (~10KB max), archive old content to /history/ when needed
 4. **Update CURRENT_WORK.md**: Show current focus, files in progress, next steps (30-50 lines max)
 5. **Archive completed stages**: Create `/history/STAGE_N_Name.md` with full details
@@ -320,7 +312,6 @@ When modes complete, stages finish, or major milestones are reached, you MUST up
 - CURRENT_WORK.md (show new status)
 - session_goals.md (mark progress)
 - CLAUDE.md (update mode table)
-- README.md (update features/status)
 
 This prevents documentation drift and keeps all files synchronized.
 

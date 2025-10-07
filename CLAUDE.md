@@ -14,7 +14,7 @@
 
 **Design Documents**: See [/docs/](docs/) for detailed specifications and implementation plans
 
-**Static References**: See [REFERENCE.md](REFERENCE.md), [DEVELOPMENT.md](DEVELOPMENT.md), [README.md](README.md)
+**Reference Guides**: See [/docs/ASTROLOGY_REFERENCE.md](docs/ASTROLOGY_REFERENCE.md) for astrology systems, [/docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md) for development workflow
 
 ---
 
@@ -108,7 +108,7 @@ Located in `/References/` folder:
 
 **RAG Database**: `/output/database/astrology_rag_database.jsonl`
 
-See [REFERENCE.md](REFERENCE.md) for detailed astrology systems reference.
+See [/docs/ASTROLOGY_REFERENCE.md](docs/ASTROLOGY_REFERENCE.md) for detailed astrology systems reference.
 
 ---
 
@@ -134,7 +134,7 @@ profiles/
 
 **Settings Block System**: Each profile.txt contains customizable interpretation settings (depth, house rulers, lots, psychological overlay, modern methods, etc.)
 
-See [DEVELOPMENT.md](DEVELOPMENT.md) for profile creation and management.
+See [/docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md) for profile creation and management.
 
 ---
 
@@ -188,7 +188,7 @@ This project adheres strictly to traditional/Hellenistic astrological systems:
 **Aspects**: Classical only - conjunction (0°), sextile (60°), square (90°), trine (120°), opposition (180°)
 **Planetary Set**: Traditional Seven primary (Sun through Saturn); modern planets (Uranus, Neptune, Pluto) secondary context only
 
-See [REFERENCE.md](REFERENCE.md) for complete astrological systems reference.
+See [/docs/ASTROLOGY_REFERENCE.md](docs/ASTROLOGY_REFERENCE.md) for complete astrological systems reference.
 
 ---
 
@@ -209,10 +209,9 @@ See [REFERENCE.md](REFERENCE.md) for complete astrological systems reference.
 - [/docs/transit_staged_implementation.md](docs/transit_staged_implementation.md) - Transit implementation plan
 - [/docs/session_goals_COMPARISON.md](docs/session_goals_COMPARISON.md) - Documentation structure comparison
 
-**Static Documentation**:
-- [REFERENCE.md](REFERENCE.md) - Astrological systems and terminology (rarely updated)
-- [DEVELOPMENT.md](DEVELOPMENT.md) - Contributor guide and development workflow (rarely updated)
-- [README.md](README.md) - Project overview and installation (rarely updated)
+**Reference Guides**:
+- [/docs/ASTROLOGY_REFERENCE.md](docs/ASTROLOGY_REFERENCE.md) - Astrological systems and terminology (rarely updated)
+- [/docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md) - Contributor guide and development workflow (rarely updated)
 
 **Agents**:
 - [.claude/agents/](.claude/agents/) - Individual agent configuration files
@@ -232,7 +231,7 @@ See [REFERENCE.md](REFERENCE.md) for complete astrological systems reference.
 **MCP Servers**: context7 (library docs), filesystem (file operations), github (repo operations)
 **Allowed Directories**: Project root, /Users/darrenschaeffer/.claude/agents/, iCloud sync paths
 
-See [DEVELOPMENT.md](DEVELOPMENT.md) for setup instructions and development workflow.
+See [/docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md) for setup instructions and development workflow.
 
 ---
 
@@ -252,7 +251,7 @@ See [DEVELOPMENT.md](DEVELOPMENT.md) for setup instructions and development work
 - Mode 2: Life arc report ✅ (complete - enhanced with convergence detection)
 - Mode 3: Transit report ⏳ (ready to implement)
 
-See [DEVELOPMENT.md](DEVELOPMENT.md) for detailed workflow documentation.
+See [/docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md) for detailed workflow documentation.
 
 ---
 

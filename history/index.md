@@ -86,6 +86,48 @@ This directory contains archived documentation of completed project stages. Each
 
 ---
 
+### [Stage 2: Life Arc Report System](STAGE_2_Life_Arc_Report.md)
+**Date**: 2025-10-05 to 2025-10-07
+**Duration**: 3 days
+**Status**: ✅ COMPLETE
+
+**Summary**: Built comprehensive life arc report system generating decades-long life timelines (ages 0-100) with convergence detection and narrative interpretation. Integrated 5 core timing techniques, built Firdaria calculator, implemented point-based convergence scoring, and created chapter-based narrative structure using ZR L1 periods.
+
+**Key Outcomes**:
+- 5 core timing techniques integrated: Profections, ZR Fortune/Spirit L1, Firdaria, Planetary Returns, Progressed Sun
+- Convergence detection system: Point-based scoring (25+ MAJOR, 15-24 SIGNIFICANT, 8-14 NOTABLE)
+- Narrative chapter structure: ZR L1 periods as chapters, convergences as subheadings
+- 10 lots integrated: Added Exaltation, Marriage, Children formulas
+- Complete workflow: Calculator + simplified interpreter + full RAG-integrated agent
+- Professional output: Markdown + PDF (157.9 KB typical)
+
+**Key Files Created**:
+- `/scripts/firdaria_calculator.py` - Persian time-lord system (329 lines)
+- `/scripts/test_convergence.py` - Convergence detection test script (141 lines)
+- `/docs/firdaria_reference.md` - Traditional sources (20KB)
+
+**Enhanced Files**:
+- `/scripts/life_arc_generator.py` - Added Firdaria, returns, progressions, convergence (287 lines added)
+- `/scripts/seed_data_generator.py` - Added 3 new lot calculations (61 lines added)
+- `/.claude/agents/life-arc-interpreter.md` - Complete rewrite for narrative structure (399 lines)
+
+**Testing**:
+- Full 0-100 report generated for darren profile
+- 6 major events, 11 significant transitions, 7 notable periods identified
+- PDF generation working (157.9 KB output)
+- Output directory structure corrected to `profiles/{profile}/output/`
+
+**Lessons Learned**:
+1. Convergence scoring: Point-based system effectively identifies major events without noise
+2. Narrative structure: Chapter-based organization (ZR L1 periods) creates natural flow
+3. ZR L2 noise: Skip L2 sub-periods for clarity (8-30 year L1 periods provide better structure)
+4. Profile settings: Single-line format easier to scan and modify
+5. Output directory: Correct path `profiles/{profile}/output/` (not root `/output/`)
+
+**Next Stage**: Stage 3 - Transit Report System (design documents complete, ready to implement)
+
+---
+
 ## Stage Naming Convention
 
 - **Stage -1, 0**: Foundation and research phases
