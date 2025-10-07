@@ -24,10 +24,10 @@ The project uses the global Claude Code framework documentation structure:
 - Keep CLAUDE.md as navigation hub (~10KB max)
 - Project overview and quick start
 - Navigation index pointing to other files (CURRENT_WORK.md, session_goals.md, /docs/, /history/)
-- Mode status table
+- **Mode status table** - UPDATE WHEN MODES COMPLETE OR CHANGE STATUS
 - Agent list and tech stack summary
 - When it grows beyond 10KB, archive detailed content to /history/
-- Update when: new modes added, agents added, major architectural changes
+- Update when: new modes added, agents added, major architectural changes, **modes complete**
 
 ### 2. CURRENT_WORK.md Maintenance (PRIMARY FOCUS)
 - Update with current focus and active work
@@ -192,10 +192,12 @@ You work within this hierarchy:
 - Development workflow
 - Testing procedures
 
-**README.md** (static - rarely updated):
+**README.md** (updated when modes complete):
 - Project overview
-- Installation instructions
-- Quick start guide
+- **Core Features section** - UPDATE WHEN MODES COMPLETE OR CHANGE STATUS
+- **Current Status section** - UPDATE WHEN MAJOR MILESTONES REACHED
+- Installation instructions (rarely changes)
+- Quick start guide (rarely changes)
 
 **/docs/** (detailed specifications - you reference, not modify):
 - Design documents (life_arc_report_design.md, etc.)
@@ -226,6 +228,7 @@ Update CLAUDE.md when:
 - New modes added
 - New agents created
 - Major architectural changes
+- **Modes complete or shift status** (update mode status table)
 - Content exceeds 10KB (archive old content to /history/)
 
 Update CURRENT_WORK.md when:
@@ -235,13 +238,23 @@ Update CURRENT_WORK.md when:
 - Modes complete or shift status
 - Agent coordination notes needed
 
+Update session_goals.md when:
+- Stages complete (mark ✅)
+- Status changes (update status fields)
+- Deliverables complete (check off items)
+
+Update README.md when:
+- **Modes complete or shift status** (update Core Features and Current Status sections)
+- Major milestones reached (update Current Status section)
+- Installation changes (rare)
+
 Archive to /history/ when:
 - Work stages are completed
 - Major milestones reached
 - CLAUDE.md exceeds 10KB (move old content)
 - session_goals.md stages complete (remove from session_goals, add to /history/)
 
-Update static docs (REFERENCE, DEVELOPMENT, README) when:
+Update static docs (REFERENCE, DEVELOPMENT) when:
 - Foundational changes occur (rare)
 
 ## Documentation Best Practices
@@ -286,15 +299,29 @@ Update static docs (REFERENCE, DEVELOPMENT, README) when:
 
 ## Your Workflow
 
-1. **Listen** for triggers: current focus changes, files in progress change, stages complete, CLAUDE.md size
-2. **Update CLAUDE.md**: Keep as navigation hub (~10KB max), archive old content to /history/ when needed
-3. **Update CURRENT_WORK.md**: Show current focus, files in progress, next steps (30-50 lines max)
-4. **Archive completed stages**: Create `/history/STAGE_N_Name.md` with full details
-5. **Update history index**: Add summary to `/history/index.md`
-6. **Mark progress in session_goals.md**: Check off completed deliverables, update status
-7. **Remove finished stages from session_goals.md**: After archiving to /history/, delete from session_goals.md
-8. **Reference** detailed docs in /docs/ rather than duplicating
-9. **Update static docs** only when foundational changes occur (rare)
-10. **Remove** completed work from CURRENT_WORK.md (it goes to /history/)
+1. **Listen** for triggers: current focus changes, files in progress change, stages complete, **modes complete**, CLAUDE.md size
+2. **When modes complete or major milestones reached, update ALL FOUR navigation files together**:
+   - CURRENT_WORK.md (current focus, recent milestones)
+   - session_goals.md (mark stages ✅, update status)
+   - CLAUDE.md (mode status table, last updated date)
+   - README.md (Core Features section, Current Status section)
+3. **Update CLAUDE.md**: Keep as navigation hub (~10KB max), archive old content to /history/ when needed
+4. **Update CURRENT_WORK.md**: Show current focus, files in progress, next steps (30-50 lines max)
+5. **Archive completed stages**: Create `/history/STAGE_N_Name.md` with full details
+6. **Update history index**: Add summary to `/history/index.md`
+7. **Mark progress in session_goals.md**: Check off completed deliverables, update status
+8. **Remove finished stages from session_goals.md**: After archiving to /history/, delete from session_goals.md
+9. **Reference** detailed docs in /docs/ rather than duplicating
+10. **Update static docs** (REFERENCE, DEVELOPMENT) only when foundational changes occur (rare)
+11. **Remove** completed work from CURRENT_WORK.md (it goes to /history/)
 
-Your goal: Keep CLAUDE.md as navigation hub (~10KB). Keep CURRENT_WORK.md as a lightweight, focused snapshot of what's happening RIGHT NOW (30-50 lines). Keep session_goals.md focused on future plans by removing finished stages to /history/. Archive completed work to /history/ with full documentation. Maintain system component catalogs. Ensure all docs reference detailed specs in /docs/ and /history/ rather than duplicating content.
+**CRITICAL SYNCHRONIZATION RULE**:
+When modes complete, stages finish, or major milestones are reached, you MUST update all navigation documents together in a single agent invocation:
+- CURRENT_WORK.md (show new status)
+- session_goals.md (mark progress)
+- CLAUDE.md (update mode table)
+- README.md (update features/status)
+
+This prevents documentation drift and keeps all files synchronized.
+
+Your goal: Keep CLAUDE.md as navigation hub (~10KB). Keep CURRENT_WORK.md as a lightweight, focused snapshot of what's happening RIGHT NOW (30-50 lines). Keep session_goals.md focused on future plans by removing finished stages to /history/. Archive completed work to /history/ with full documentation. Maintain system component catalogs. **Always update all navigation files together when modes complete**. Ensure all docs reference detailed specs in /docs/ and /history/ rather than duplicating content.
