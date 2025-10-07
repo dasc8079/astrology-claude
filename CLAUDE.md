@@ -31,10 +31,10 @@ This project creates a comprehensive traditional/Hellenistic astrology applicati
 - Query-optimized for chart interpretation, dignities, aspects, and timing techniques
 
 **Application Modes**:
-1. **Mode 1: Natal Horoscope Generator** ✅ - Complete birth chart psychological profiles
-2. **Mode 2: Life Arc Report Generator** 🔄 - Life timeline from birth to age 100
-3. **Mode 3: Transit Report Generator** ⏳ - Current and upcoming transit analysis
-4. **Mode 4+: Additional Timing Techniques** ⏳ - Profections, progressions, returns
+1. **Mode 1: Natal Horoscope Generator** ✅ COMPLETE - Birth chart psychological profiles with PDF output
+2. **Mode 2: Life Arc Report Generator** ✅ COMPLETE - Life timeline from birth to age 100 with convergence detection
+3. **Mode 3: Transit Report Generator** ⏳ PENDING - Current and upcoming transit analysis
+4. **Mode 4+: Additional Timing Techniques** ⏳ PENDING - Additional predictive techniques
 
 **Rolling Chat Interfaces** (Future):
 - Horoscope Inquirer: Deep-dive natal chart questions
@@ -46,10 +46,10 @@ This project creates a comprehensive traditional/Hellenistic astrology applicati
 
 | Mode | Name | Status | Stage | Notes |
 |------|------|--------|-------|-------|
-| 1 | Natal Horoscope | ✅ COMPLETE | 1.4 pending | Fully functional, enhancements planned |
-| 2 | Life Arc Report | ✅ COMPLETE | Stage 4 complete | Full pipeline: calculator + RAG-integrated interpreter |
-| 3 | Transit Report | ⏳ PENDING | Design complete | Ready to begin |
-| 4+ | Additional Timing | ⏳ PENDING | Research complete | Profections, ZR, progressions |
+| 1 | Natal Horoscope | ✅ COMPLETE | Production | Multi-profile, PDF output, fully functional |
+| 2 | Life Arc Report | ✅ COMPLETE | Production | Enhanced with convergence detection, narrative chapters, 5 core timing techniques |
+| 3 | Transit Report | ⏳ PENDING | Design ready | Design documents complete, ready to implement |
+| 4+ | Additional Timing | ⏳ PENDING | Research done | Core techniques built (profections, ZR, Firdaria) |
 
 **Legend**: ✅ Complete | 🔄 In Progress | ⏳ Pending
 
@@ -63,7 +63,7 @@ See [CURRENT_WORK.md](CURRENT_WORK.md) for detailed status and next steps.
 **Astronomical Calculations**: Swiss Ephemeris (pyswisseph v2.10.3.2)
 **Knowledge Base**: RAG database (2,472 chunks from 6 traditional sources)
 **Embeddings**: OpenAI API (embeddings only, not for LLM calls)
-**Interpretation Agents**: Claude Code agents (natal-interpreter, life-arc-synthesizer, transit-analyzer)
+**Interpretation Agents**: Claude Code agents (natal-interpreter, life-arc-interpreter, transit-analyzer planned)
 **House System**: Whole-sign houses (traditional/Hellenistic)
 **Planetary Set**: Traditional Seven (Sun through Saturn) primary; modern planets (Uranus, Neptune, Pluto) secondary
 **Aspects**: Classical only (conjunction, sextile, square, trine, opposition)
@@ -248,9 +248,9 @@ See [DEVELOPMENT.md](DEVELOPMENT.md) for setup instructions and development work
 5. Generate professional PDF output
 
 **Modes**:
-- Mode 1: Natal horoscope (complete)
-- Mode 2: Life arc report (in development)
-- Mode 3: Transit report (planned)
+- Mode 1: Natal horoscope ✅ (complete)
+- Mode 2: Life arc report ✅ (complete - enhanced with convergence detection)
+- Mode 3: Transit report ⏳ (ready to implement)
 
 See [DEVELOPMENT.md](DEVELOPMENT.md) for detailed workflow documentation.
 
@@ -266,7 +266,7 @@ See [DEVELOPMENT.md](DEVELOPMENT.md) for detailed workflow documentation.
 
 ## Version & Updates
 
-**Last Updated**: 2025-10-06
+**Last Updated**: 2025-10-07
 **Framework**: Global Claude Code documentation structure (CLAUDE.md as navigation hub)
 **Maintained By**: docs-updater-astrology agent
 
