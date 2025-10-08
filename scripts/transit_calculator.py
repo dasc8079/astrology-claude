@@ -58,6 +58,25 @@ DEFAULT_ORBS = {
     'Pluto': 2.0,         # Very slow
 }
 
+# Planet sets by report type
+PLANET_SETS = {
+    'short': ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto'],
+    'long': ['Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto']  # Slower planets only for 1-5 year reports
+}
+
+
+def get_allowed_planets(report_type: str) -> List[str]:
+    """
+    Get list of allowed transiting planets based on report type.
+
+    Args:
+        report_type: 'short' (all planets) or 'long' (slower planets only)
+
+    Returns:
+        List of planet names to include in transit calculations
+    """
+    return PLANET_SETS.get(report_type, PLANET_SETS['short'])
+
 
 def parse_date_range(
     args: argparse.Namespace,
@@ -438,6 +457,7 @@ def calculate_transit_report_data(
     profile_name: str,
     start_date: str,
     end_date: str,
+    report_type: str = 'short',
     orb: Optional[float] = None,
     include_modern: bool = True
 ) -> Dict[str, Any]:
@@ -448,6 +468,7 @@ def calculate_transit_report_data(
         profile_name: Profile identifier
         start_date: Start date (YYYY-MM-DD)
         end_date: End date (YYYY-MM-DD)
+        report_type: 'short' (all planets, 1-4 months) or 'long' (slower planets, 1-5 years)
         orb: Custom orb override (optional)
         include_modern: Include Uranus, Neptune, Pluto
 
@@ -502,11 +523,12 @@ def calculate_transit_report_data(
         age=current_age
     )
 
-    # ZR Fortune L1 and L2
+    # ZR Fortune L1, L2, and L3
     try:
         zr_fortune_data = calculate_zr_from_lot(profile_name, 'fortune', max_age=current_age + 20)
         zr_fortune_l1_periods = zr_fortune_data.get('l1_periods', [])
         zr_fortune_l2_periods = zr_fortune_data.get('l2_periods', [])
+        zr_fortune_l3_periods = zr_fortune_data.get('l3_periods', [])
 
         # Find current L1 period
         current_zr_fortune_l1 = find_current_period(zr_fortune_l1_periods, current_age)
@@ -534,16 +556,33 @@ def calculate_transit_report_data(
             }
         else:
             zr_fortune_l2 = None
+
+        # Find current L3 period
+        current_zr_fortune_l3 = find_current_period(zr_fortune_l3_periods, current_age)
+        if current_zr_fortune_l3:
+            zr_fortune_l3 = {
+                'period_sign': current_zr_fortune_l3['sign'],
+                'ruler': current_zr_fortune_l3['ruler'],
+                'start_age': current_zr_fortune_l3['start_age'],
+                'end_age': current_zr_fortune_l3['end_age'],
+                'duration': current_zr_fortune_l3['duration'],
+                'is_peak_l2': current_zr_fortune_l3.get('is_peak_l2', False),
+                'is_peak_l1': current_zr_fortune_l3.get('is_peak_l1', False)
+            }
+        else:
+            zr_fortune_l3 = None
     except Exception as e:
         print(f"Warning: Could not calculate ZR Fortune: {e}")
         zr_fortune_l1 = None
         zr_fortune_l2 = None
+        zr_fortune_l3 = None
 
-    # ZR Spirit L1 and L2
+    # ZR Spirit L1, L2, and L3
     try:
         zr_spirit_data = calculate_zr_from_lot(profile_name, 'spirit', max_age=current_age + 20)
         zr_spirit_l1_periods = zr_spirit_data.get('l1_periods', [])
         zr_spirit_l2_periods = zr_spirit_data.get('l2_periods', [])
+        zr_spirit_l3_periods = zr_spirit_data.get('l3_periods', [])
 
         # Find current L1 period
         current_zr_spirit_l1 = find_current_period(zr_spirit_l1_periods, current_age)
@@ -571,10 +610,26 @@ def calculate_transit_report_data(
             }
         else:
             zr_spirit_l2 = None
+
+        # Find current L3 period
+        current_zr_spirit_l3 = find_current_period(zr_spirit_l3_periods, current_age)
+        if current_zr_spirit_l3:
+            zr_spirit_l3 = {
+                'period_sign': current_zr_spirit_l3['sign'],
+                'ruler': current_zr_spirit_l3['ruler'],
+                'start_age': current_zr_spirit_l3['start_age'],
+                'end_age': current_zr_spirit_l3['end_age'],
+                'duration': current_zr_spirit_l3['duration'],
+                'is_peak_l2': current_zr_spirit_l3.get('is_peak_l2', False),
+                'is_peak_l1': current_zr_spirit_l3.get('is_peak_l1', False)
+            }
+        else:
+            zr_spirit_l3 = None
     except Exception as e:
         print(f"Warning: Could not calculate ZR Spirit: {e}")
         zr_spirit_l1 = None
         zr_spirit_l2 = None
+        zr_spirit_l3 = None
 
     # Firdaria
     try:
@@ -605,15 +660,21 @@ def calculate_transit_report_data(
         'profection': profection,
         'zr_fortune_l1': zr_fortune_l1,
         'zr_fortune_l2': zr_fortune_l2,
+        'zr_fortune_l3': zr_fortune_l3,
         'zr_spirit_l1': zr_spirit_l1,
         'zr_spirit_l2': zr_spirit_l2,
+        'zr_spirit_l3': zr_spirit_l3,
         'firdaria': firdaria,
         'solar_return': solar_return,
         'progressed_moon': progressed_moon
     }
 
     # Iterate through date range calculating transits
+    allowed_planets = get_allowed_planets(report_type)
     print(f"Calculating transits from {start_date} to {end_date} ({days} days)...")
+    print(f"Report type: {report_type}")
+    print(f"Planets included: {', '.join(allowed_planets)}")
+    print(f"Tier filtering: {'CRITICAL only' if report_type == 'long' else 'All tiers (CRITICAL, IMPORTANT, NOTABLE)'}\n")
 
     all_transits = []
 
@@ -638,10 +699,17 @@ def calculate_transit_report_data(
                 orb=default_orb
             )
 
+            # Get allowed planets for this report type
+            allowed_planets = get_allowed_planets(report_type)
+
             # Process each aspect found
             for asp in aspect_list:
                 trans_name = asp['transiting_planet']
                 natal_name = asp['natal_planet']
+
+                # Filter by allowed planets for report type
+                if trans_name not in allowed_planets:
+                    continue
 
                 # Find the transiting planet data
                 trans_planet = next(
@@ -698,6 +766,10 @@ def calculate_transit_report_data(
                             aspect['duration'] = None
                     else:
                         aspect['duration'] = None
+
+                    # For long reports, only include CRITICAL tier transits
+                    if report_type == 'long' and aspect['tier'] != 'critical':
+                        continue
 
                     all_transits.append(aspect)
 
@@ -902,6 +974,8 @@ def calculate_transit_report_data(
         'daily_scores': daily_scores,
         'metadata': {
             'generated': datetime.now().isoformat(),
+            'report_type': report_type,
+            'planets_included': get_allowed_planets(report_type),
             'orb_defaults': DEFAULT_ORBS,
             'include_modern': include_modern
         }
@@ -969,6 +1043,8 @@ def main():
     parser.add_argument('--start-date', help='Start date (YYYY-MM-DD)')
     parser.add_argument('--end-date', help='End date (YYYY-MM-DD)')
     parser.add_argument('--duration', type=int, help='Duration in days from start (or today if no start)')
+    parser.add_argument('--report-type', choices=['short', 'long'], default='short',
+                        help='Report type: short (1-4 months, all planets) or long (1-5 years, slower planets + timing techniques)')
     parser.add_argument('--orb', type=float, help='Custom orb override')
     parser.add_argument('--include-modern', type=bool, default=True, help='Include modern planets')
     parser.add_argument('--list-profiles', action='store_true', help='List available profiles')
@@ -1005,6 +1081,7 @@ def main():
         profile_name=args.profile,
         start_date=start_date,
         end_date=end_date,
+        report_type=args.report_type,
         orb=args.orb,
         include_modern=args.include_modern
     )

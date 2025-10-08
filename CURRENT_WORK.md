@@ -1,11 +1,68 @@
 # Current Work - Astrology Application
 
 **Last Updated**: 2025-10-07
-**Current Focus**: Mode 2 - Life Arc Report Generator - COMPLETE ✅
+**Current Focus**: Mode 3 - Transit Report Generator - Phase 3 COMPLETE ✅
 
 ---
 
 ## 🎯 Recent Milestones (2025-10-07)
+
+### Mode 3: Transit Report Generator - Phase 3 COMPLETE ✅
+
+**Major Achievement**: Complete refactor to convergent timing techniques (like life-arc-interpreter)
+
+**Phase 1 - Transit Calculator Enhancements** (6 tasks completed):
+1. ✅ **Lord of Year Bug Fixed**: Corrected nested profection data structure access
+2. ✅ **Transit Duration Tracking**: Applying → exact → separating dates, retrograde loops, stations
+3. ✅ **Daily Quality Scoring**: Summation of all active transits per day across date range
+4. ✅ **Peak/Low Period Detection**: Consecutive high/low scoring days identified
+5. ✅ **Most Auspicious/Challenging Days**: THE best/worst day + top 10-20 each
+6. ✅ **Timing Lord Integration**: Lord of Year, ZR L1/L2, Firdaria in tier scoring
+
+**Phase 2 - Long-Term Transit Agent** (4 tasks completed):
+1. ✅ **Agent Design**: 1-5 year variable-length reports with ZR L2 chapter structure
+2. ✅ **Traditional/Modern Hierarchy**: Sun-Saturn PRIMARY, Uranus-Pluto SECONDARY (matches natal-interpreter)
+3. ✅ **Output Structure**: Quick Reference tables at TOP, pure flowing narrative after (like life-arc-interpreter)
+4. ✅ **Convergence Scoring**: Point-based system (Lord of Year +10, ZR L2 lord +8, etc.)
+
+**Phase 3 - Report Type Refactor + ZR L3** (5 tasks completed):
+1. ✅ **Report Type Parameter**: `--report-type short|long` for different filtering strategies
+2. ✅ **Planet Filtering by Type**:
+   - **Short** (1-4 months): All 10 planets (Sun-Pluto)
+   - **Long** (1-5 years): 6 slower planets only (Mars-Pluto)
+3. ✅ **Tier Filtering by Type**:
+   - **Short**: All tiers (CRITICAL, IMPORTANT, NOTABLE)
+   - **Long**: CRITICAL tier only
+4. ✅ **ZR L3 Implementation**: Added Level 3 sub-periods for fine-grained timing (1-5 months)
+5. ✅ **L3 Integration**: Fortune L3 and Spirit L3 now in timing_context
+
+**Transit Reduction Results**:
+- **Without filtering** (5 years): ~1,885 transits (overwhelming)
+- **With long-type filtering** (5 years): ~575 transits (manageable narrative)
+- **Reduction**: 70% fewer transits for long reports
+
+**ZR L3 Structure**:
+- **L1** (8-30 years): Major life chapters → H1 headings or context
+- **L2** (1-3 years): Sub-chapters → H1 headings for long reports
+- **L3** (1-5 months): Fine timing → H2 headings for sub-periods
+- **Peak detection**: is_peak_l2 (L3=L2), is_peak_l1 (L3=L1, rare/powerful)
+
+**Files Created/Modified**:
+- ✅ `/scripts/transit_calculator.py` - Refactored with report types, planet/tier filtering, L3 integration
+- ✅ `/scripts/zodiacal_releasing.py` - Added calculate_l3_periods() function
+- ✅ `/scripts/transit_synthesis_simplified.py` - Fixed Lord of Year access
+- ✅ `/.claude/agents/transit-analyzer-long.md` - Long-term transit agent (1-5 years)
+- ✅ `/profiles/darren/output/transit_data_darren_2025-10-07_to_2026-10-07_2.json` - Test data with L3
+
+**Next Phase**:
+- ⏳ Update transit-analyzer-long agent to use L3 for H2 sub-chapters
+- ⏳ Test long-term report generation with convergent techniques
+- ⏳ Build transit-analyzer-short agent (1-4 months, default 1 month)
+- ⏳ Update natal/life-arc agent output naming consistency
+
+---
+
+## 🎯 Previous Milestone (2025-10-07 Early)
 
 ### Mode 2: Life Arc Report Generator - COMPLETE ✅ (Enhanced)
 
@@ -86,12 +143,19 @@ See `/history/` for detailed archives:
 |------|--------|--------|
 | **Mode 1**: Natal Horoscope | ✅ COMPLETE | Markdown + PDF synthesis |
 | **Mode 2**: Life Arc Report | ✅ COMPLETE | Calculator ✅ + Simplified Interpreter ✅ + Full RAG-Integrated Agent ✅ |
-| **Mode 3**: Transit Report | ⏳ PENDING | Next logical focus |
+| **Mode 3**: Transit Report | 🔄 IN PROGRESS | Calculator ✅ (refactored) + Long-term Agent ✅ (created) + ZR L3 ✅ (implemented) + Testing ⏳ |
 | **Mode 4**: Additional Timing | ⏳ PENDING | Future |
 
 ---
 
 ## 📁 Key Files
+
+**Mode 3 In Progress**:
+- ✅ `/scripts/transit_calculator.py` - Refactored with report types (short/long), planet/tier filtering, L3 integration
+- ✅ `/scripts/zodiacal_releasing.py` - Enhanced with ZR L3 calculation (1-5 month sub-periods)
+- ✅ `/scripts/transit_synthesis_simplified.py` - Template-based transit synthesis (testing JSON structure)
+- ✅ `/.claude/agents/transit-analyzer-long.md` - Long-term transit agent (1-5 years, convergent techniques)
+- ⏳ `/.claude/agents/transit-analyzer-short.md` - Short-term transit agent (1-4 months, pending)
 
 **Mode 2 Complete + Enhanced**:
 - ✅ `/scripts/profections_calculator.py` - Annual profections calculator
@@ -121,30 +185,28 @@ See `/history/` for detailed archives:
 
 ## 🎬 Next Steps
 
+**Mode 3 Phase 3 - Testing & Short-Term Agent** (IN PROGRESS):
+- ⏳ **Test long-term transit agent** with real data (NEXT: Generate report)
+- ⏳ Build short-term transit agent (1-4 months, default 1 month)
+- ⏳ Check other agent frontmatter formatting consistency
+- ⏳ Update docs to reference ASTROLOGY_REFERENCE.md more explicitly
+- ⏳ Update natal/life-arc agent output naming consistency
+
+**Documentation Improvements Identified**:
+- Add explicit reference to ASTROLOGY_REFERENCE.md in agent creation guidelines
+- Update docs-updater-astrology to check for redundant content that should reference existing docs
+- Ensure all agents use correct frontmatter format (single-line description with embedded examples)
+
 **Mode 2 Enhancement COMPLETE ✅**:
 - All 12 enhancement tasks completed
 - Convergence detection working (point-based scoring)
 - Narrative chapter structure implemented
 - 5 core timing techniques integrated
-- Profile settings simplified
-- 10 lots accessible in timeline
-- Output directory structure corrected
 
-**Optional Mode 2 Polish** (if desired):
-- Test with additional profiles (mom/sister) for different chart types
-- Add Nemesis and Siblings lot formulas (not found in RAG)
-- Fine-tune convergence thresholds based on more profiles
-
-**Ready for Mode 3**:
-- Proceed to Transit Report system (current year + future transits)
-- Design transit interpretation workflow
-- Integrate with existing timing technique calculators
-- Reference transit design documents in `/docs/`
-
-**Agent Maintenance** (DONE):
-- ✅ life-arc-interpreter agent updated with narrative structure
-- ✅ Output directory path corrected in agent instructions
-- ✅ Agent-creator documentation enhanced with frontmatter format lessons
+**Agent Maintenance**:
+- ✅ transit-analyzer-long agent created with correct frontmatter format
+- ⏳ Check natal-interpreter and life-arc-interpreter frontmatter formatting
+- ⏳ Update agent-creator documentation with ASTROLOGY_REFERENCE.md guidance
 
 ---
 
@@ -183,19 +245,26 @@ See `/history/` for detailed archives:
 **Project-Specific Agents**:
 - `docs-updater-astrology` - Updates this file + project docs
 - `workflow-planner-2` - Maintains session_goals.md, technical recommendations
-- `mode-orchestrator` - Routes requests to natal/life arc/transit modes (NEW)
+- `mode-orchestrator` - Routes requests to natal/life arc/transit modes
 - `natal-interpreter` - Generates natal horoscope synthesis (Mode 1) ✅ WORKING
-- `life-arc-interpreter` - Generates whole-life arc interpretation (Mode 2) ✅ WORKING (fixed 2025-10-07)
+- `life-arc-interpreter` - Generates whole-life arc interpretation (Mode 2) ✅ WORKING
+- `transit-analyzer-long` - Generates long-term transit reports (Mode 3, 1-5 years) ✅ CREATED (testing)
+- `transit-analyzer-short` - Generates short-term transit reports (Mode 3, 1-4 months) ⏳ PENDING
 - `astrology-rag-builder` - Maintains RAG database
 
 **Global Agents** (from `~/.claude/agents/`):
 - `history-manager` - Archives completed stages to `/history/`
-- `agent-creator` - Creates new agents with correct frontmatter format ✅ ENHANCED (2025-10-07)
+- `agent-creator` - Creates new agents with correct frontmatter format
 
 **Agent Status Notes**:
-- life-arc-interpreter agent frontmatter corrected (removed broken YAML `description: |` syntax)
-- agent-creator enhanced with "CRITICAL: Agent File Frontmatter Format" section
-- All project agents now using correct frontmatter format
+- transit-analyzer-long created 2025-10-07 with correct frontmatter format
+- All agents should reference ASTROLOGY_REFERENCE.md instead of listing planets/techniques
+- Frontmatter format: single-line description with embedded examples (using `\n\n` for newlines)
+
+**Documentation Reference Structure**:
+- `ASTROLOGY_REFERENCE.md` - Contains ALL astrological terminology, planets, aspects, techniques
+- Agents should reference this file instead of duplicating content in prompts
+- Future agent updates should check for redundant content
 
 ---
 

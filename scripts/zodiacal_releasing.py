@@ -171,6 +171,67 @@ def calculate_l2_periods(l1_period: Dict[str, Any], birth_date: str) -> List[Dic
     return l2_periods
 
 
+def calculate_l3_periods(l2_period: Dict[str, Any], birth_date: str) -> List[Dict[str, Any]]:
+    """
+    Calculate L3 (Level 3) sub-periods within an L2 period.
+
+    L3 periods cycle through all 12 signs starting from the L2 sign,
+    with lengths proportional to the parent L2 period.
+
+    Args:
+        l2_period: The parent L2 period
+        birth_date: Birth date (YYYY-MM-DD)
+
+    Returns:
+        List of L3 periods
+    """
+    l3_periods = []
+    current_sign = l2_period['sign']
+    l2_duration = l2_period['duration']
+
+    # Calculate total of all sign periods for proportion
+    total_sign_years = sum(PERIOD_LENGTHS.values())  # 228 years total
+
+    # Starting point
+    current_age = l2_period['start_age']
+    birth = datetime.strptime(birth_date, '%Y-%m-%d')
+
+    # Cycle through all 12 signs
+    for i in range(12):
+        # Calculate proportional duration for this L3 period
+        sign_years = PERIOD_LENGTHS[current_sign]
+        l3_duration = (sign_years / total_sign_years) * l2_duration
+        end_age = current_age + l3_duration
+
+        # Calculate dates
+        start_date = birth + timedelta(days=365.25 * current_age)
+        end_date = birth + timedelta(days=365.25 * end_age)
+
+        # Check if this is a peak period (L2 and L3 same sign, or L1/L2/L3 all same)
+        is_peak_l2 = current_sign == l2_period['sign']
+        is_peak_l1 = current_sign == l2_period.get('parent_sign')
+
+        l3_periods.append({
+            'level': 3,
+            'sign': current_sign,
+            'ruler': DOMICILE[current_sign],
+            'start_age': round(current_age, 4),
+            'end_age': round(end_age, 4),
+            'duration': round(l3_duration, 4),
+            'start_date': start_date.strftime('%Y-%m-%d'),
+            'end_date': end_date.strftime('%Y-%m-%d'),
+            'parent_l2_sign': l2_period['sign'],
+            'parent_l1_sign': l2_period.get('parent_sign'),
+            'is_peak_l2': is_peak_l2,  # L3 matches L2
+            'is_peak_l1': is_peak_l1,  # L3 matches L1 (rare, powerful)
+        })
+
+        current_sign = get_next_sign(current_sign)
+        current_age = end_age
+
+    return l3_periods
+
+
 def find_current_period(periods: List[Dict[str, Any]], current_age: float) -> Optional[Dict[str, Any]]:
     """Find the period that contains the current age."""
     for period in periods:
@@ -225,6 +286,12 @@ def calculate_zr_from_lot(profile_name: str, lot_type: str, max_age: int = 100) 
         l2_periods = calculate_l2_periods(l1_period, birth_date)
         all_l2_periods.extend(l2_periods)
 
+    # Calculate L3 periods for each L2 period
+    all_l3_periods = []
+    for l2_period in all_l2_periods:
+        l3_periods = calculate_l3_periods(l2_period, birth_date)
+        all_l3_periods.extend(l3_periods)
+
     return {
         'profile': profile_name,
         'lot_type': lot_type,
@@ -236,6 +303,7 @@ def calculate_zr_from_lot(profile_name: str, lot_type: str, max_age: int = 100) 
         'birth_date': birth_date,
         'l1_periods': l1_periods,
         'l2_periods': all_l2_periods,
+        'l3_periods': all_l3_periods,
     }
 
 
