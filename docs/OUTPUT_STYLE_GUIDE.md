@@ -191,52 +191,236 @@ and feeling the weight of responsibility...
 
 ## Structure Standards
 
-### Synthesis/PDF Structure
+All reports follow one of three fundamental structures based on their organizing principle:
 
-**Required Sections** (in order):
+### Template A: Chart-Based Reports (Natal Horoscope)
 
-1. **Introduction** (2-4 paragraphs)
-   - Essential nature and core life story
-   - Current position in the life arc
-   - Overarching themes
+**Organizing Principle**: Birth chart components (placements, aspects, houses)
 
-2. **Major Life Chapters** (if applicable to mode)
-   - Narrative description of major periods
-   - How you got to where you are now
-   - Psychological themes of each chapter
+**Structure**:
+1. **Title Page** (see Title Page Standards below)
+2. **Introduction** (2-4 paragraphs)
+   - Essential nature and core character
+   - Overarching natal themes
+3. **Chart Components** (organized by astrological logic)
+   - Luminaries (Sun/Moon identity)
+   - Key planetary placements
+   - Angular planets and chart ruler
+   - Aspect patterns
+   - House emphases
+4. **Integration & Synthesis**
+   - How all components work together
+   - Core psychological patterns
+5. **Poetic Wrapup** (final paragraph - NO heading)
+   - 4-8 sentences, direct second person
+   - Reiterate key themes
+   - NO astrological jargon
 
-3. **Current Position** (most detailed)
-   - Where you are in the life story
-   - What this moment means
-   - Convergent themes and patterns
-   - Inner experience and outer manifestation
-
-4. **Future Outlook** (brief, non-predictive)
-   - What's ahead in the life arc
-   - Major transitions approaching
-   - The next chapter
-
-5. **Synthesis & Integration** (conclusion)
-   - Tying all themes together
-   - The coherent whole of your current position
-   - Closing insights
-
-6. **Poetic Wrapup** (final paragraph) ⭐ **REQUIRED**
-   - Brief, separate closing paragraph
-   - Warm, grounded, poetic prose
-   - Affirms strengths, natural gifts, or opportunities present
-   - Acknowledges key constraints or challenges with compassion
-   - Frames the moment, choice, or path now before them
-   - Offers direction without pressure or determinism
-   - Closure in tone but not in possibility
-   - Leaves them feeling understood, empowered, and ready
-
-**Format**:
-- Flowing narrative prose
+**Format Style**:
+- Flowing narrative paragraphs (4-8 sentences each)
+- Extra paragraph spacing for readability
 - Minimal subsections (avoid over-structuring)
-- No numbered lists or bullet points in narrative
 - Smooth transitions between sections
-- Readable as a unified essay
+- Readable as unified psychological essay
+
+**CSS File**: `scripts/css/chart_based.css`
+
+**Examples**: `profiles/darren/output/natal_horoscope_synthesis.pdf`
+
+---
+
+### Template B: Timeline-Based Reports (Life Arc)
+
+**Organizing Principle**: Life chapters across decades (birth to age 100)
+
+**Structure**:
+1. **Title Page** (see Title Page Standards below)
+2. **Introduction** (2-3 paragraphs)
+   - Current position in life story
+   - Overview of major chapters
+3. **Major Life Chapters** (H2 sections by ZR L1 periods)
+   - Each chapter = 8-30 year period
+   - Age ranges as H2 headings (e.g., "Ages 12-39: The Capricorn Chapter")
+   - Sub-chapters (H3) for significant L2 periods within each chapter
+   - Narrative description of themes, challenges, growth
+4. **Current Position** (most detailed chapter)
+   - Where you are NOW in the timeline
+   - Convergent techniques (profections, progressions, transits)
+   - What this moment means
+5. **Near Future** (next 1-5 years)
+   - Upcoming transitions
+   - Next major chapter (if approaching)
+6. **Poetic Wrapup** (final paragraph - NO heading)
+   - 4-8 sentences, direct second person
+   - Reiterate journey themes
+   - NO astrological jargon
+
+**Format Style**:
+- Bigger, more prominent H2 chapter headings (20pt)
+- Age indicators emphasized in headings
+- Timeline visual flow with extra spacing
+- Prevent chapter breaks mid-page
+- Long flowing paragraphs within each chapter
+
+**CSS File**: `scripts/css/timeline_based.css`
+
+**Examples**: Life arc reports (Mode 2 in development)
+
+---
+
+### Template C1: Movement-Based Reports with Chapters (Transit Long)
+
+**Organizing Principle**: Multi-year transit arcs (1-5 years) organized by ZR L2 periods with flowing narrative
+
+**Structure**:
+1. **Title Page** (see Title Page Standards below)
+   - Title: "Long Transit Report"
+   - Date range: "MM/YYYY to MM/YYYY" format
+   - Birth data and natal context
+2. **Quick Reference Tables** (TOP of report with brief interpretations)
+   - Most Auspicious Periods (20-30 entries with scores +10 to +18)
+   - Most Challenging Periods (20-30 entries with scores -10 to -16)
+   - Major Narrative Arcs (6-10 multi-month themes)
+   - Each table includes: Date/Period, Score, Key Transits, **Brief Interpretation**
+3. **Section 1: Overview** (2-4 pages)
+   - High-level narrative of entire period
+   - Major life chapter context (ZR L1, profections, Firdaria)
+   - Dominant themes and turning points
+4. **Section 2: Chapter-by-Chapter Timeline** (H1 headings)
+   - **ZR L2 Periods** as primary chapters (1-3 year blocks)
+   - Each chapter: "# [Sign] Fortune Chapter: [Age Range] ([Ruler] Period)"
+   - Sub-chapters (H2): ZR L3 periods (1-5 month fine-timing blocks)
+   - Alternative chapters: Calendar years, outer planet sign changes, retrograde arcs
+5. **Pure Flowing Narrative** (after Quick Reference)
+   - NO bullet points in body text
+   - Long paragraphs (4-8 sentences) exploring psychological themes
+   - Bold dates woven naturally into narrative
+   - Retrograde loops as story arcs (3-pass structure)
+   - Convergence periods highlighted (timing lord alignment)
+6. **Poetic Wrapup** (final paragraph - NO heading)
+   - 4-8 sentences, direct second person
+   - Reiterate timing themes and life chapter arc
+   - NO astrological jargon
+
+**Format Style**:
+- **Voice**: Poetic, intimate address ("You are caught between...", "There is something in you that...")
+- **Psychological depth**: Internal meaning, not just events
+- **Evocative language**: Metaphor, imagery, vivid description
+- **Long flowing paragraphs**: Weave themes together
+- **Compassionate witnessing**: Honor shadow and light
+- **Bold dates**: Woven naturally, never listed
+- **Traditional PRIMARY**: Sun-Saturn form core narrative
+- **Modern SECONDARY**: Uranus-Pluto add psychological context
+
+**Quick Reference Table Example**:
+```markdown
+## Quick Reference: Points of Interest
+
+### Most Auspicious Periods
+| Date/Period | Score | Key Transits | Brief Interpretation |
+|-------------|-------|--------------|---------------------|
+| **March 12, 2026** | +18 | Jupiter trine natal Sun (exact), Venus sextile Jupiter | THE most favorable day - expansion meets grace, Lord of Year supports identity |
+| Oct 12-18, 2026 | +15 | Venus-Jupiter cluster | Week of opportunities, relationships flourish |
+```
+
+**Chapter Structure Example**:
+```markdown
+# Scorpio Fortune Chapter: Ages 35.5-37.4 (Mars Period)
+
+## Aquarius Fortune L3: January-March 2026 (Saturn Sub-Period)
+
+[Flowing narrative with bold dates woven in...]
+
+**March 12, 2026**—Jupiter trines your natal Sun, THE most favorable day of the year...
+```
+
+**CSS File**: `scripts/css/movement_based.css`
+
+**Examples**: `profiles/darren/output/transit_report_darren_long_2025-10-07_to_2030-10-06.pdf`
+
+---
+
+### Template C2: Pure Movement-Based Reports (Transit Short, Single Event)
+
+**Organizing Principle**: Pure chronological movements (no chapter structure)
+
+**Structure**:
+1. **Title Page** (see Title Page Standards below)
+2. **Quick Reference** (table of all transits/events in date order)
+3. **Individual Movements** (H2 sections in chronological order)
+   - Each movement gets its own H2 section
+   - Date range in heading (emphasized)
+   - Exact passes (if retrograde loop)
+   - Psychological narrative of this specific movement
+   - Timing context (what else is happening)
+4. **Convergence Analysis** (if multiple techniques involved)
+   - How movements connect and reinforce
+   - Timing windows where multiple factors converge
+5. **Integration & Synthesis**
+   - The full story across all movements
+   - Decision points and timing considerations
+6. **Poetic Wrapup** (final paragraph - NO heading)
+   - 4-8 sentences, direct second person
+   - Reiterate movement themes
+   - NO astrological jargon
+
+**Format Style**:
+- Quick Reference table very prominent
+- Movement headings with clear date emphasis
+- Timing context highlighted in boxes
+- Keep movement sections together on page
+- Poetic synthesis section set apart visually
+
+**CSS File**: `scripts/css/movement_based.css`
+
+**Examples**: Short-range transit reports, single event analyzers (Mode 3 Level 3 in development)
+
+**NOTE**: Transit Short and Single Event structures need work - see transit report output task (pending).
+
+---
+
+### Title Page Standards (All Reports)
+
+**Every report must begin with a title page** containing high-level metadata.
+
+**Required Elements**:
+- Report title (e.g., "Natal Horoscope", "Life Arc Report", "Transit Analysis")
+- Profile name (person receiving report)
+- Date range or age range (if applicable)
+- Birth data (date, time, location)
+- Report creation date
+- Report emphasis or focus (if applicable)
+
+**HTML/Markdown Structure**:
+```html
+<div class="title-page">
+  <h1>Report Title</h1>
+  <div class="profile-name">Name</div>
+  <div class="date-range">Date/Age Range</div>
+  <div class="birth-data">
+    Born: [Date] at [Time]<br>
+    Location: [City, State/Country]<br>
+    [Coordinates if relevant]
+  </div>
+  <div class="report-meta">
+    Report Generated: [Date]<br>
+    [Other metadata]
+  </div>
+</div>
+```
+
+**CSS Classes** (defined in `base.css`):
+- `.title-page` - Centered container with page break after
+- `.profile-name` - Person's name (20pt bold)
+- `.date-range` - Report coverage (16pt)
+- `.birth-data` - Natal information (12pt)
+- `.report-meta` - Creation date and metadata (10pt grey)
+
+**Formatting**:
+- Centered text
+- Padding from top (3cm)
+- Page break after title page (no page number on title page)
+- Professional, clean layout
 
 ### Process/MD Structure
 
@@ -293,27 +477,200 @@ and feeling the weight of responsibility...
 
 ## PDF Generation System
 
+### Overview
+
 **How It Works**:
 - Markdown synthesis files are converted to PDF using `scripts/pdf_generator.py`
 - Process: Markdown → HTML (via Python `markdown` library) → PDF (via WeasyPrint)
-- Styling is defined in CSS within `pdf_generator.py` (no separate template files)
-- All styling changes must be made in the CSS string within `pdf_generator.py`
-
-**Usage**:
-```bash
-# Convert markdown to PDF
-python scripts/pdf_generator.py input.md output.pdf --title "Report Title"
-
-# Default output (same name, .pdf extension)
-python scripts/pdf_generator.py input.md
-```
+- Styling uses **external CSS files** loaded based on report type
+- CSS follows modular structure: base + type-specific
 
 **Standard Workflow**:
 1. Agent generates synthesis markdown file
-2. Agent calls `pdf_generator.py` to convert to PDF
-3. Both .md and .pdf files saved to profiles/{name}/output/
+2. Agent calls `pdf_generator.py` with report type parameter
+3. Generator loads appropriate CSS files
+4. Both .md and .pdf files saved to profiles/{name}/output/
 
-**No Templates**: There are no separate PDF template files. All formatting is CSS-based within the generator script.
+---
+
+### CSS File Structure
+
+**Location**: `scripts/css/`
+
+**Files**:
+1. **base.css** - Universal styles for ALL reports
+2. **chart_based.css** - Natal horoscope specific styles
+3. **timeline_based.css** - Life arc report specific styles
+4. **movement_based.css** - Transit/event report specific styles
+
+**How CSS Files Work**:
+- `base.css` is ALWAYS loaded first (defines page setup, typography, title pages, tables)
+- Type-specific CSS is loaded second (overrides base for report-specific needs)
+- Both files combine to create final styling
+
+---
+
+### CSS File Descriptions
+
+#### base.css (Universal)
+
+**Purpose**: Styles that apply to ALL astrology reports regardless of type
+
+**Defines**:
+- Page setup (@page rules, margins, page numbers)
+- Title page styling (`.title-page`, `.profile-name`, `.date-range`, `.birth-data`, `.report-meta`)
+- Typography defaults (Helvetica, 11pt body, line height 1.6)
+- Heading hierarchy (H1 through H4)
+- Tables (structure, borders, alternating rows)
+- Paragraphs (spacing, orphans/widows)
+- Lists, emphasis, blockquotes, code blocks
+- Color palette (black #000000 throughout)
+- Page layout (letter size, portrait, margins)
+
+**Key Features**:
+- Title page has no page number (@page :first)
+- Page numbers bottom center on all other pages
+- Helvetica font family throughout
+- Professional black-and-white color scheme
+- Page break controls to prevent orphaned headings
+
+**File Location**: `scripts/css/base.css`
+
+---
+
+#### chart_based.css (Natal Horoscope)
+
+**Purpose**: Styles specific to natal chart reports organized by chart components
+
+**Adds/Overrides**:
+- Extra paragraph spacing (margin-bottom: 1em) for flowing narrative
+- H3 subsections (margin-top: 1.5em, font-size: 14pt)
+- Synthesis section styling (border-top, extra spacing)
+- Orphan/widow control (4 lines minimum)
+- Smooth section transitions (reduced H2+p, H3+p spacing)
+
+**Use For**:
+- Mode 1: Natal horoscope reports
+- Any chart-based interpretation organized by placements
+
+**File Location**: `scripts/css/chart_based.css`
+
+---
+
+#### timeline_based.css (Life Arc)
+
+**Purpose**: Styles specific to life arc reports organized by decades/chapters
+
+**Adds/Overrides**:
+- Bigger chapter headings (H2 = 20pt, border-bottom 3px)
+- Sub-chapter styling (H3 = 15pt)
+- Age indicator emphasis (strong = bold)
+- Timeline visual flow (extra spacing after H2)
+- Page break controls (keep chapters together, prevent mid-chapter breaks)
+
+**Use For**:
+- Mode 2: Life arc timeline reports
+- Any report organized by long time periods (decades, major chapters)
+
+**File Location**: `scripts/css/timeline_based.css`
+
+---
+
+#### movement_based.css (Transit/Event Reports)
+
+**Purpose**: Styles specific to transit and single-event reports organized by movements
+
+**Adds/Overrides**:
+- Quick Reference table prominence (larger spacing, 10.5pt font)
+- Movement heading styling (H2 = 17pt, border-bottom 2px)
+- Date emphasis in headings (bold)
+- Section dividers (hr = 2.5em spacing, 2px border)
+- Timing context boxes (border-left, padding, light background)
+- Synthesis section prominence (3em top margin, 3px border, 11.5pt font)
+
+**Use For**:
+- Mode 3 Level 1: Long-range transit reports (with chapters)
+- Mode 3 Level 2: Short-range transit reports (pure movements)
+- Mode 3 Level 3: Single event analyzers
+- Any report organized by specific astrological movements
+
+**File Location**: `scripts/css/movement_based.css`
+
+**NOTE**: Transit report structure and CSS may need refinement - see transit output work (pending).
+
+---
+
+### Using CSS in pdf_generator.py
+
+**Current Status**: Needs implementation
+
+**Planned Usage**:
+```bash
+# Natal report (chart-based)
+python scripts/pdf_generator.py input.md output.pdf --report-type natal
+
+# Life arc report (timeline-based)
+python scripts/pdf_generator.py input.md output.pdf --report-type life_arc
+
+# Transit report (movement-based)
+python scripts/pdf_generator.py input.md output.pdf --report-type transit
+```
+
+**How It Should Work**:
+1. `pdf_generator.py` accepts `--report-type` parameter
+2. Based on report type, loads:
+   - `base.css` (always)
+   - `chart_based.css` (if report_type='natal')
+   - `timeline_based.css` (if report_type='life_arc')
+   - `movement_based.css` (if report_type='transit' or 'event')
+3. Combines CSS and applies to PDF generation
+
+**TODO**: Modify `pdf_generator.py` to implement this CSS loading system (see pending tasks).
+
+---
+
+### Agent Instructions for CSS
+
+**natal-interpreter agent**:
+- Use `--report-type natal` when calling pdf_generator.py
+- CSS will load: base.css + chart_based.css
+
+**life-arc-interpreter agent**:
+- Use `--report-type life_arc` when calling pdf_generator.py
+- CSS will load: base.css + timeline_based.css
+
+**transit-analyzer agents** (all levels):
+- Use `--report-type transit` when calling pdf_generator.py
+- CSS will load: base.css + movement_based.css
+
+**single-event-analyzer agent** (future):
+- Use `--report-type event` (same as transit)
+- CSS will load: base.css + movement_based.css
+
+---
+
+### Customizing CSS
+
+**To modify universal styles** (affects ALL reports):
+- Edit `scripts/css/base.css`
+- Changes apply to natal, life arc, transit, and event reports
+
+**To modify natal report styles only**:
+- Edit `scripts/css/chart_based.css`
+- Changes only affect natal horoscope PDFs
+
+**To modify life arc report styles only**:
+- Edit `scripts/css/timeline_based.css`
+- Changes only affect life arc timeline PDFs
+
+**To modify transit/event report styles only**:
+- Edit `scripts/css/movement_based.css`
+- Changes only affect transit and single event PDFs
+
+**CSS Cascading**:
+- base.css defines defaults
+- Type-specific CSS can override base
+- Use type-specific CSS for report-unique styling needs
 
 ## Visual/PDF Formatting
 
@@ -417,10 +774,10 @@ you stronger!
 
 ### Poetic Wrapup (Required Final Paragraph - No Heading)
 
-Every synthesis PDF MUST end with a 3-5 sentence poetic closing paragraph. **IMPORTANT**: Do NOT add a heading for this paragraph - it should flow naturally as the final paragraph of the last section.
+Every synthesis PDF MUST end with a 4-8 sentence poetic closing paragraph. **IMPORTANT**: Do NOT add a heading for this paragraph - it should flow naturally as the final paragraph of the last section.
 
 **Requirements**:
-- **Length**: 3-5 sentences
+- **Length**: 4-8 sentences
 - **Tone**: Visionary, commanding voice
 - **Voice**: Direct second person ("You are here to...", "You must...", "There is within you...")
 - **Purpose**: Reiterate key themes to deepen the emotional impact of the reading

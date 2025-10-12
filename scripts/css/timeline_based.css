@@ -1,0 +1,41 @@
+/* Timeline-Based Reports (Life Arc) */
+
+/* Chapter markers - bigger, more prominent H2s */
+h2 {
+    font-size: 20pt;
+    margin-top: 2em;
+    margin-bottom: 0.8em;
+    padding-bottom: 0.3em;
+    border-bottom: 3px solid #000000;
+    page-break-before: auto;
+}
+
+/* Sub-chapters (H3) for periods within chapters */
+h3 {
+    font-size: 15pt;
+    margin-top: 1.5em;
+    margin-bottom: 0.6em;
+    font-weight: bold;
+}
+
+/* Age indicators - make them stand out */
+strong {
+    font-weight: bold;
+}
+
+/* Timeline visual elements - extra spacing between major sections */
+h2 + p {
+    margin-top: 0.8em;
+}
+
+/* Prevent chapter breaks mid-page */
+h2 {
+    page-break-after: avoid;
+    page-break-inside: avoid;
+}
+
+/* Keep chapter openings together */
+h2 + h3,
+h2 + p {
+    page-break-before: avoid;
+}

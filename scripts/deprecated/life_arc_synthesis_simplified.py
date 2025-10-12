@@ -1,15 +1,37 @@
 #!/usr/bin/env python3
 """
-Life Arc Synthesis Generator - Simplified Version
-Generates narrative-focused life arc interpretation using simplified structure.
+DEPRECATED: Life Arc Synthesis Generator - Simplified Version
 
-Output Structure:
-1. Your Life Arc Story - Comprehensive narrative with all timing techniques
+⚠️  DO NOT USE FOR PRODUCTION LIFE ARC REPORTS ⚠️
+
+This script was created for testing and development purposes during the initial
+implementation of Mode 2 (Life Arc Reports). It generates a basic 3-section
+output structure but LACKS the sophisticated analysis of the life-arc-interpreter agent.
+
+Why this is deprecated:
+- Missing convergence scoring system (25-point Tier 1-3 analysis)
+- No proper chapter narrative structure
+- Limited psychological depth
+- Doesn't follow OUTPUT_STYLE_GUIDE formatting standards
+- No access to agent-specific prompt engineering
+
+✅ CORRECT APPROACH: Use the life-arc-interpreter agent instead
+   - Agent provides proper convergence analysis
+   - Chapter-based narrative structure (Template B)
+   - Follows OUTPUT_STYLE_GUIDE standards
+   - Psychological depth with therapeutic tone
+   - Zero astrological jargon for accessibility
+
+What this script does (for reference only):
+Generates a simplified 3-section life arc interpretation:
+1. Your Life Arc Story - Basic narrative with timing techniques
 2. Theme Convergences - Where 2+ techniques align
 3. Major Transitions - Key age markers and chapter changes
 
-Usage:
+Original testing usage:
     python life_arc_synthesis_simplified.py --profile darren --start-age 0 --end-age 46
+
+This file is preserved in scripts/deprecated/ for historical reference only.
 """
 
 import argparse

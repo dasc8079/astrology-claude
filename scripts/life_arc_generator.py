@@ -164,20 +164,26 @@ def calculate_progression_sign_changes(profile_name: str, start_age: int = 0, en
     return sign_changes
 
 
-def calculate_convergence_score(age: int, snapshot: Dict[str, Any], timeline: Dict[str, Any]) -> tuple[int, List[str]]:
+def calculate_convergence_score(age: int, snapshot: Dict[str, Any], timeline: Dict[str, Any], simplified_mode: bool = False) -> tuple[int, List[str]]:
     """
     Calculate convergence score for a given age.
 
     Scoring system:
     - TIER 1 (20pts): ZR L1 transitions, Progressed Sun sign changes (rare, decades apart)
     - TIER 2 (10-15pts): Saturn return, Uranus opp, Firdaria major transitions
-    - TIER 3 (1-5pts): Jupiter return, Firdaria sub, profection
+    - TIER 3 (1-5pts): Jupiter return, Firdaria sub (if not simplified), profection
 
     Thresholds:
     - 25+ points = MAJOR LIFE EVENT (chapter-defining)
     - 15-24 points = SIGNIFICANT TRANSITION (major milestone)
     - 8-14 points = NOTABLE PERIOD (worth mentioning)
     - <8 points = background (don't highlight)
+
+    Args:
+        age: Current age being scored
+        snapshot: Snapshot of all active periods at this age
+        timeline: Full timeline data
+        simplified_mode: If True, exclude L2 periods and Firdaria subs from scoring
 
     Returns:
         Tuple of (score, list of reasons)
@@ -189,25 +195,25 @@ def calculate_convergence_score(age: int, snapshot: Dict[str, Any], timeline: Di
     # ZR L1 transitions (sign changes)
     if snapshot['fortune_l1']:
         fortune_start = snapshot['fortune_l1'].get('start_age', 0)
-        if abs(age - fortune_start) < 0.5:
+        if abs(age - fortune_start) <= 0.5:  # FIXED: Changed < to <=
             score += 20
             reasons.append(f"ZR Fortune L1 → {snapshot['fortune_l1']['sign']}")
 
     if snapshot['spirit_l1']:
         spirit_start = snapshot['spirit_l1'].get('start_age', 0)
-        if abs(age - spirit_start) < 0.5:
+        if abs(age - spirit_start) <= 0.5:  # FIXED: Changed < to <=
             score += 20
             reasons.append(f"ZR Spirit L1 → {snapshot['spirit_l1']['sign']}")
 
     # Progressed Sun sign changes
     for prog_change in timeline.get('progression_sign_changes', []):
-        if abs(age - prog_change['age']) < 0.5:
+        if abs(age - prog_change['age']) <= 0.5:  # FIXED: Changed < to <=
             score += 20
             reasons.append(f"Progressed Sun → {prog_change['new_sign']}")
 
     # TIER 2 - MAJOR MILESTONES (10-15 points)
     for return_event in timeline.get('planetary_returns', []):
-        if abs(age - return_event['age']) < 0.5:
+        if abs(age - return_event['age']) <= 0.5:  # FIXED: Changed < to <=
             if return_event['planet'] in ['Saturn', 'Uranus']:
                 score += 15
                 reasons.append(return_event['event'])
@@ -218,14 +224,15 @@ def calculate_convergence_score(age: int, snapshot: Dict[str, Any], timeline: Di
     # Firdaria major transitions
     if snapshot['firdaria_major']:
         fir_start = snapshot['firdaria_major'].get('start_age', 0)
-        if abs(age - fir_start) < 0.5:
+        if abs(age - fir_start) <= 0.5:  # FIXED: Changed < to <=
             score += 10
             reasons.append(f"Firdaria → {snapshot['firdaria_major']['planet']}")
 
     # TIER 3 - REGULAR CYCLES (1-2 points)
-    if snapshot['firdaria_sub']:
+    # Skip Firdaria sub-periods in simplified mode (reduces noise)
+    if not simplified_mode and snapshot['firdaria_sub']:
         sub_start = snapshot['firdaria_sub'].get('start_age', 0)
-        if abs(age - sub_start) < 0.5:
+        if abs(age - sub_start) <= 0.5:  # FIXED: Changed < to <=
             score += 2
             reasons.append(f"Firdaria sub → {snapshot['firdaria_sub']['sub_planet']}")
 
@@ -235,9 +242,13 @@ def calculate_convergence_score(age: int, snapshot: Dict[str, Any], timeline: Di
     return score, reasons
 
 
-def identify_convergence_events(timeline: Dict[str, Any]) -> Dict[str, List[Dict[str, Any]]]:
+def identify_convergence_events(timeline: Dict[str, Any], simplified_mode: bool = False) -> Dict[str, List[Dict[str, Any]]]:
     """
     Identify all convergence events in timeline.
+
+    Args:
+        timeline: Complete timeline data
+        simplified_mode: If True, exclude L2 periods and Firdaria subs from scoring
 
     Returns:
         Dictionary with 'major', 'significant', and 'notable' event lists
@@ -251,7 +262,7 @@ def identify_convergence_events(timeline: Dict[str, Any]) -> Dict[str, List[Dict
 
     for age in range(start_age, end_age + 1):
         snapshot = get_year_snapshot(timeline, age)
-        score, reasons = calculate_convergence_score(age, snapshot, timeline)
+        score, reasons = calculate_convergence_score(age, snapshot, timeline, simplified_mode)
 
         event = {
             'age': age,
@@ -282,7 +293,8 @@ def generate_life_arc_timeline(
     include_spirit: bool = True,
     include_progressions: bool = False,
     include_solar_returns: bool = False,
-    current_date: Optional[str] = None
+    current_date: Optional[str] = None,
+    simplified_mode: bool = False
 ) -> Dict[str, Any]:
     """
     Generate complete life arc timeline combining all techniques.
@@ -296,6 +308,8 @@ def generate_life_arc_timeline(
         include_progressions: Include secondary progressions
         include_solar_returns: Include solar return charts
         current_date: Date for current transits (YYYY-MM-DD or None)
+        simplified_mode: If True, exclude L2 periods and Firdaria subs from convergence scoring
+                         (reduces noise for decades-long life arc analysis)
 
     Returns:
         Dictionary with unified timeline data
@@ -403,8 +417,9 @@ def generate_life_arc_timeline(
     }
 
     # Calculate convergence events (needs complete timeline data)
-    convergence = identify_convergence_events(timeline)
+    convergence = identify_convergence_events(timeline, simplified_mode)
     timeline['convergence'] = convergence
+    timeline['simplified_mode'] = simplified_mode
 
     return timeline
 

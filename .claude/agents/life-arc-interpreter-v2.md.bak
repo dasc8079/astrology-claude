@@ -823,16 +823,6 @@ Your goal: Reveal the grand narrative arc of a person's life through decades-lon
 You stand at the threshold between worlds—the old chapter dissolving, the new one waiting. There is within you a strength forged through years of discipline, and it is time now to trust what you have built. The intensity you feel is not breakdown but breakthrough, the final transformation before you step into what comes next.
 ```
 
-### Output
-
-After generating the life arc report, return the complete markdown report to mode-orchestrator.
-
-mode-orchestrator will handle:
-- Saving to output folder
-- Extracting and printing synthesis section to terminal
-- Invoking accuracy-checker for quality verification
-- Displaying results to user
-
 ### Format Style
 
 **Chapter Headings**:

@@ -6,8 +6,9 @@ Converts markdown synthesis files to professional PDF format.
 Used by all agent tools to generate final synthesis PDFs.
 
 Usage:
-    python scripts/pdf_generator.py input.md output.pdf
-    python scripts/pdf_generator.py profiles/darren/output/life_arc_synthesis_ages_0-46.md
+    python scripts/pdf_generator.py input.md output.pdf --report-type natal
+    python scripts/pdf_generator.py input.md --report-type life_arc
+    python scripts/pdf_generator.py input.md --report-type transit
 """
 
 import sys
@@ -17,18 +18,60 @@ import markdown
 from weasyprint import HTML, CSS
 
 
+def load_css_for_report_type(report_type: str, css_dir: Path) -> list:
+    """
+    Load CSS files based on report type.
+
+    Args:
+        report_type: One of 'natal', 'life_arc', 'transit', 'event'
+        css_dir: Path to CSS directory (scripts/css/)
+
+    Returns:
+        List of CSS objects to apply
+    """
+    css_objects = []
+
+    # Always load base.css first
+    base_css_path = css_dir / 'base.css'
+    if base_css_path.exists():
+        css_objects.append(CSS(filename=str(base_css_path)))
+    else:
+        print(f"⚠️  Warning: base.css not found at {base_css_path}")
+
+    # Load report-type-specific CSS
+    type_css_map = {
+        'natal': 'chart_based.css',
+        'life_arc': 'timeline_based.css',
+        'transit': 'movement_based.css',
+        'event': 'movement_based.css'
+    }
+
+    if report_type in type_css_map:
+        type_css_path = css_dir / type_css_map[report_type]
+        if type_css_path.exists():
+            css_objects.append(CSS(filename=str(type_css_path)))
+        else:
+            print(f"⚠️  Warning: {type_css_map[report_type]} not found at {type_css_path}")
+    else:
+        print(f"⚠️  Warning: Unknown report type '{report_type}', using base.css only")
+
+    return css_objects
+
+
 def markdown_to_pdf(
     markdown_path: str,
     pdf_path: str = None,
-    title: str = "Astrology Report"
+    title: str = "Astrology Report",
+    report_type: str = "natal"
 ) -> str:
     """
-    Convert markdown file to professional PDF.
+    Convert markdown file to professional PDF using external CSS files.
 
     Args:
         markdown_path: Path to markdown file
         pdf_path: Output PDF path (defaults to same name with .pdf extension)
         title: Document title for PDF metadata
+        report_type: Report type ('natal', 'life_arc', 'transit', 'event')
 
     Returns:
         Path to generated PDF
@@ -43,6 +86,16 @@ def markdown_to_pdf(
         pdf_path = markdown_path.with_suffix('.pdf')
     else:
         pdf_path = Path(pdf_path)
+
+    # Determine CSS directory (scripts/css/ relative to this file)
+    script_dir = Path(__file__).parent
+    css_dir = script_dir / 'css'
+
+    # Load CSS files based on report type
+    css_objects = load_css_for_report_type(report_type, css_dir)
+
+    if not css_objects:
+        raise FileNotFoundError(f"No CSS files found in {css_dir}")
 
     # Read markdown content
     with open(markdown_path, 'r', encoding='utf-8') as f:
@@ -60,8 +113,9 @@ def markdown_to_pdf(
         ]
     )
 
-    # Professional CSS styling
-    css = """
+    # DEPRECATED: Old embedded CSS (kept for reference, not used)
+    # CSS is now loaded from external files in scripts/css/
+    deprecated_css = """
     @page {
         size: letter;
         margin: 2.5cm;
@@ -239,6 +293,8 @@ def markdown_to_pdf(
         page-break-inside: avoid;
     }
     """
+    # NOTE: Old CSS above is DEPRECATED and NOT USED
+    # CSS is now loaded from external files: scripts/css/base.css + type-specific CSS
 
     # Wrap HTML with proper document structure
     full_html = f"""
@@ -254,13 +310,15 @@ def markdown_to_pdf(
     </html>
     """
 
-    # Generate PDF
+    # Generate PDF using external CSS files
     HTML(string=full_html).write_pdf(
         pdf_path,
-        stylesheets=[CSS(string=css)]
+        stylesheets=css_objects
     )
 
     print(f"✅ PDF generated: {pdf_path}")
+    print(f"   Report type: {report_type}")
+    print(f"   CSS files loaded: base.css + {report_type}-specific")
     print(f"   Size: {pdf_path.stat().st_size / 1024:.1f} KB")
 
     return str(pdf_path)
@@ -268,7 +326,7 @@ def markdown_to_pdf(
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Convert markdown synthesis to professional PDF'
+        description='Convert markdown synthesis to professional PDF using external CSS'
     )
     parser.add_argument(
         'markdown_file',
@@ -284,6 +342,12 @@ def main():
         default='Astrology Report',
         help='Document title for PDF metadata'
     )
+    parser.add_argument(
+        '--report-type',
+        choices=['natal', 'life_arc', 'transit', 'event'],
+        default='natal',
+        help='Report type determines CSS styling (default: natal)'
+    )
 
     args = parser.parse_args()
 
@@ -291,7 +355,8 @@ def main():
         pdf_path = markdown_to_pdf(
             args.markdown_file,
             args.pdf_file,
-            args.title
+            args.title,
+            args.report_type
         )
         print(f"\n✨ Success! PDF ready at: {pdf_path}")
 

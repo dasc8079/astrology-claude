@@ -1,0 +1,204 @@
+/* Base CSS - Applied to ALL astrology reports */
+
+/* Page Setup */
+@page {
+    size: letter;
+    margin: 2.5cm;
+
+    @bottom-center {
+        content: counter(page);
+        font-size: 9pt;
+        color: #666;
+    }
+}
+
+/* Title Page (no page numbers) */
+@page :first {
+    @bottom-center {
+        content: none;
+    }
+}
+
+/* Body Defaults */
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.6;
+    color: #000000;
+    text-align: left;
+    hyphens: auto;
+}
+
+/* Title Page Styling */
+.title-page {
+    text-align: center;
+    padding-top: 3cm;
+    page-break-after: always;
+}
+
+.title-page h1 {
+    font-size: 28pt;
+    font-weight: bold;
+    margin-bottom: 1em;
+    border: none;
+    padding: 0;
+}
+
+.title-page .profile-name {
+    font-size: 20pt;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.title-page .date-range {
+    font-size: 16pt;
+    margin-bottom: 2em;
+}
+
+.title-page .birth-data {
+    font-size: 12pt;
+    line-height: 1.8;
+    margin-top: 3em;
+    color: #333;
+}
+
+.title-page .report-meta {
+    font-size: 10pt;
+    color: #666;
+    margin-top: 4em;
+}
+
+/* Headings */
+h1 {
+    color: #000000;
+    font-size: 24pt;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    page-break-after: avoid;
+    border-bottom: 3px solid #000000;
+    padding-bottom: 0.3em;
+}
+
+h2 {
+    color: #000000;
+    font-size: 18pt;
+    font-weight: bold;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    page-break-after: avoid;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 0.2em;
+}
+
+h3 {
+    color: #000000;
+    font-size: 14pt;
+    font-weight: bold;
+    margin-top: 1.2em;
+    margin-bottom: 0.4em;
+    page-break-after: avoid;
+}
+
+h4 {
+    color: #000000;
+    font-size: 12pt;
+    font-weight: bold;
+    margin-top: 1em;
+    margin-bottom: 0.3em;
+    page-break-after: avoid;
+}
+
+/* Paragraphs */
+p {
+    margin-top: 0;
+    margin-bottom: 0.8em;
+    orphans: 3;
+    widows: 3;
+}
+
+/* Lists */
+ul, ol {
+    margin-left: 1.5em;
+    margin-bottom: 1em;
+}
+
+li {
+    margin-bottom: 0.3em;
+}
+
+/* Text Emphasis */
+strong {
+    color: #000000;
+    font-weight: bold;
+}
+
+em {
+    font-style: italic;
+    color: #000000;
+}
+
+/* Tables */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 1.5em;
+    page-break-inside: avoid;
+}
+
+th {
+    background-color: #000000;
+    color: white;
+    font-weight: bold;
+    padding: 0.5em;
+    text-align: left;
+    border: 1px solid #000000;
+}
+
+td {
+    padding: 0.5em;
+    border: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Horizontal Rules */
+hr {
+    border: none;
+    border-top: 1px solid #000;
+    margin: 2em 0;
+}
+
+/* Code (if needed) */
+code {
+    font-family: 'Courier New', monospace;
+    font-size: 9pt;
+    background-color: #f4f4f4;
+    padding: 0.1em 0.3em;
+    border-radius: 3px;
+}
+
+pre {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 1em;
+    overflow-x: auto;
+    margin-bottom: 1em;
+    page-break-inside: avoid;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+}
+
+/* Blockquotes */
+blockquote {
+    margin: 1em 2em;
+    padding-left: 1em;
+    border-left: 3px solid #000;
+    font-style: italic;
+}

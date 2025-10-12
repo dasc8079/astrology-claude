@@ -1,0 +1,39 @@
+/* Chart-Based Reports (Natal Horoscope) */
+
+/* Extra paragraph spacing for flowing narrative */
+p {
+    margin-bottom: 1em;
+}
+
+/* Subsection styling */
+h3 {
+    margin-top: 1.5em;
+    font-size: 14pt;
+}
+
+/* Bold emphasis for key themes */
+strong {
+    font-weight: bold;
+}
+
+/* Poetic synthesis closing (final section) */
+.synthesis {
+    margin-top: 2em;
+    padding-top: 1em;
+    border-top: 2px solid #000;
+}
+
+/* Fix weird line breaks - prevent orphan/widow issues */
+p {
+    orphans: 4;
+    widows: 4;
+}
+
+/* Smooth section transitions */
+h2 + p {
+    margin-top: 0.5em;
+}
+
+h3 + p {
+    margin-top: 0.3em;
+}

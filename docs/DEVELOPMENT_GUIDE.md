@@ -153,23 +153,64 @@ python scripts/create_profile.py --name "person" \
 python scripts/seed_data_generator.py --profile darren
 ```
 
-Generates: `/profiles/darren/seed_data/master_seed_data.yaml`
+Generates: `/profiles/darren/seed_data/master_seed_data.yaml` or `seed_data.json`
+
+**IMPORTANT WORKFLOW NOTE**:
+- **seed_data_generator.py should be called EVERY TIME new birth data is entered**
+- This ensures all astronomical calculations are fresh and accurate
+- Interpretation agents (natal, life-arc, transit) require ONLY seed_data.json
+- Agents do NOT require natal-interpreter or other interpreters to have run first
+- Seed data is the single source of truth for all downstream interpretation
 
 **Current Capabilities**:
 - Basic natal chart data (planets, houses, aspects, sect)
 - (Life arc calculations coming in next iteration)
 
-**Seed Data Structure**: See `/docs/seed_data_schema.yaml`
+**Data Formats**: See **[DATA_FORMATS.md](DATA_FORMATS.md)** for complete schemas:
+- Profile formats (profile.txt and profile.md)
+- Life arc timeline data structure
+- Transit data structure
+- Seed data structure (coming soon)
+- RAG database format
+- Agent communication formats
 
 ### 3. Agent-Based Synthesis
 
 **Available Agents** (`.claude/agents/`):
+
+For complete agent documentation, see **[AGENTS_REFERENCE.md](AGENTS_REFERENCE.md)** which includes:
+- Complete agent catalog with capabilities and triggers
+- Coordination patterns and handoffs
+- When to use each agent
+- Agent-to-agent communication protocols
+
+**Key Interpretation Agents**:
 
 **natal-interpreter**:
 - Purpose: Generate natal horoscope synthesis
 - Input: Seed data from `natal_interpretation_enhanced.md`
 - Output: Markdown + PDF synthesis
 - Style: Narrative prose, plain language
+
+**life-arc-interpreter**:
+- Purpose: Generate life timeline narratives
+- Input: Life arc timeline data
+- Output: Decades-long life story (ages 0-100)
+
+**transit-analyzer-short**:
+- Purpose: 1-4 month transit reports (multi-movement OR period-of-interest)
+- Dual mode: Standard date range OR cluster analysis
+
+**transit-analyzer-long**:
+- Purpose: 1-5 year detailed transit analysis
+- Structure: Chapter-based with convergence tracking
+
+**Infrastructure Agents**:
+
+**mode-orchestrator**:
+- Purpose: Central routing for ALL interpretation requests
+- Routes: Natal, Life Arc, Transit, Timing requests
+- Validates: Profile and seed data before invoking interpreters
 
 **workflow-planner-2**:
 - Purpose: Technical advisor and architect
@@ -185,6 +226,10 @@ Generates: `/profiles/darren/seed_data/master_seed_data.yaml`
 - Purpose: RAG database maintenance
 - Database: 2,472 chunks from 6 sources
 - Queries: Semantic search for interpretations
+
+**astrology-output-debugger**:
+- Purpose: Debug interpretation quality issues
+- Investigates: Data inconsistency, missing sections, logic errors
 
 ### 4. Testing
 
@@ -212,9 +257,38 @@ python -c "from scripts.profile_loader import get_default_profile; print(get_def
 1. Create profile (if new): `create_profile.py`
 2. Generate seed data: `natal_interpreter.py`
 3. Invoke natal-interpreter agent for synthesis
-4. Create PDF: `create_synthesis_pdf.py`
+4. Create PDF: `python scripts/pdf_generator.py input.md --report-type natal`
 
 **All automated with**: "Create a natal horoscope for [person]"
+
+### Generate PDF from Markdown
+
+All astrology reports use the **external CSS system** for consistent formatting:
+
+```bash
+# Natal report (chart-based styling)
+python scripts/pdf_generator.py profiles/name/output/natal_synthesis.md --report-type natal
+
+# Life arc report (timeline-based styling)
+python scripts/pdf_generator.py profiles/name/output/life_arc_synthesis.md --report-type life_arc
+
+# Transit report (movement-based styling)
+python scripts/pdf_generator.py profiles/name/output/transit_report.md --report-type transit
+```
+
+**Report Types**:
+- `natal` - Loads base.css + chart_based.css
+- `life_arc` - Loads base.css + timeline_based.css
+- `transit` - Loads base.css + movement_based.css
+- `event` - Loads base.css + movement_based.css (same as transit)
+
+**CSS Files** (in `scripts/css/`):
+- `base.css` - Universal styles (page setup, title pages, typography)
+- `chart_based.css` - Natal horoscope specific styles
+- `timeline_based.css` - Life arc specific styles
+- `movement_based.css` - Transit/event specific styles
+
+**See**: [OUTPUT_STYLE_GUIDE.md](OUTPUT_STYLE_GUIDE.md) for complete formatting standards
 
 ### Query RAG Database
 
@@ -242,16 +316,111 @@ python scripts/query_rag_database.py "Mars square Saturn"
 
 ## Agent Coordination
 
+For complete agent workflows and coordination patterns, see **[WORKFLOWS_VISUAL.md](WORKFLOWS_VISUAL.md)** and **[AGENTS_REFERENCE.md](AGENTS_REFERENCE.md)**.
+
 **When to use agents**:
 
-1. **workflow-planner-2**: Planning features, architecture decisions, tool selection
-2. **docs-updater-astrology**: After completing work, when docs need updating
-3. **natal-interpreter**: Synthesizing natal horoscope from seed data
-4. **astrology-rag-builder**: RAG database work, adding sources, quality control
+1. **mode-orchestrator**: ALL interpretation requests (natal, life arc, transit)
+2. **workflow-planner-2**: Planning features, architecture decisions, tool selection
+3. **docs-updater-astrology**: After completing work, when docs need updating
+4. **natal-interpreter**: Synthesizing natal horoscope from seed data (via mode-orchestrator)
+5. **life-arc-interpreter**: Synthesizing life arc timeline narratives (via mode-orchestrator)
+6. **transit-analyzer-short**: 1-4 month transit reports (via mode-orchestrator)
+7. **transit-analyzer-long**: 1-5 year transit reports (via mode-orchestrator)
+8. **astrology-rag-builder**: RAG database work, adding sources, quality control
+9. **astrology-output-debugger**: Debug interpretation quality issues
 
-**Agent invocation**: Use Task tool to launch agents
+**Agent invocation**: Use Task tool to launch agents (mode-orchestrator handles routing)
 
-**Agent modification**: Synthesis agents (natal-interpreter, future life-arc agent) require user approval before changes
+**Agent modification**: Synthesis agents (natal-interpreter, life-arc-interpreter, transit-analyzer) require user approval before changes
+
+**Complete workflows**: See [WORKFLOWS_VISUAL.md](WORKFLOWS_VISUAL.md) for visual workflow diagrams
+
+---
+
+## Creating New Interpretation Agents
+
+When creating new astrology interpretation agents, follow these standards:
+
+### Required Agent Instructions
+
+All interpretation agents MUST include these sections in their instructions:
+
+1. **Output Format Standards**:
+```
+Follow OUTPUT_STYLE_GUIDE.md for all output:
+- Two-file system: process.md (technical) + synthesis.pdf (narrative)
+- Report structure templates based on type (Chart-Based, Timeline-Based, Movement-Based)
+- Title page with metadata
+- Voice standards (psychological depth, second-person, minimal jargon)
+```
+
+2. **PDF Generation**:
+```
+Generate PDF using external CSS system:
+python scripts/pdf_generator.py output.md --report-type [natal|life_arc|transit|event]
+
+Report types:
+- natal: Chart-based reports (natal horoscopes)
+- life_arc: Timeline-based reports (life arc timelines)
+- transit: Movement-based reports (transit analysis)
+- event: Movement-based reports (single event analysis)
+```
+
+3. **Astrological Systems Reference**:
+```
+See ASTROLOGY_REFERENCE.md for:
+- Traditional systems (houses, dignities, aspects)
+- Planetary meanings and conditions
+- Timing techniques
+Do NOT duplicate this content in agent instructions.
+```
+
+4. **Report Structure Template**:
+Specify which template from OUTPUT_STYLE_GUIDE.md:
+- **Template A**: Chart-Based (for natal/chart-focused reports)
+- **Template B**: Timeline-Based (for life arc/decades reports)
+- **Template C1**: Movement-Based with Chapters (for long transit reports)
+- **Template C2**: Pure Movement-Based (for short transit/event reports)
+
+### Agent Creation Checklist
+
+- [ ] References OUTPUT_STYLE_GUIDE.md for formatting
+- [ ] Specifies correct report type for PDF generation
+- [ ] References ASTROLOGY_REFERENCE.md (not duplicating content)
+- [ ] Includes title page generation instructions
+- [ ] Specifies voice standards (psychological depth, therapeutic tone)
+- [ ] Defines two-file output (process.md + synthesis.pdf)
+- [ ] Uses appropriate report structure template
+
+### Example Agent Instruction Block
+
+```markdown
+## Output Format
+
+Follow [OUTPUT_STYLE_GUIDE.md](docs/OUTPUT_STYLE_GUIDE.md) standards:
+
+**Report Type**: Timeline-Based (Template B)
+**Structure**: ZR L1 chapters → H2 headings, convergence events → H3 subheadings
+**Voice**: Psychological depth, second-person, minimal jargon
+**Files**: life_arc_process.md (technical) + life_arc_synthesis.pdf (narrative)
+
+## PDF Generation
+
+Generate PDF with timeline-based styling:
+```bash
+python scripts/pdf_generator.py output.md --report-type life_arc
+```
+
+## Astrological Systems
+
+See [ASTROLOGY_REFERENCE.md](docs/ASTROLOGY_REFERENCE.md) for:
+- Traditional systems and dignities
+- Timing techniques (profections, ZR, Firdaria)
+- Planetary meanings
+```
+
+**For complete standards**: See [OUTPUT_STYLE_GUIDE.md](OUTPUT_STYLE_GUIDE.md)
 
 ---
 
@@ -342,26 +511,32 @@ All data consolidated in `master_seed_data.yaml` per profile.
 
 ## Troubleshooting
 
-### Common Issues
+For comprehensive troubleshooting, see **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** which covers:
+- Profile issues (not found, missing fields)
+- Seed data problems (missing, incomplete, schema mismatch)
+- Calculation errors (Swiss Ephemeris, transits)
+- Interpretation quality issues (data inconsistency, missing sections, jargon)
+- RAG database problems (empty results, corruption)
+- Output generation failures (reports not saved, terminal summary issues)
+- Agent coordination issues (routing, triggering)
+- PDF generation problems (missing title page, formatting)
+- Complete debug workflows
+
+### Quick Fixes
 
 **ModuleNotFoundError**:
 - Activate virtual environment: `source venv/bin/activate`
 - Install dependencies: `pip install -r requirements.txt`
 
-**KeyError in chart data**:
-- Check chart_analyzer output structure
-- Verify keys exist before access
-- Use `get()` method with defaults
+**Profile not found**:
+- Create with: `python scripts/create_profile.py --name <name> --date ... --time ... --location ...`
 
-**Ephemeris calculation errors**:
-- Verify date is within ephemeris range (1800-2400 CE typically)
-- Check coordinates are valid (lat: -90 to 90, lon: -180 to 180)
-- Ensure timezone is correct
+**Seed data not found**:
+- Generate with: `python scripts/seed_data_generator.py --profile <name>`
 
 **RAG database not found**:
 - Verify `/output/database/astrology_rag_database.jsonl` exists
-- Check OpenAI API key in `.env` file
-- Rebuild database if corrupted
+- Rebuild if needed: `python scripts/build_rag_database.py`
 
 ### Debug Mode
 
@@ -370,6 +545,8 @@ Set environment variables:
 export DEBUG=1
 python scripts/seed_data_generator.py --profile darren
 ```
+
+For detailed troubleshooting procedures, consult [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
 ---
 
@@ -401,6 +578,11 @@ python scripts/seed_data_generator.py --profile darren
 - `REFERENCE.md` - Astrology systems used
 - `/docs/seed_data_schema.yaml` - Complete data structure
 - `/docs/life_arc_report_design.md` - Life arc system design
+- `/docs/DATA_FORMATS.md` - Complete JSON schemas and data structures
+- `/docs/TROUBLESHOOTING.md` - Common issues and debug workflows
+- `/docs/AGENTS_REFERENCE.md` - Complete agent catalog with capabilities
+- `/docs/SCRIPTS_REFERENCE.md` - Script documentation and usage
+- `/docs/WORKFLOWS_VISUAL.md` - Visual workflow diagrams
 
 **Reference Books** (in `/Referendces/`):
 1. Hellenistic Astrology (Chris Brennan) - PRIMARY
@@ -412,6 +594,13 @@ python scripts/seed_data_generator.py --profile darren
 
 ---
 
-*For current work status, see CURRENT_WORK.md*
-*For astrology reference, see REFERENCE.md*
-*For project overview, see README.md*
+**Documentation Index**:
+- **CURRENT_WORK.md** - Current focus and active work
+- **REFERENCE.md** - Astrology systems and terminology
+- **AGENTS_REFERENCE.md** - Complete agent catalog
+- **SCRIPTS_REFERENCE.md** - Script documentation
+- **DATA_FORMATS.md** - JSON schemas and data structures
+- **TROUBLESHOOTING.md** - Common issues and fixes
+- **WORKFLOWS_VISUAL.md** - Visual workflow diagrams
+- **OUTPUT_STYLE_GUIDE.md** - Output format standards
+- **README.md** - Project overview

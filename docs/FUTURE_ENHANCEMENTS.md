@@ -2,6 +2,81 @@
 
 This document tracks timing techniques and features that were considered but deferred for future implementation.
 
+## Deferred Agents
+
+### Electional Astrology Agent
+
+**Status**: Not implemented
+**Reason**: Requires different methodology (finding optimal times, not interpreting given times)
+**Priority**: Medium (useful feature, not core functionality)
+**Date Added**: 2025-10-11
+
+**What Electional Astrology Agent Would Add:**
+
+1. **Optimal Timing Selection**
+   - User provides date range + intention (e.g., "start business", "get married", "sign contract")
+   - Agent finds best dates/times within range based on traditional electional rules
+   - Considers natal chart compatibility (user's chart + elected chart synergy)
+
+2. **Traditional Electional Rules**
+   - Moon phase, sign, and aspects (primary considerations)
+   - Ascendant and MC placement (angular strength)
+   - Benefic planets (Jupiter/Venus) well-placed and strong
+   - Malefic planets (Mars/Saturn) weak or well-contained
+   - House rulers appropriate to intention (e.g., 10th for career, 7th for partnership)
+
+3. **Practical Output**
+   - Top 3-5 dates/times within user's range
+   - Explanation of why each time is favorable
+   - What to avoid (challenging periods within range)
+   - Backup dates if primary choices unavailable
+
+**Implementation Approach:**
+
+1. **Input Parameters**:
+   - User's natal chart (for compatibility)
+   - Date range (flexible window, e.g., "March 2026")
+   - Intention category (career, relationship, travel, contract, health, etc.)
+   - Required constraints (e.g., "must be weekday 9am-5pm")
+
+2. **Calculation Strategy**:
+   - Calculate planetary positions for every hour in date range
+   - Score each moment based on traditional electional criteria
+   - Filter by user constraints
+   - Rank top candidates
+   - Generate interpretation for each candidate
+
+3. **Agent Workflow**:
+   - Validate inputs (date range, intention, constraints)
+   - Run electional calculations (new script: `electional_calculator.py`)
+   - Query RAG for electional rules specific to intention
+   - Generate ranked list with explanations
+   - Output user-friendly recommendations
+
+**Why Deferred:**
+- Core project focuses on INTERPRETATION of existing charts/times
+- Electional astrology is SELECTION of future optimal times (different paradigm)
+- Requires new calculation logic and scoring system
+- User base may be small initially (niche use case)
+- Can be added later without disrupting existing modes
+
+**If We Implement Later:**
+
+Recommended approach:
+- Create new Mode 5: Electional Timing
+- Build `electional_calculator.py` (scores moments in date range)
+- Create `electional-analyzer` agent (interprets top candidates)
+- Add to mode-orchestrator routing
+- Label as "experimental" initially
+
+**References:**
+- Lehman, J. Lee: "The Book of Rulerships"
+- Dykes, Benjamin: "Choices & Inceptions" (translation of Sahl ibn Bishr)
+- Hand, Robert: "Planets in Transit" (electional timing sections)
+- Traditional rules from Bonatti, Lilly, Al-Biruni
+
+---
+
 ## Deferred Timing Techniques
 
 ### Primary Directions

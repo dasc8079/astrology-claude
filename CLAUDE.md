@@ -14,7 +14,28 @@
 
 **Design Documents**: See [/docs/](docs/) for detailed specifications and implementation plans
 
-**Reference Guides**: See [/docs/ASTROLOGY_REFERENCE.md](docs/ASTROLOGY_REFERENCE.md) for astrology systems, [/docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md) for development workflow
+**Reference Guides**:
+- [ASTROLOGY_REFERENCE.md](docs/ASTROLOGY_REFERENCE.md) - Astrology systems and terminology
+- [OUTPUT_STYLE_GUIDE.md](docs/OUTPUT_STYLE_GUIDE.md) - Output format standards for all report types
+- [DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md) - Development workflow and agent creation
+- [DATA_FORMATS.md](docs/DATA_FORMATS.md) - Complete JSON schemas and data structures
+- [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) - Common issues and debug workflows
+
+**Operational Guides**:
+- [AGENT_ORCHESTRATION_GUIDE.md](docs/AGENT_ORCHESTRATION_GUIDE.md) - How to use mode-orchestrator and astrology-output-debugger
+- [PROFILES_GUIDE.md](docs/PROFILES_GUIDE.md) - Profile creation and management
+- [TRANSITS_GUIDE.md](docs/TRANSITS_GUIDE.md) - Transit concepts and usage
+- [LIFE_ARC_GUIDE.md](docs/LIFE_ARC_GUIDE.md) - Life arc timeline generation and interpretation
+- [AGENTS_REFERENCE.md](docs/AGENTS_REFERENCE.md) - Complete agent catalog with capabilities
+- [SCRIPTS_REFERENCE.md](docs/SCRIPTS_REFERENCE.md) - Script documentation and usage
+- [WORKFLOWS_VISUAL.md](docs/WORKFLOWS_VISUAL.md) - Visual workflow diagrams
+
+**Timing Techniques Guides**:
+- [PROFECTIONS_GUIDE.md](docs/PROFECTIONS_GUIDE.md) - Annual profections system
+- [ZODIACAL_RELEASING_GUIDE.md](docs/ZODIACAL_RELEASING_GUIDE.md) - Zodiacal Releasing (Fortune/Spirit, L1/L2/L3)
+- [firdaria_reference.md](docs/firdaria_reference.md) - Firdaria timing system (Persian time-lords)
+- [SECONDARY_PROGRESSIONS_GUIDE.md](docs/SECONDARY_PROGRESSIONS_GUIDE.md) - Secondary progressions
+- [SOLAR_RETURNS_GUIDE.md](docs/SOLAR_RETURNS_GUIDE.md) - Solar return charts
 
 ---
 
@@ -68,7 +89,8 @@ See [CURRENT_WORK.md](CURRENT_WORK.md) for detailed status and next steps.
 **Planetary Set**: Traditional Seven (Sun through Saturn) primary; modern planets (Uranus, Neptune, Pluto) secondary
 **Aspects**: Classical only (conjunction, sextile, square, trine, opposition)
 **Storage**: Local files, JSONL vector database
-**Output**: Markdown reports + PDF generation
+**Output**: Markdown reports + PDF generation (external CSS system with report-type styling)
+**PDF System**: WeasyPrint with modular CSS (base.css + type-specific styles)
 
 **Migration Path**: Agent instructions serve as approved "prompts"; can migrate to GPT-5 API later if desired.
 
@@ -78,16 +100,33 @@ See [CURRENT_WORK.md](CURRENT_WORK.md) for detailed status and next steps.
 
 **Planning & Documentation**:
 - `workflow-planner-2` - Expert advisor for architecture, tools, and technical recommendations
-- `docs-updater-astrology` - Documentation maintainer (CURRENT_WORK.md, CLAUDE.md, /history/)
+- `feature-designer-astrology` - Conversational feature design and specification creation ✅ NEW
+- `docs-updater-astrology` - Documentation maintainer (CURRENT_WORK.md, CLAUDE.md, /history/, AGENTS_REFERENCE.md)
+
+**Agent Creation**:
+- `astrology-agent-creator` - Creates astrology interpretation agents with OUTPUT_STYLE_GUIDE.md template extraction
+  - Auto-invokes docs-updater-astrology after creation
+  - Can accept specification documents from feature-designer-astrology
 
 **RAG Database**:
 - `astrology-rag-builder` - RAG database maintenance, queries, normalization
 - `astrology-output-debugger` - Debug interpretation issues, data quality, workflow problems
 
+**Quality Assurance**:
+- `accuracy-checker` - Automated quality verification for interpretation outputs (SPEC COMPLETE, implementation pending)
+
+**Orchestration**:
+- `mode-orchestrator` - Central coordinator routing all astrology interpretation requests (Mode 1-4+) ⚠️ UPDATE WHEN CREATING NEW INTERPRETERS
+
 **Interpretation & Synthesis**:
-- `natal-interpreter` - Natal chart synthesis using traditional Hellenistic methods (Mode 1) ✅
-- `life-arc-interpreter` - Life timeline synthesis (Mode 2) ✅ WORKING (fixed 2025-10-07)
-- `transit-analyzer` - Transit analysis and timing (Mode 3) ⏳ Planned
+- `natal-interpreter` - Natal chart synthesis using traditional Hellenistic methods (Mode 1) ✅ WORKING
+- `life-arc-interpreter` - Life timeline synthesis (Mode 2) ✅ WORKING
+- `transit-analyzer-long` - Long-term transit reports, 1-5 years (Mode 3 Level 1) ✅ WORKING
+- `transit-analyzer-short` - Short-term transit reports, 1-4 months (Mode 3 Level 2) ✅ WORKING
+
+**IMPORTANT**: When creating new interpretation agents, update `mode-orchestrator.md` to add routing logic. astrology-agent-creator automatically invokes docs-updater-astrology. See [AGENT_ORCHESTRATION_GUIDE.md](docs/AGENT_ORCHESTRATION_GUIDE.md) for details.
+
+**Complete Agent Catalog**: See [AGENTS_REFERENCE.md](docs/AGENTS_REFERENCE.md) for detailed agent documentation.
 
 See [.claude/agents/](.claude/agents/) for individual agent configuration files.
 
@@ -203,15 +242,20 @@ See [/docs/ASTROLOGY_REFERENCE.md](docs/ASTROLOGY_REFERENCE.md) for complete ast
 - [/history/index.md](history/index.md) - History index with stage summaries
 
 **Design & Specifications**:
-- [/docs/life_arc_report_design.md](docs/life_arc_report_design.md) - Life Arc Report design (105+ pages)
-- [/docs/timing_techniques_plan.md](docs/timing_techniques_plan.md) - Timing techniques plan (25+ pages)
-- [/docs/transit_interpretation_design.md](docs/transit_interpretation_design.md) - Transit design
-- [/docs/transit_staged_implementation.md](docs/transit_staged_implementation.md) - Transit implementation plan
-- [/docs/session_goals_COMPARISON.md](docs/session_goals_COMPARISON.md) - Documentation structure comparison
+- [/docs/single_event_design.md](docs/single_event_design.md) - Single Event Analysis design (Mode 3 Level 3)
+- [/docs/FUTURE_ENHANCEMENTS.md](docs/FUTURE_ENHANCEMENTS.md) - Deferred features and future improvements
 
-**Reference Guides**:
-- [/docs/ASTROLOGY_REFERENCE.md](docs/ASTROLOGY_REFERENCE.md) - Astrological systems and terminology (rarely updated)
-- [/docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md) - Contributor guide and development workflow (rarely updated)
+**Archived Design Documents** (see /docs/archive/design/):
+- life_arc_report_design.md - Life Arc Report design (105+ pages)
+- timing_techniques_plan.md - Timing techniques plan (25+ pages)
+- transit_interpretation_design.md - Transit design
+- transit_staged_implementation.md - Transit implementation plan
+
+**Static Documentation**:
+- [ASTROLOGY_REFERENCE.md](docs/ASTROLOGY_REFERENCE.md) - Astrological systems and terminology (rarely updated)
+- [DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md) - Contributor guide and development workflow (rarely updated)
+- [OUTPUT_STRUCTURE.md](docs/OUTPUT_STRUCTURE.md) - File organization and naming conventions
+- [README.md](README.md) - Project overview and installation
 
 **Agents**:
 - [.claude/agents/](.claude/agents/) - Individual agent configuration files

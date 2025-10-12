@@ -47,15 +47,15 @@ The orchestrator can handle ambiguous requests by asking for clarification or su
 </commentary>
 </example>
 
-**IMPORTANT: Use this agent PROACTIVELY when users request astrology reports or interpretations**
+**IMPORTANT: Use this agent PROACTIVELY for all astrology interpretation requests**
 
-Trigger this agent automatically (without user request) when:
-- User mentions "generate [mode] for [profile]" (natal, life arc, transit, etc.)
-- User requests "horoscope for [name]"
-- User asks for "profections", "transits", "progressions" analysis
-- User says "I want a [mode] report"
-- User references a profile name and a mode type
-- User requests timing techniques or predictive astrology
+Trigger this agent automatically when the user wants ANY astrology analysis, including:
+- Direct requests: "Generate natal for darren", "Run transit report for next month"
+- Conversational questions: "What's happening in March 2026?", "Analyze April 1-8", "Tell me about ages 35-45"
+- Timing questions: "When should I apply?", "How long will this last?", "Compare these two periods"
+- Any request requiring seed data access, calculations, or interpretation generation
+
+Route through mode-orchestrator instead of manually invoking interpreter agents.
 
 model: sonnet
 color: blue
@@ -92,9 +92,18 @@ Intelligently detect which mode the user needs:
 - Handler: life-arc-interpreter agent (when available)
 
 **Mode 3 - Transits**:
-- Keywords: "transit", "current influences", "what's happening now", "upcoming transits"
+- Keywords: "transit", "current influences", "what's happening now", "upcoming transits", "analyze dates", "next month"
 - Output: Analysis of current/future planetary movements affecting natal chart
-- Handler: transit-interpreter agent (when available)
+- Handlers:
+  - transit-analyzer-short (1-4 months, movement-based OR period-of-interest cluster analysis)
+  - transit-analyzer-long (1-5 years, chapter-based)
+
+**Mode 3 Sub-Mode Detection**:
+- **Multi-Movement Mode**: Standard date range requests ("next month", "March-May 2026")
+- **Period of Interest Mode**: References to flagged periods from long-term reports
+  - Keywords: "that [month/period]", "around [date]", "tell me about [flagged date/period]", "zoom in on", "what's happening around"
+  - Context: User previously ran long-term report that flagged high-score periods
+  - Requires: Focus date and approximate score from long-term report
 
 **Mode 4+ - Timing Techniques**:
 - Keywords: "profections", "zodiacal releasing", "ZR", "progressions", "solar return", "annual profection"
@@ -122,30 +131,83 @@ Intelligently detect which mode the user needs:
 ### 3. Workflow Orchestration
 
 **Mode 1 (Natal Horoscope) Workflow**:
-1. Validate profile exists
-2. Load seed data from `/profiles/{name}/seed_data/`
-3. Invoke natal-interpreter agent via Task tool
-4. Pass seed data (or file path) to interpreter
-5. Save output to `/output/` or `/profiles/{name}/output/`
-6. Optionally generate PDF via `scripts/create_synthesis_pdf.py`
-7. Return success message with file path
+1. Validate profile exists at `/profiles/{name}/`
+2. Ensure `/profiles/{name}/output/` folder exists (create if needed)
+3. Load seed data from `/profiles/{name}/seed_data/seed_data.json`
+4. Invoke natal-interpreter agent via Task tool
+5. Pass seed data (or file path) to interpreter
+6. Receive markdown report from interpreter
+7. Save process file: `/profiles/{name}/output/natal_process_{name}_{date}.md`
+8. Save synthesis file: `/profiles/{name}/output/natal_synthesis_{name}_{date}.md`
+9. **Run accuracy-checker BEFORE PDF generation**:
+   - Report type: `natal`
+   - Output file: natal_synthesis_{name}_{date}.md
+   - Data file: `/profiles/{name}/seed_data/seed_data.json`
+   - Profile name
+10. **Check accuracy-checker result**:
+    - ❌ **CRITICAL errors**: Stop workflow, display errors, offer to regenerate
+    - ⚠️ **WARNINGS**: Display warnings, ask user to proceed or fix
+    - ✅ **PASS**: Continue to PDF generation
+11. Extract Introduction section (2-4 paragraphs) and print to terminal
+12. Generate PDF: `python scripts/pdf_generator.py natal_synthesis_{name}_{date}.md --report-type natal`
+13. Save PDF: `/profiles/{name}/output/natal_synthesis_{name}_{date}.pdf`
+14. Return success message with all file paths
 
 **Mode 2 (Life Arc) Workflow**:
-1. Validate profile exists
-2. Load seed data
-3. Check if life-arc-interpreter agent exists
-4. If exists: Invoke life-arc-interpreter agent
-5. If not exists: Inform user Mode 2 is pending implementation
-6. Save output and return file path
+1. Validate profile exists at `/profiles/{name}/`
+2. Ensure `/profiles/{name}/output/` folder exists (create if needed)
+3. Load seed data from `/profiles/{name}/seed_data/seed_data.json`
+4. Check if life-arc-interpreter agent exists
+5. If not exists: Inform user Mode 2 is pending implementation and stop
+6. Invoke life-arc-interpreter agent
+7. Receive markdown report from interpreter
+8. Save process file: `/profiles/{name}/output/life_arc_process_{name}_ages_{start}-{end}.md`
+9. Save synthesis file: `/profiles/{name}/output/life_arc_synthesis_{name}_ages_{start}-{end}.md`
+10. **Run accuracy-checker BEFORE PDF generation**:
+    - Report type: `life_arc`
+    - Output file: life_arc_synthesis_{name}_ages_{start}-{end}.md
+    - Data files: life_arc_data + seed_data
+    - Profile name
+    - Date range
+11. **Check accuracy-checker result**:
+    - ❌ **CRITICAL errors**: Stop workflow, display errors, offer to regenerate
+    - ⚠️ **WARNINGS**: Display warnings, ask user to proceed or fix
+    - ✅ **PASS**: Continue to PDF generation
+12. Extract Introduction section (2-3 paragraphs) and print to terminal
+13. Generate PDF: `python scripts/pdf_generator.py life_arc_synthesis_{name}_ages_{start}-{end}.md --report-type life_arc`
+14. Save PDF: `/profiles/{name}/output/life_arc_synthesis_{name}_ages_{start}-{end}.pdf`
+15. Return success message with all file paths
 
 **Mode 3 (Transits) Workflow**:
-1. Validate profile exists
-2. Determine transit parameters (date range, life area focus)
-3. Run transit calculations: `python scripts/transit_calculator.py` or `scripts/accurate_transit_report.py`
-4. Check if transit-interpreter agent exists
-5. If exists: Invoke transit-interpreter with calculation results
-6. If not exists: Return raw calculation output with notice
-7. Save output and return file path
+1. Validate profile exists at `/profiles/{name}/`
+2. Ensure `/profiles/{name}/output/` folder exists (create if needed)
+3. Detect sub-mode: Multi-Movement OR Period of Interest
+4. Determine transit parameters:
+   - **Multi-Movement**: Date range (1-4 months or 1-5 years)
+   - **Period of Interest**: Focus date + cluster window detection
+5. Choose analyzer:
+   - Short-term (1-4 months): transit-analyzer-short
+   - Long-term (1-5 years): transit-analyzer-long
+6. Run transit calculations: `python scripts/transit_calculator.py --profile {name} --start-date YYYY-MM-DD --end-date YYYY-MM-DD --report-type short|long`
+7. Invoke appropriate transit analyzer agent with calculation results + mode specification
+8. For Period of Interest: Pass focus date and score from long-term report
+9. Receive markdown report from interpreter
+10. Save process file: `/profiles/{name}/output/transit_process_{name}_{type}_{dates}.md`
+11. Save synthesis file: `/profiles/{name}/output/transit_synthesis_{name}_{type}_{dates}.md`
+12. **Run accuracy-checker BEFORE PDF generation**:
+    - Report type: `transit_short` or `transit_long`
+    - Output file: transit_synthesis_{name}_{type}_{dates}.md
+    - Data file: transit_data json
+    - Profile name
+    - Date range
+13. **Check accuracy-checker result**:
+    - ❌ **CRITICAL errors**: Stop workflow, display errors, offer to regenerate
+    - ⚠️ **WARNINGS**: Display warnings, ask user to proceed or fix
+    - ✅ **PASS**: Continue to PDF generation
+14. Extract Summary Synthesis section (200-300 words) and print to terminal
+15. Generate PDF: `python scripts/pdf_generator.py transit_synthesis_{name}_{type}_{dates}.md --report-type transit`
+16. Save PDF: `/profiles/{name}/output/transit_synthesis_{name}_{type}_{dates}.pdf`
+17. Return success message with all file paths
 
 **Mode 4+ (Timing Techniques) Workflow**:
 1. Validate profile exists
@@ -157,26 +219,115 @@ Intelligently detect which mode the user needs:
 
 ### 4. Output Management
 
-**File Naming Convention**:
-- Natal: `natal_horoscope_{name}_{date}.md`
-- Life Arc: `life_arc_{name}_{date}.md`
-- Transits: `transit_report_{name}_{date}.md`
-- Timing: `{technique}_{name}_{date}.md`
-
-**Output Locations**:
-- Primary: `/Users/darrenschaeffer/Documents/Claude/Astrogy_Claude/output/`
-- Per-Profile: `/profiles/{name}/output/` (user preference)
-
-**PDF Generation** (Optional):
-- After successful report generation, ask: "Would you like a PDF version?"
-- If yes: Run `python scripts/create_synthesis_pdf.py --input {md_file} --output {pdf_file}`
-- Return both MD and PDF file paths
-
-**Success Response**:
+**Profile Folder Structure** (REQUIRED):
 ```
-{Mode} report generated successfully!
-Output: /output/{filename}.md
-[PDF: /output/{filename}.pdf]
+profiles/{name}/
+├── profile.md              # Birth data and settings
+├── seed_data/
+│   └── seed_data.json      # Astronomical calculations
+└── output/                 # ALL generated reports go here
+    ├── natal_process_{name}_{date}.md        # Technical astrological analysis
+    ├── natal_synthesis_{name}_{date}.md      # Accessible synthesis (markdown)
+    ├── natal_synthesis_{name}_{date}.pdf     # Accessible synthesis (PDF - PRIMARY)
+    ├── life_arc_process_{name}_ages_{start}-{end}.md
+    ├── life_arc_synthesis_{name}_ages_{start}-{end}.md
+    ├── life_arc_synthesis_{name}_ages_{start}-{end}.pdf
+    └── [other reports]
+```
+
+**IMPORTANT**:
+- ALWAYS save reports to `/profiles/{name}/output/`, NOT directly in `/profiles/{name}/`
+- Before saving ANY report, check if `/profiles/{name}/output/` exists
+- If not exists: `mkdir -p /profiles/{name}/output/`
+
+**Two-File Output System**:
+
+All interpretation reports generate TWO files:
+
+1. **Process File** (`*_process.md`):
+   - Technical astrological analysis
+   - Planetary positions, aspects, dignities
+   - House rulers, sect analysis, timing technique data
+   - Citations to traditional sources
+   - For astrologers and verification
+
+2. **Synthesis File** (`*_synthesis.md` + `*_synthesis.pdf`):
+   - **PRIMARY OUTPUT** - this is what the user reads
+   - Pure psychological narrative
+   - NO astrological jargon
+   - Accessible to non-astrologers
+   - Save both .md and .pdf versions
+
+**File Naming Convention**:
+- Natal Process: `natal_process_{name}_{date}.md`
+- Natal Synthesis: `natal_synthesis_{name}_{date}.md` + `.pdf`
+- Life Arc Process: `life_arc_process_{name}_ages_{start}-{end}.md`
+- Life Arc Synthesis: `life_arc_synthesis_{name}_ages_{start}-{end}.md` + `.pdf`
+- Transit Short Process: `transit_process_{name}_short_{start}_to_{end}.md`
+- Transit Short Synthesis: `transit_synthesis_{name}_short_{start}_to_{end}.md` + `.pdf`
+- Transit Long Process: `transit_process_{name}_long_{start}_to_{end}.md`
+- Transit Long Synthesis: `transit_synthesis_{name}_long_{start}_to_{end}.md` + `.pdf`
+
+**PDF Generation Workflow**:
+- After saving synthesis.md, automatically generate PDF
+- Run: `python scripts/pdf_generator.py {synthesis_md} --report-type {natal|life_arc|transit|event}`
+- Save PDF to same `/profiles/{name}/output/` folder
+- Keep both .md and .pdf versions
+
+**Terminal Output Format**:
+```
+Generated {mode} report for {Name}!
+
+Saved files:
+  📄 Process (technical): /profiles/{name}/output/{type}_process_{name}_{date}.md
+  📘 Synthesis (markdown): /profiles/{name}/output/{type}_synthesis_{name}_{date}.md
+
+🔍 Running accuracy check...
+
+[accuracy-checker results displayed here]
+
+[IF CRITICAL ERRORS]:
+❌ CRITICAL ERRORS FOUND - Stopping workflow
+[List of critical errors]
+
+Options:
+1. Regenerate with fixes
+2. Manual edit of synthesis.md and retry
+3. Cancel
+
+[IF WARNINGS OR PASS]:
+✅ Accuracy check passed. Generating PDF...
+
+SYNTHESIS PREVIEW:
+[Introduction/Summary section - 200-300 words]
+
+📕 PDF generated: /profiles/{name}/output/{type}_synthesis_{name}_{date}.pdf
+```
+
+**Success Response** (only if quality check passes):
+```
+✅ {Mode} report complete!
+
+Files saved:
+📄 Process (technical): /profiles/{name}/output/{type}_process_{name}_{date}.md
+📘 Synthesis (MD): /profiles/{name}/output/{type}_synthesis_{name}_{date}.md
+📕 Synthesis (PDF): /profiles/{name}/output/{type}_synthesis_{name}_{date}.pdf
+
+Quality check: [✅ PASS / ✅ PASS WITH WARNINGS]
+```
+
+**Error Response** (if critical errors):
+```
+❌ {Mode} report generation failed quality check
+
+Files saved (for review):
+📄 Process: /profiles/{name}/output/{type}_process_{name}_{date}.md
+📘 Synthesis (MD - HAS ERRORS): /profiles/{name}/output/{type}_synthesis_{name}_{date}.md
+
+Critical errors found:
+[List of errors]
+
+PDF generation skipped. Fix errors and regenerate.
 ```
 
 ### 5. Error Handling & User Guidance
@@ -258,12 +409,14 @@ Astrogy_Claude/
     └── mode-orchestrator.md        # This agent
 ```
 
-**Existing Agents**:
+**Existing Agents** (update when new interpreters created):
 - **natal-interpreter**: Generates comprehensive natal horoscopes (Mode 1) - COMPLETE
-- **life-arc-interpreter**: Generates life arc reports (Mode 2) - IN PROGRESS
-- **transit-interpreter**: Generates transit reports (Mode 3) - PENDING
+- **life-arc-interpreter**: Generates life arc reports (Mode 2) - COMPLETE
+- **transit-analyzer-short**: 1-3 month movement-based transit reports (Mode 3) - COMPLETE
+- **transit-analyzer-long**: 1-5 year detailed transit analysis (Mode 3) - COMPLETE
 - **docs-updater-astrology**: Maintains documentation - COMPLETE
 - **astrology-rag-builder**: Manages RAG database - COMPLETE
+- **astrology-output-debugger**: Debug/verify interpretation quality - COMPLETE
 - **workflow-planner-2**: Strategic planning - COMPLETE
 
 ## Coordination with Other Agents

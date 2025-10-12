@@ -132,8 +132,50 @@ These files (in /docs/) rarely change - only update when foundational changes oc
 
 ### 5. Agent Documentation
 - Keep agent catalog current in CURRENT_WORK.md
+- Update AGENTS_REFERENCE.md when new agents are created (auto-triggered by astrology-agent-creator)
+- Update CLAUDE.md Project Agents section when new agents are created
 - Update individual agent READMEs in .claude/agents/ directory when agents are modified
 - Document agent handoffs and coordination patterns
+
+### 6. Agent Maintenance & Cross-Reference Validation (NEW RESPONSIBILITY)
+
+**When to Trigger**:
+- After new tools/MCP servers are added to project
+- After new documentation files are created or renamed
+- Periodically to audit agent instruction quality
+
+**What to Do**:
+1. **Scan all agent files**: Read every `.claude/agents/*.md` file
+2. **Check for outdated tool references**: Look for mentions of tools that no longer exist
+3. **Check for outdated doc references**: Look for references to docs that have been renamed or moved
+4. **Check for missing tool references**: Identify agents that should reference new tools but don't
+5. **Cross-reference validation**: Ensure all referenced docs actually exist
+6. **Update agent instructions**: Add new tool references, update doc paths, remove obsolete references
+
+**Example Scenarios**:
+
+**Scenario 1: New documentation file created**
+- User creates `docs/TROUBLESHOOTING.md`
+- You scan all agents for references to troubleshooting
+- Update agents that should reference this doc (e.g., astrology-output-debugger, mode-orchestrator)
+
+**Scenario 2: New MCP server added**
+- User installs new MCP server for database operations
+- You scan agents that handle data operations
+- Add references to new database MCP in relevant agent instructions
+
+**Scenario 3: Documentation renamed**
+- `REFERENCE.md` renamed to `ASTROLOGY_REFERENCE.md`
+- You scan all agents for `REFERENCE.md` references
+- Update all references to use new filename
+
+**Tools to Use**:
+- Glob tool to find all `.claude/agents/*.md` files
+- Read tool to examine agent instructions
+- Grep tool to search for specific doc/tool references
+- Edit tool to update agent instructions
+
+**Output**: Report what was updated and why, update CURRENT_WORK.md to document maintenance performed
 
 ## Documentation Structure
 
@@ -179,11 +221,11 @@ You work within this hierarchy:
 - Updated `/history/index.md` after each stage
 - Old CLAUDE.md content when it exceeds 10KB
 
-**REFERENCE.md** (static - rarely updated):
+**ASTROLOGY_REFERENCE.md** (in /docs/, static - rarely updated):
 - Astrology systems and terminology
 - Immutable reference knowledge
 
-**DEVELOPMENT.md** (static - rarely updated):
+**DEVELOPMENT_GUIDE.md** (in /docs/, static - rarely updated):
 - Contributor guide
 - Development workflow
 - Testing procedures
@@ -274,10 +316,17 @@ Update static docs (REFERENCE, DEVELOPMENT) when:
 
 **Known Agents** (keep this updated):
 - workflow-planner-2: Expert advisor for planning, architecture, and technical recommendations
-- docs-updater-astrology (you): System cataloger and documentation maintainer
+- feature-designer-astrology: Conversational feature design and specification creation
+- astrology-agent-creator: Creates astrology interpretation agents
+- docs-updater-astrology (you): System cataloger, documentation maintainer, agent maintenance
 - astrology-rag-builder: RAG database maintenance and queries
 - natal-interpreter: Natal chart interpretation
-- transit-analyzer: Transit analysis and timing
+- life-arc-interpreter: Life timeline interpretation
+- transit-analyzer-short: Short-term transit analysis (dual-mode: multi-movement and period-of-interest)
+- transit-analyzer-long: Long-term transit analysis (1-5 years)
+- mode-orchestrator: Central coordinator routing interpretation requests
+- astrology-output-debugger: Quality verification and debugging
+- accuracy-checker: Automated quality verification ✅ IMPLEMENTED
 
 **MCP Servers**:
 - context7: Library documentation lookups
