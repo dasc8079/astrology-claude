@@ -21,12 +21,13 @@
 
 /* Body Defaults */
 body {
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 11pt;
-    line-height: 1.6;
-    color: #000000;
-    text-align: left;
+    font-family: 'Garamond', 'Georgia', 'Times New Roman', serif;
+    font-size: 12pt;
+    line-height: 1.7;
+    color: #1a1a1a;
+    text-align: justify;
     hyphens: auto;
+    text-justify: inter-word;
 }
 
 /* Title Page Styling */
@@ -70,51 +71,72 @@ body {
 
 /* Headings */
 h1 {
-    color: #000000;
-    font-size: 24pt;
-    font-weight: bold;
+    font-family: 'Garamond', 'Georgia', 'Times New Roman', serif;
+    color: #1a1a1a;
+    font-size: 28pt;
+    font-weight: normal;
+    letter-spacing: 0.5pt;
     margin-top: 0;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.8em;
     page-break-after: avoid;
-    border-bottom: 3px solid #000000;
-    padding-bottom: 0.3em;
+    border-bottom: 2px solid #2c3e50;
+    padding-bottom: 0.4em;
 }
 
 h2 {
-    color: #000000;
-    font-size: 18pt;
-    font-weight: bold;
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
+    font-family: 'Garamond', 'Georgia', 'Times New Roman', serif;
+    color: #2c3e50;
+    font-size: 20pt;
+    font-weight: normal;
+    letter-spacing: 0.3pt;
+    margin-top: 2em;
+    margin-bottom: 0.6em;
     page-break-after: avoid;
-    border-bottom: 2px solid #000000;
-    padding-bottom: 0.2em;
+    border-bottom: 1px solid #34495e;
+    padding-bottom: 0.3em;
 }
 
 h3 {
-    color: #000000;
-    font-size: 14pt;
-    font-weight: bold;
-    margin-top: 1.2em;
-    margin-bottom: 0.4em;
+    font-family: 'Garamond', 'Georgia', 'Times New Roman', serif;
+    color: #34495e;
+    font-size: 15pt;
+    font-weight: 600;
+    font-style: italic;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
     page-break-after: avoid;
 }
 
 h4 {
-    color: #000000;
-    font-size: 12pt;
-    font-weight: bold;
-    margin-top: 1em;
-    margin-bottom: 0.3em;
+    font-family: 'Garamond', 'Georgia', 'Times New Roman', serif;
+    color: #2c3e50;
+    font-size: 13pt;
+    font-weight: 600;
+    margin-top: 1.2em;
+    margin-bottom: 0.4em;
     page-break-after: avoid;
 }
 
 /* Paragraphs */
 p {
     margin-top: 0;
-    margin-bottom: 0.8em;
-    orphans: 3;
-    widows: 3;
+    margin-bottom: 1em;
+    text-indent: 1.5em;
+    orphans: 4;
+    widows: 4;
+}
+
+/* First paragraph after heading (no indent) */
+h1 + p,
+h2 + p,
+h3 + p,
+h4 + p {
+    text-indent: 0;
+}
+
+/* Paragraphs after horizontal rules */
+hr + p {
+    text-indent: 0;
 }
 
 /* Lists */
@@ -129,13 +151,24 @@ li {
 
 /* Text Emphasis */
 strong {
-    color: #000000;
-    font-weight: bold;
+    color: #2c3e50;
+    font-weight: 600;
+    letter-spacing: 0.2pt;
 }
 
 em {
     font-style: italic;
-    color: #000000;
+    color: #34495e;
+}
+
+/* Drop caps for section openings (optional class) */
+.drop-cap::first-letter {
+    float: left;
+    font-size: 3.5em;
+    line-height: 0.9;
+    margin: 0.05em 0.1em 0 0;
+    font-weight: bold;
+    color: #2c3e50;
 }
 
 /* Tables */
@@ -197,8 +230,30 @@ pre code {
 
 /* Blockquotes */
 blockquote {
-    margin: 1em 2em;
-    padding-left: 1em;
-    border-left: 3px solid #000;
+    margin: 1.5em 3em;
+    padding: 1em 1.5em;
+    border-left: 4px solid #2c3e50;
     font-style: italic;
+    color: #34495e;
+    background-color: #f8f9fa;
+}
+
+/* Section breaks with ornamental styling */
+.section-break {
+    text-align: center;
+    margin: 2em 0;
+    color: #7f8c8d;
+    font-size: 16pt;
+}
+
+/* Pull quotes (special emphasis) */
+.pull-quote {
+    font-size: 14pt;
+    font-style: italic;
+    color: #2c3e50;
+    margin: 1.5em 2em;
+    padding: 1em;
+    border-top: 1px solid #bdc3c7;
+    border-bottom: 1px solid #bdc3c7;
+    text-align: center;
 }
