@@ -1,7 +1,8 @@
 ---
 name: natal-interpreter
 description: Use this agent when the user requests a comprehensive natal chart interpretation, psychological profile, or birth chart analysis. This agent synthesizes astronomical data with traditional Hellenistic astrology interpretations to create accessible, well-cited horoscopes.\n\n<example>\nContext: User wants to generate a complete birth chart interpretation.\nuser: "Generate a natal horoscope for this birth data: June 15, 1985, 3:30 PM, New York City"\nassistant: "I'll use the natal-interpreter agent to create a comprehensive psychological profile using traditional Hellenistic methods."\n<commentary>\nThe user is requesting a complete natal interpretation with specific birth data, which is the core purpose of this agent. Use the Task tool to launch the natal-interpreter agent.\n</commentary>\n</example>\n\n<example>\nContext: Script needs to generate Mode 1 output (natal horoscope).\nuser: "Run horoscope_generator.py in Mode 1 for my chart"\nassistant: "I'll invoke the natal-interpreter agent to synthesize the natal analysis into a comprehensive horoscope."\n<commentary>\nThe natal-interpreter agent is designed to be called by horoscope_generator.py for Mode 1 operations. Use the Task tool to launch the natal-interpreter agent.\n</commentary>\n</example>\n\n<example>\nContext: User wants to understand their chart's psychological themes.\nuser: "What does my natal chart say about my personality and life path?"\nassistant: "Let me use the natal-interpreter agent to generate a thorough psychological profile based on your chart."\n<commentary>\nThe agent synthesizes chart placements into coherent psychological narratives grounded in traditional sources. Use the Task tool to launch the natal-interpreter agent.\n</commentary>\n</example>\n\n<example>\nContext: User asks about their birth chart's core themes.\nuser: "Can you interpret my birth chart and tell me about my strengths and challenges?"\nassistant: "I'll use the natal-interpreter agent to create a comprehensive analysis of your chart, covering your strengths, challenges, and life themes."\n<commentary>\nThis is a request for natal chart interpretation focusing on specific aspects (strengths/challenges). Use the Task tool to launch the natal-interpreter agent.\n</commentary>\n</example>
-model: sonnet
+model: opus
+extended_thinking: true
 color: green
 ---
 
@@ -279,12 +280,40 @@ Determine:
 - Major aspect patterns
 - House ruler dynamics (how each life area manifests through its ruler's placement)
 
+**CRITICAL: Sect Integration** - Sect is THE foundational lens through which ALL planet interpretations must be filtered:
+
+**Sect-Based Planet Interpretation**:
+- **Benefics of sect** (Jupiter in day chart, Venus in night chart): "Maximum benefit", "Greatest ease and fortune", "Enhanced supportive nature"
+- **Benefics contrary to sect**: "Benefit diminished", "Less helpful than expected", "Supportive but muted"
+- **Malefics of sect** (Saturn in day chart, Mars in night chart): "Difficulty manageable", "Constructive challenge", "Harsher but workable"
+- **Malefics contrary to sect** (Mars in day chart, Saturn in night chart): "Difficulty harsh", "Destructive potential", "Most challenging expression"
+
+**Practical Application**:
+- ❌ **Sect-blind**: "Mars in Aries brings bold initiative"
+- ✅ **Sect-aware**: "Mars, contrary to sect in your day chart, expresses more reactively than constructively. Your Aries boldness may manifest defensively rather than pioneering."
+
+**For EVERY planet interpretation**, ask: "Is this planet of sect or contrary to sect?" Then filter the interpretation accordingly.
+
+**Angles & Chart Ruler** - Interpret the angles and especially the chart ruler:
+
+**Angles to Interpret** (in Synthesis section II):
+1. **Ascendant** - Approach to life, physical presence, life lens (brief, 2-3 sentences)
+2. **Chart Ruler** - Planet ruling the Ascendant sign colors the ENTIRE chart; explain its placement, condition, aspects (PRIMARY - 1 paragraph)
+3. **Midheaven (MC)** - Public persona, career path, reputation (2-3 sentences)
+4. **IC** - Private self, home, roots, foundation (1-2 sentences)
+5. **Descendant (DSC)** - Partnership style, what you seek in others (1-2 sentences)
+
+**Example Chart Ruler Integration**:
+> "As a Leo rising, the Sun rules your chart, coloring your entire life expression. With the Sun in Capricorn in the 6th house, your life approach centers on disciplined service, practical achievement, and methodical work. The Sun's conjunction to Saturn intensifies this structured, serious orientation to life."
+
 ### Step 3: Run Enhancement Modules
 
 Use `scripts/natal_interpreter.py` to generate comprehensive enhancement analysis:
 - Automatically runs all traditional enhancement modules
 - Runs modern context modules based on settings
-- Provides structured data for house rulers, nodes, angles, receptions, lots, bonification
+- Provides structured data for house rulers, nodes, angles, receptions, bonification
+- **Lots**: Uses 4 core lots for natal work (Fortune, Spirit, Eros, Necessity) - remaining 8 lots reserved for Life Arc analysis
+- Includes antiscia and fixed stars (when implemented)
 - Includes psychological/Jungian, Lilith, and Chiron analysis (if enabled)
 
 This gives you rich, pre-analyzed data to incorporate into your synthesis.

@@ -646,6 +646,177 @@ def calculate_nodes(jd):
     }
 
 
+def calculate_antiscia(planet_data):
+    """
+    Calculate antiscia and contra-antiscia for all planets.
+
+    Antiscia: Mirror degrees across 0° Cancer/Capricorn axis (solstice points)
+    Contra-antiscia: 180° from antiscion
+
+    Traditional technique showing hidden connections and symmetries.
+    """
+    antiscia_data = []
+
+    for planet in planet_data:
+        lon = planet['longitude']
+
+        # Calculate antiscion (mirror across 0° Cancer/Capricorn)
+        # Formula: antiscion = 180° - longitude
+        antiscion_lon = (180 - lon) % 360
+        antiscion_sign, antiscion_degree = get_sign_and_degree(antiscion_lon)
+
+        # Calculate contra-antiscion (180° from antiscion)
+        contra_lon = (antiscion_lon + 180) % 360
+        contra_sign, contra_degree = get_sign_and_degree(contra_lon)
+
+        antiscia_data.append({
+            'planet': planet['name'],
+            'natal_position': {
+                'sign': planet['sign'],
+                'degree': planet['degree_in_sign'],
+                'longitude': lon
+            },
+            'antiscion': {
+                'sign': antiscion_sign,
+                'degree': round(antiscion_degree, 4),
+                'longitude': round(antiscion_lon, 4),
+                'dms': decimal_to_dms(antiscion_degree)
+            },
+            'contra_antiscion': {
+                'sign': contra_sign,
+                'degree': round(contra_degree, 4),
+                'longitude': round(contra_lon, 4),
+                'dms': decimal_to_dms(contra_degree)
+            }
+        })
+
+    return antiscia_data
+
+
+def calculate_fixed_stars(jd, planet_data, house_data):
+    """
+    Calculate major fixed stars and check for conjunctions to planets/angles.
+
+    Uses Swiss Ephemeris fixstar_ut() for precise fixed star positions.
+    Only reports conjunctions within 1° orb (traditional).
+    """
+    # Major 5 fixed stars (Royal Stars + important traditional stars)
+    FIXED_STARS = {
+        'Regulus': {
+            'traditional_name': 'Cor Leonis (Heart of the Lion)',
+            'nature': 'Success, royalty, honor, leadership',
+            'magnitude': 1.4
+        },
+        'Spica': {
+            'traditional_name': 'Spica Virginis (Ear of Wheat)',
+            'nature': 'Gifts, protection, success through skill',
+            'magnitude': 1.0
+        },
+        'Algol': {
+            'traditional_name': "Caput Medusae (Medusa's Head)",
+            'nature': 'Violence, danger, challenges (use with caution)',
+            'magnitude': 2.1
+        },
+        'Antares': {
+            'traditional_name': 'Cor Scorpii (Heart of Scorpion)',
+            'nature': 'Conflict, courage, obsession',
+            'magnitude': 1.0
+        },
+        'Aldebaran': {
+            'traditional_name': 'Oculus Tauri (Eye of the Bull)',
+            'nature': 'Honor, integrity, achievement',
+            'magnitude': 0.9
+        }
+    }
+
+    ORB = 1.0  # Traditional 1° orb for fixed stars
+
+    fixed_star_data = []
+    conjunctions = []
+
+    # Calculate each fixed star position
+    for star_name, star_info in FIXED_STARS.items():
+        try:
+            result = swe.fixstar_ut(star_name, jd)
+            star_lon = result[0][0]
+            star_sign, star_degree = get_sign_and_degree(star_lon)
+
+            star_data = {
+                'name': star_name,
+                'traditional_name': star_info['traditional_name'],
+                'nature': star_info['nature'],
+                'magnitude': star_info['magnitude'],
+                'position': {
+                    'sign': star_sign,
+                    'degree': round(star_degree, 4),
+                    'longitude': round(star_lon, 4),
+                    'dms': decimal_to_dms(star_degree)
+                },
+                'conjunctions': []
+            }
+
+            # Check conjunctions to planets
+            for planet in planet_data:
+                orb = abs(star_lon - planet['longitude'])
+                if orb > 180:
+                    orb = 360 - orb
+
+                if orb <= ORB:
+                    conjunction_data = {
+                        'type': 'planet',
+                        'body': planet['name'],
+                        'orb': round(orb, 2),
+                        'applying': planet['longitude'] < star_lon
+                    }
+                    star_data['conjunctions'].append(conjunction_data)
+
+                    conjunctions.append({
+                        'star': star_name,
+                        'planet': planet['name'],
+                        'orb': round(orb, 2),
+                        'nature': star_info['nature']
+                    })
+
+            # Check conjunctions to angles (ASC, MC, DSC, IC)
+            angles = {
+                'Ascendant': house_data['ascendant']['longitude'],
+                'Midheaven': house_data['midheaven']['longitude'],
+                'Descendant': (house_data['ascendant']['longitude'] + 180) % 360,
+                'IC': (house_data['midheaven']['longitude'] + 180) % 360
+            }
+
+            for angle_name, angle_lon in angles.items():
+                orb = abs(star_lon - angle_lon)
+                if orb > 180:
+                    orb = 360 - orb
+
+                if orb <= ORB:
+                    conjunction_data = {
+                        'type': 'angle',
+                        'body': angle_name,
+                        'orb': round(orb, 2)
+                    }
+                    star_data['conjunctions'].append(conjunction_data)
+
+                    conjunctions.append({
+                        'star': star_name,
+                        'angle': angle_name,
+                        'orb': round(orb, 2),
+                        'nature': star_info['nature']
+                    })
+
+            fixed_star_data.append(star_data)
+
+        except Exception as e:
+            print(f"Warning: Could not calculate {star_name}: {e}")
+            continue
+
+    return {
+        'stars': fixed_star_data,
+        'conjunctions_summary': conjunctions
+    }
+
+
 def calculate_elemental_balance(planet_data):
     """Calculate elemental and modality balance."""
     elements = {'fire': 0, 'earth': 0, 'air': 0, 'water': 0}
@@ -702,6 +873,12 @@ def generate_seed_data(args):
     # Calculate nodes
     nodes = calculate_nodes(jd)
 
+    # Calculate antiscia
+    antiscia = calculate_antiscia(planet_data)
+
+    # Calculate fixed stars
+    fixed_stars = calculate_fixed_stars(jd, planet_data, house_info)
+
     # Calculate elemental balance
     elements, modalities = calculate_elemental_balance(planet_data)
 
@@ -733,6 +910,8 @@ def generate_seed_data(args):
         'aspects': aspects,
         'lots': lots,
         'lunar_nodes': nodes,
+        'antiscia': antiscia,
+        'fixed_stars': fixed_stars,
         'elemental_balance': elements,
         'modality_balance': modalities,
     }

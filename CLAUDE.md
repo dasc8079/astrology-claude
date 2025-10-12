@@ -52,9 +52,9 @@ This project creates a comprehensive traditional/Hellenistic astrology applicati
 - Query-optimized for chart interpretation, dignities, aspects, and timing techniques
 
 **Application Modes**:
-1. **Mode 1: Natal Horoscope Generator** ✅ COMPLETE - Birth chart psychological profiles with PDF output
-2. **Mode 2: Life Arc Report Generator** ✅ COMPLETE - Life timeline from birth to age 100 with convergence detection
-3. **Mode 3: Transit Report Generator** ⏳ PENDING - Current and upcoming transit analysis
+1. **Mode 1: Natal Horoscope Generator** ✅ COMPLETE - Birth chart psychological profiles with PDF output (Opus model)
+2. **Mode 2: Life Arc Report Generator** ✅ COMPLETE - Life timeline from birth to age 100 with convergence detection (Opus model)
+3. **Mode 3: Transit Report Generator** ✅ COMPLETE - Short-term (1-4 months) and long-term (1-5 years) transit analysis (Opus model)
 4. **Mode 4+: Additional Timing Techniques** ⏳ PENDING - Additional predictive techniques
 
 **Rolling Chat Interfaces** (Future):
@@ -65,14 +65,14 @@ This project creates a comprehensive traditional/Hellenistic astrology applicati
 
 ## Mode Status Table
 
-| Mode | Name | Status | Stage | Notes |
+| Mode | Name | Status | Model | Notes |
 |------|------|--------|-------|-------|
-| 1 | Natal Horoscope | ✅ COMPLETE | Production | Multi-profile, PDF output, fully functional |
-| 2 | Life Arc Report | ✅ COMPLETE | Production | Enhanced with convergence detection, narrative chapters, 5 core timing techniques |
-| 3 | Transit Report | ⏳ PENDING | Design ready | Design documents complete, ready to implement |
-| 4+ | Additional Timing | ⏳ PENDING | Research done | Core techniques built (profections, ZR, Firdaria) |
+| 1 | Natal Horoscope | ✅ COMPLETE | Opus | Multi-profile, standardized file structure, PDF output |
+| 2 | Life Arc Report | ✅ COMPLETE | Opus | Ages 0-100, convergence detection, narrative chapters |
+| 3 | Transit Report | ✅ COMPLETE | Opus | Short-term (1-4 months) and long-term (1-5 years) analysis |
+| 4+ | Additional Timing | ⏳ PENDING | TBD | Modular timing techniques (profections, ZR, Firdaria built) |
 
-**Legend**: ✅ Complete | 🔄 In Progress | ⏳ Pending
+**Legend**: ✅ Complete | ⏳ Pending
 
 See [CURRENT_WORK.md](CURRENT_WORK.md) for detailed status and next steps.
 
@@ -100,29 +100,27 @@ See [CURRENT_WORK.md](CURRENT_WORK.md) for detailed status and next steps.
 
 **Planning & Documentation**:
 - `workflow-planner-2` - Expert advisor for architecture, tools, and technical recommendations
-- `feature-designer-astrology` - Conversational feature design and specification creation ✅ NEW
-- `docs-updater-astrology` - Documentation maintainer (CURRENT_WORK.md, CLAUDE.md, /history/, AGENTS_REFERENCE.md)
+- `feature-designer-astrology` - Conversational feature design and specification creation
+- `docs-updater-astrology` - Documentation maintainer (CURRENT_WORK.md, CLAUDE.md, /history/)
 
 **Agent Creation**:
 - `astrology-agent-creator` - Creates astrology interpretation agents with OUTPUT_STYLE_GUIDE.md template extraction
-  - Auto-invokes docs-updater-astrology after creation
-  - Can accept specification documents from feature-designer-astrology
 
 **RAG Database**:
 - `astrology-rag-builder` - RAG database maintenance, queries, normalization
 - `astrology-output-debugger` - Debug interpretation issues, data quality, workflow problems
 
 **Quality Assurance**:
-- `accuracy-checker` - Automated quality verification for interpretation outputs (SPEC COMPLETE, implementation pending)
+- `accuracy-checker` - Automated quality verification for interpretation outputs
 
 **Orchestration**:
-- `mode-orchestrator` - Central coordinator routing all astrology interpretation requests (Mode 1-4+) ⚠️ UPDATE WHEN CREATING NEW INTERPRETERS
+- `mode-orchestrator` - Central coordinator routing all astrology interpretation requests (Mode 1-4+)
 
 **Interpretation & Synthesis**:
-- `natal-interpreter` - Natal chart synthesis using traditional Hellenistic methods (Mode 1) ✅ WORKING
-- `life-arc-interpreter` - Life timeline synthesis (Mode 2) ✅ WORKING
-- `transit-analyzer-long` - Long-term transit reports, 1-5 years (Mode 3 Level 1) ✅ WORKING
-- `transit-analyzer-short` - Short-term transit reports, 1-4 months (Mode 3 Level 2) ✅ WORKING
+- `natal-interpreter` - Natal chart synthesis using traditional Hellenistic methods (Mode 1)
+- `life-arc-interpreter` - Life timeline synthesis (Mode 2)
+- `transit-analyzer-long` - Long-term transit reports, 1-5 years (Mode 3 Level 1)
+- `transit-analyzer-short` - Short-term transit reports, 1-4 months (Mode 3 Level 2)
 
 **IMPORTANT**: When creating new interpretation agents, update `mode-orchestrator.md` to add routing logic. astrology-agent-creator automatically invokes docs-updater-astrology. See [AGENT_ORCHESTRATION_GUIDE.md](docs/AGENT_ORCHESTRATION_GUIDE.md) for details.
 
@@ -151,29 +149,43 @@ See [/docs/ASTROLOGY_REFERENCE.md](docs/ASTROLOGY_REFERENCE.md) for detailed ast
 
 ---
 
-## User Birth Data
+## User Profiles & Data
 
 **Location**: `/profiles/` directory with multi-profile support
 
-**Profiles Available**:
-- `darren/` - Complete natal horoscope (technical + synthesis + PDF)
-- `mom/` - Synthesis PDF only
-- `sister/` - Synthesis PDF only
-
-**Profile Structure**:
+**Standardized Profile Structure** (v1.0 - Oct 2025):
 ```
 profiles/
-├── darren/
-│   ├── profile.txt          # Birth data
-│   ├── seed_data.json       # Astronomical calculations
-│   ├── natal_technical.md   # Technical analysis
-│   ├── natal_synthesis.md   # Accessible synthesis
-│   └── natal_synthesis.pdf  # Professional PDF output
+├── FirstName_LastInitial/         # Capitalized, underscore separator
+│   ├── profile.md                 # Birth data + interpretation settings
+│   ├── seed_data/
+│   │   └── seed_data.json         # Complete astronomical calculations
+│   └── output/                    # ALL generated reports
+│       ├── natal_process_*.md     # Technical analysis
+│       ├── natal_synthesis_*.md   # Accessible narrative (markdown)
+│       ├── natal_synthesis_*.pdf  # Professional PDF (primary deliverable)
+│       ├── life_arc_*             # Life timeline reports
+│       └── transit_*              # Transit analysis reports
 ```
 
-**Settings Block System**: Each profile.txt contains customizable interpretation settings (depth, house rulers, lots, psychological overlay, modern methods, etc.)
+**Active Profiles**:
+- `Darren_S/` - Complete: natal, life arc (0-100), transits
+- `Sam_P/` - Natal horoscope
+- Additional profiles available
 
-See [/docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md) for profile creation and management.
+**Naming Convention**:
+- Format: `FirstName_LastInitial` (e.g., `Darren_S`, `Sam_P`, `Elizabeth_M`)
+- Capitalized first name and last initial
+- Underscore separator (no spaces)
+- Consistent across all file names within profile
+
+**Settings System**: Each `profile.md` contains customizable interpretation settings:
+- Traditional techniques (house rulers, lots, nodes, receptions, bonification)
+- Modern methods (Lilith, Chiron, psychological overlays - optional)
+- Timing techniques (firdaria, progressions, solar returns)
+- Output preferences (depth, citations, technical sections)
+
+**Complete Documentation**: See [docs/PROFILE_STRUCTURE.md](docs/PROFILE_STRUCTURE.md) for detailed standards, migration guide, and validation checklist.
 
 ---
 

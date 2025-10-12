@@ -196,6 +196,12 @@ Determine appropriate:
 - **Sonnet**: Most interpretation agents (balanced performance, moderate complexity)
 - **Haiku**: Simple straightforward operations (unlikely for interpretation)
 
+**Extended Thinking**:
+- **ALWAYS add `extended_thinking: true`** for ALL astrology interpretation agents
+- Interpretation agents synthesize multiple astrological data points into psychological narratives
+- This requires finding subtle connections, weaving coherent stories, and translating technical data
+- Additionally, for LIFE ARC agents, add instruction: **"Use extended thinking at the MAXIMUM level ('ultrathink')"** in the agent prompt (life arc synthesizes 5 timing techniques across decades - most complex task)
+
 **Color Selection**:
 - **Pink**: Planning, meta-agents (agent-creator itself)
 - **Cyan**: Documentation, cataloging
