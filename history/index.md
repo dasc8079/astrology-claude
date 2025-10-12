@@ -124,7 +124,46 @@ This directory contains archived documentation of completed project stages. Each
 4. Profile settings: Single-line format easier to scan and modify
 5. Output directory: Correct path `profiles/{profile}/output/` (not root `/output/`)
 
-**Next Stage**: Stage 3 - Transit Report System (design documents complete, ready to implement)
+**Next Stage**: Stage 4 - Natal Horoscope Optimization (extended-thinking integration + antiscia/fixed stars)
+
+---
+
+### [Stage 3: Transit Report System](STAGE_3_Transit_Reports.md)
+**Date**: 2025-10-07 to 2025-10-12
+**Duration**: 6 days
+**Status**: ✅ COMPLETE
+
+**Summary**: Built comprehensive transit report system with dual-level reporting (short-term and long-term), convergent timing techniques, dynamic movement detection, and psychological narrative synthesis. Implemented complete refactor to match life-arc-interpreter narrative depth with ZR L2/L3 chapter structure.
+
+**Key Outcomes**:
+- Long-term transit agent (1-5 years): ZR L2/L3 chapters, slower planets only, CRITICAL tier only
+- Short-term transit agent (1-4 months): Dual-mode capability (Multi-Movement + Period of Interest)
+- ZR L3 implementation: Fine-grained timing (1-5 months) for sub-periods
+- Planet/tier filtering: 70% reduction in transits for long reports (1,885 → 575)
+- Convergence scoring: Point-based system for identifying high-concentration periods
+- Voice transformation: Psychological depth matching natal-interpreter
+- External CSS system: Modular styling (base + type-specific)
+- Agent orchestration: mode-orchestrator + astrology-output-debugger protocols
+- 35-page comprehensive reports with narrative depth
+
+**Key Files Created**:
+- `/.claude/agents/transit-analyzer-long.md` - Long-term transit agent
+- `/.claude/agents/transit-analyzer-short.md` - Short-term dual-mode agent
+- `/scripts/transit_calculator.py` - Refactored with report types, filtering, L3 integration
+- `/docs/OUTPUT_STYLE_GUIDE.md` - All 4 report structure templates
+- `/docs/AGENT_ORCHESTRATION_GUIDE.md` - 237-line comprehensive guide
+- `/docs/single_event_design.md` - Mode 3 Level 3 design
+- `/scripts/css/` - Modular CSS system (base + 3 type-specific files)
+
+**Lessons Learned**:
+1. Planet/tier filtering critical for narrative coherence
+2. Psychological depth voice > therapeutic event-focused voice
+3. Hardcoded templates save 70% tokens per agent
+4. Dynamic movement detection > fixed time divisions
+5. Data verification phase prevents common errors
+6. Dual-mode agents can handle multiple use cases effectively
+
+**Next Stage**: Stage 4 - Natal Horoscope Optimization (extended-thinking + antiscia/fixed stars)
 
 ---
 

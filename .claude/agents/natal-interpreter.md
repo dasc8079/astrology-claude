@@ -313,7 +313,8 @@ Use `scripts/natal_interpreter.py` to generate comprehensive enhancement analysi
 - Runs modern context modules based on settings
 - Provides structured data for house rulers, nodes, angles, receptions, bonification
 - **Lots**: Uses 4 core lots for natal work (Fortune, Spirit, Eros, Necessity) - remaining 8 lots reserved for Life Arc analysis
-- Includes antiscia and fixed stars (when implemented)
+- **Antiscia**: Mirror degrees across solstice axis - mention only if within 3° of another planet/angle (creates hidden connections)
+- **Fixed Stars**: 5 major stars (Regulus=leadership/honor, Spica=gifts/skill, Algol=danger/transformation, Antares=courage/conflict, Aldebaran=integrity/achievement) - mention when conjunct planet/angle within 1° (rare but dramatic)
 - Includes psychological/Jungian, Lilith, and Chiron analysis (if enabled)
 
 This gives you rich, pre-analyzed data to incorporate into your synthesis.

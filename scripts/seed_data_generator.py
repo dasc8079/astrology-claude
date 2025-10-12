@@ -673,7 +673,7 @@ def calculate_antiscia(planet_data):
             'planet': planet['name'],
             'natal_position': {
                 'sign': planet['sign'],
-                'degree': planet['degree_in_sign'],
+                'degree': planet['degree'],
                 'longitude': lon
             },
             'antiscion': {
