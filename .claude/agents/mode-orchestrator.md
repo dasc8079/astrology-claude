@@ -88,26 +88,31 @@ Intelligently detect which mode the user needs:
    - Everything BEFORE marker → process content
    - Everything AFTER marker → synthesis content
    - If no clear marker, look for transition from technical jargon to accessible prose
-9. **Save Process File**: `/profiles/{name}/output/{report_type}_process_{name}_{date_identifier}.md`
-10. **Save Synthesis File**: `/profiles/{name}/output/{report_type}_synthesis_{name}_{date_identifier}.md`
-11. **Run Accuracy Checker BEFORE PDF**:
+9. **VERIFY OUTPUT PATHS** (before writing any files):
+   - ✅ Correct: `profiles/Darren_S/output/natal_synthesis_Darren_S_2025-10-13.md`
+   - ❌ WRONG: `output/natal_synthesis_Darren_S_2025-10-13.md` (missing profiles/{name}/)
+   - ❌ WRONG: `profiles/Darren_S/natal_synthesis_Darren_S_2025-10-13.md` (missing output/ subfolder)
+   - Echo back all three file paths to confirm correct location BEFORE proceeding
+10. **Save Process File**: `profiles/{name}/output/{report_type}_process_{name}_{date_identifier}.md`
+11. **Save Synthesis File**: `profiles/{name}/output/{report_type}_synthesis_{name}_{date_identifier}.md`
+12. **Run Accuracy Checker BEFORE PDF**:
     - Report type: `{natal|life_arc|transit_short|transit_long}`
     - Output file: synthesis markdown file
     - Data file(s): Appropriate seed data or calculation results
     - Profile name and date range (if applicable)
-12. **Check Accuracy Results**:
+13. **Check Accuracy Results**:
     - ❌ **CRITICAL errors**: Stop workflow, display errors, offer to regenerate
     - ⚠️ **WARNINGS**: Display warnings, ask user to proceed or fix
     - ✅ **PASS**: Continue to PDF generation
-13. **Extract Preview Section**: Introduction (natal/life arc) or Summary Synthesis (transits) - print to terminal (200-300 words)
-14. **Generate PDF**: `python scripts/pdf_generator.py {synthesis_md} --report-type {report_type}`
+14. **Extract Preview Section**: Introduction (natal/life arc) or Summary Synthesis (transits) - print to terminal (200-300 words)
+15. **Generate PDF**: `python scripts/pdf_generator.py {synthesis_md} --report-type {report_type}`
     - **IMPORTANT**: PDF must follow Universal 3-Page Standard (see OUTPUT_STYLE_GUIDE.md):
       - **Page 1**: Title page only (centered, professional spacing)
       - **Page 2**: Technical Quick Reference (8-12 sparse bullets, NO narrative prose)
       - **Page 3**: Synthesis Introduction (600-800 words, flowing prose, NO heading)
       - **Pages 4+**: Main synthesis content
-15. **Save PDF**: `/profiles/{name}/output/{report_type}_synthesis_{name}_{date_identifier}.pdf`
-16. **Return Success**: Display all file paths and completion status
+16. **Save PDF**: `profiles/{name}/output/{report_type}_synthesis_{name}_{date_identifier}.pdf`
+17. **Return Success**: Display all file paths and completion status
 
 ### 4. Mode-Specific Parameters
 
