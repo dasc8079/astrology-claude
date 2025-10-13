@@ -18,6 +18,100 @@ Features we may implement but haven't fully planned yet:
 - **Different input/output modes**: Various ways to interact with the system
 - **Electional astrology**: Add chart selection for optimal timing (doesn't help with transits, so later priority)
 
+### Natal Horoscope Enhancement - Deeper Nuanced Synthesis (20 pages)
+
+**Goal**: Transform natal horoscopes from high-level summaries to deeply nuanced personality portraits where astrological techniques weave together naturally rather than being listed separately.
+
+**Key Changes**:
+
+1. **Seed Data Enhancements** (add missing calculations):
+
+   **Priority 1** (critical for nuanced interpretation):
+   - Stelliums: Calculate 3+ traditional planets in same sign OR house, identify ruler
+   - Hayz: Optimal sect condition (diurnal planet above horizon by day, nocturnal below by night, in appropriate sign)
+   - Terms/Bounds: Fix null values (Swiss Ephemeris should provide these)
+   - Decans/Faces: Fix null values
+
+   **Priority 2** (adds significant color):
+   - Stationary: Planets within 1-2° of retrograde/direct stations
+   - Swift/Slow motion: Relative to mean speed (>110% = swift, <90% = slow)
+   - Oriental/Occidental: Rising before/after Sun
+   - Peregrine flag: Explicitly mark planets with NO essential dignities
+   - Feral flag: Explicitly mark planets with NO major aspects
+
+   **Priority 3** (advanced, less critical):
+   - Overcoming: Planet in superior square/opposition position
+   - Enclosure/Besiegement: Surrounded by benefics (helped) or malefics (burdened)
+
+2. **Structure Changes**:
+   - Page 1: Title page only
+   - Page 2: Chart Overview (300 words) - expanded technical summary
+   - Page 3: Synthesis Introduction (300 words) - essential you overview
+   - Pages 4-19: Main Synthesis (~4,800 words) - woven narrative
+   - Page 20: Integration & Closing (300 words) - poetic synthesis
+   - Remove all technical sections (goes to separate process file)
+   - Target: 5,700-6,000 words = 19-20 pages
+
+3. **Content Enhancements** (weaving techniques together):
+
+   **Life-Area Section Structure** (KEEP EXISTING):
+   - Core Personality & Character
+   - Psychological Makeup (subsections: Ideal Self, Emotional Nature, Mental Style, Love & Relating)
+   - Life Path & Purpose
+   - Strengths & Natural Gifts
+   - Challenges & Growth Areas
+   - Career & Vocation
+   - Synthesis & Integration
+   - Optional additions: Relationships & Intimacy, Creative Expression, Spiritual Path, Daily Rhythms
+
+   **Integration Formula** (weave into EACH life-area section):
+   1. Essential Dignities (domicile, exaltation, triplicity, terms, decans) - shows strength
+   2. Accidental Dignities (angularity, speed, hayz, oriental/occidental) - shows effectiveness
+   3. House Ruler Analysis - ruler's placement shows HOW life area unfolds
+   4. Planets in House - show WHAT energies are active
+   5. Aspects to Ruler and Planets - show SUPPORT or CHALLENGE
+   6. Aspect Patterns (T-squares, grand trines) - larger stories
+   7. Lot Placements - shows WHERE themes manifest
+   8. Sect Layering - colors EVERY planet's expression
+   9. Receptions & Bonification - hidden support networks
+   10. Stellium Influence - gravitational center (not separate section)
+   11. Planetary Conditions (combustion, cazimi, stationary, oriental/occidental, swift/slow, overcoming, enclosure, peregrine, feral)
+   12. Antiscia Connections - hidden symmetries
+   13. Chart Ruler Emphasis - overall life expression
+
+4. **Writing Style Shift**:
+   - Before: "You have Sun conjunct Saturn. This creates discipline. You also have Moon square Jupiter."
+   - After: "Your Sun-Saturn conjunction demands discipline, but because Saturn rules both your 6th house of work AND 7th house of partnership, this shows up in both how you approach craft and how you relate to others. Your Leo Moon wants playful warmth, creating tension—but your Lot of Eros in the 5th house suggests that creative play in both domains resolves the conflict..."
+
+**Implementation Steps**:
+1. **Seed Data Updates** (scripts/seed_data_generator.py):
+   - Add 11 new calculations (priorities 1-3)
+   - Fix terms/bounds null values
+   - Fix decans/faces null values
+   - Total: ~200-300 lines of code
+
+2. **Agent Updates** (.claude/agents/natal-interpreter.md):
+   - Keep existing life-area section structure
+   - Add complete 13-point integration formula
+   - Add word count targets per section (total 5,700-6,000 words)
+   - Add weaving examples for each section type
+   - Remove instructions to generate technical sections III-VIII (goes to separate process file)
+
+3. **Optional Section Expansion** (if needed for 20 pages):
+   - Add "Relationships & Intimacy" (separate from Love & Relating)
+   - Add "Creative Expression"
+   - Add "Spiritual Path & Inner Life"
+   - Add "Daily Rhythms & Health"
+   - Each ~400-600 words
+
+4. **Test & Iterate**:
+   - Generate test horoscope with Darren's chart
+   - Verify 19-20 page output
+   - Check that techniques are woven together, not listed separately
+   - Verify accuracy with accuracy-checker agent
+
+**Expected Result**: Horoscopes that read like cohesive personality portraits where every technique adds nuance to a unified narrative, not separate observations listed one after another.
+
 ---
 
 ## North Star Vision

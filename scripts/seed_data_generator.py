@@ -98,6 +98,38 @@ SIGN_TO_MODALITY = {
     'Gemini': 'mutable', 'Virgo': 'mutable', 'Sagittarius': 'mutable', 'Pisces': 'mutable',
 }
 
+# Egyptian Terms (Bounds) - degree ranges within each sign
+EGYPTIAN_TERMS = {
+    'Aries': [(0, 6, 'Jupiter'), (6, 12, 'Venus'), (12, 20, 'Mercury'), (20, 25, 'Mars'), (25, 30, 'Saturn')],
+    'Taurus': [(0, 8, 'Venus'), (8, 14, 'Mercury'), (14, 22, 'Jupiter'), (22, 27, 'Saturn'), (27, 30, 'Mars')],
+    'Gemini': [(0, 6, 'Mercury'), (6, 12, 'Jupiter'), (12, 17, 'Venus'), (17, 24, 'Mars'), (24, 30, 'Saturn')],
+    'Cancer': [(0, 7, 'Mars'), (7, 13, 'Venus'), (13, 19, 'Mercury'), (19, 26, 'Jupiter'), (26, 30, 'Saturn')],
+    'Leo': [(0, 6, 'Jupiter'), (6, 11, 'Venus'), (11, 18, 'Saturn'), (18, 24, 'Mercury'), (24, 30, 'Mars')],
+    'Virgo': [(0, 7, 'Mercury'), (7, 17, 'Venus'), (17, 21, 'Jupiter'), (21, 28, 'Mars'), (28, 30, 'Saturn')],
+    'Libra': [(0, 6, 'Saturn'), (6, 14, 'Mercury'), (14, 21, 'Jupiter'), (21, 28, 'Venus'), (28, 30, 'Mars')],
+    'Scorpio': [(0, 7, 'Mars'), (7, 11, 'Venus'), (11, 19, 'Mercury'), (19, 24, 'Jupiter'), (24, 30, 'Saturn')],
+    'Sagittarius': [(0, 12, 'Jupiter'), (12, 17, 'Venus'), (17, 21, 'Mercury'), (21, 26, 'Saturn'), (26, 30, 'Mars')],
+    'Capricorn': [(0, 7, 'Mercury'), (7, 14, 'Jupiter'), (14, 22, 'Venus'), (22, 26, 'Saturn'), (26, 30, 'Mars')],
+    'Aquarius': [(0, 7, 'Mercury'), (7, 13, 'Venus'), (13, 20, 'Jupiter'), (20, 25, 'Mars'), (25, 30, 'Saturn')],
+    'Pisces': [(0, 12, 'Venus'), (12, 16, 'Jupiter'), (16, 19, 'Mercury'), (19, 28, 'Mars'), (28, 30, 'Saturn')],
+}
+
+# Decans/Faces - each 10° division ruled by a planet
+DECANS = {
+    'Aries': [(0, 10, 'Mars'), (10, 20, 'Sun'), (20, 30, 'Venus')],
+    'Taurus': [(0, 10, 'Mercury'), (10, 20, 'Moon'), (20, 30, 'Saturn')],
+    'Gemini': [(0, 10, 'Jupiter'), (10, 20, 'Mars'), (20, 30, 'Sun')],
+    'Cancer': [(0, 10, 'Venus'), (10, 20, 'Mercury'), (20, 30, 'Moon')],
+    'Leo': [(0, 10, 'Saturn'), (10, 20, 'Jupiter'), (20, 30, 'Mars')],
+    'Virgo': [(0, 10, 'Sun'), (10, 20, 'Venus'), (20, 30, 'Mercury')],
+    'Libra': [(0, 10, 'Moon'), (10, 20, 'Saturn'), (20, 30, 'Jupiter')],
+    'Scorpio': [(0, 10, 'Mars'), (10, 20, 'Sun'), (20, 30, 'Venus')],
+    'Sagittarius': [(0, 10, 'Mercury'), (10, 20, 'Moon'), (20, 30, 'Saturn')],
+    'Capricorn': [(0, 10, 'Jupiter'), (10, 20, 'Mars'), (20, 30, 'Sun')],
+    'Aquarius': [(0, 10, 'Venus'), (10, 20, 'Mercury'), (20, 30, 'Moon')],
+    'Pisces': [(0, 10, 'Saturn'), (10, 20, 'Jupiter'), (20, 30, 'Mars')],
+}
+
 ASPECTS = {
     'conjunction': 0,
     'sextile': 60,
@@ -242,6 +274,7 @@ def calculate_dignities(planet, sect_type):
     """Calculate essential dignities for a planet."""
     sign = planet['sign']
     planet_name = planet['name']
+    degree = planet['degree']
 
     dignities = {
         'essential': {
@@ -250,8 +283,8 @@ def calculate_dignities(planet, sect_type):
             'detriment': DETRIMENT.get(sign) == planet_name,
             'fall': FALL.get(sign) == planet_name,
             'triplicity': None,
-            'term': None,  # Egyptian terms would need full table
-            'face': None,  # Faces/decans would need full table
+            'term': None,
+            'face': None,
         },
         'accidental': {
             'angular': False,  # Will be determined when house is assigned
@@ -271,6 +304,20 @@ def calculate_dignities(planet, sect_type):
             dignities['essential']['triplicity'] = 'night'
         elif trip['participating'] == planet_name:
             dignities['essential']['triplicity'] = 'participating'
+
+    # Egyptian Terms (Bounds)
+    if sign in EGYPTIAN_TERMS:
+        for start, end, ruler in EGYPTIAN_TERMS[sign]:
+            if start <= degree < end:
+                dignities['essential']['term'] = ruler
+                break
+
+    # Decans (Faces)
+    if sign in DECANS:
+        for start, end, ruler in DECANS[sign]:
+            if start <= degree < end:
+                dignities['essential']['face'] = ruler
+                break
 
     return dignities
 
@@ -832,6 +879,255 @@ def calculate_elemental_balance(planet_data):
     return elements, modalities
 
 
+def calculate_stelliums(planet_data):
+    """
+    Calculate stelliums (3+ traditional planets in same sign OR house).
+    Returns list of stelliums with their ruling planet.
+    """
+    stelliums = []
+
+    # Check by sign
+    sign_groups = {}
+    for planet in planet_data:
+        if planet['traditional']:
+            sign = planet['sign']
+            if sign not in sign_groups:
+                sign_groups[sign] = []
+            sign_groups[sign].append(planet['name'])
+
+    for sign, planets in sign_groups.items():
+        if len(planets) >= 3:
+            ruler = DOMICILE.get(sign, 'None')
+            stelliums.append({
+                'type': 'sign',
+                'location': sign,
+                'planets': planets,
+                'count': len(planets),
+                'ruler': ruler
+            })
+
+    # Check by house
+    house_groups = {}
+    for planet in planet_data:
+        if planet['traditional'] and 'house' in planet:
+            house = planet['house']
+            if house not in house_groups:
+                house_groups[house] = []
+            house_groups[house].append(planet['name'])
+
+    for house, planets in house_groups.items():
+        if len(planets) >= 3:
+            # Find the sign of this house to determine ruler
+            # (This would need house_data passed in, or we'll add it in integration)
+            stelliums.append({
+                'type': 'house',
+                'location': f"House {house}",
+                'planets': planets,
+                'count': len(planets),
+                'ruler': None  # Will be filled in during integration
+            })
+
+    return stelliums
+
+
+def calculate_hayz(planet_data, sect_type, house_data):
+    """
+    Calculate hayz condition for each planet.
+    Hayz = planet in optimal sect condition:
+    - Diurnal planets (Sun, Jupiter, Saturn) above horizon by day in masculine sign
+    - Nocturnal planets (Moon, Venus, Mars) below horizon by night in feminine sign
+    """
+    MASCULINE_SIGNS = ['Aries', 'Gemini', 'Leo', 'Libra', 'Sagittarius', 'Aquarius']
+    FEMININE_SIGNS = ['Taurus', 'Cancer', 'Virgo', 'Scorpio', 'Capricorn', 'Pisces']
+
+    DIURNAL_PLANETS = ['Sun', 'Jupiter', 'Saturn']
+    NOCTURNAL_PLANETS = ['Moon', 'Venus', 'Mars']
+
+    hayz_conditions = {}
+
+    for planet in planet_data:
+        name = planet['name']
+        sign = planet['sign']
+        house = planet.get('house', 0)
+
+        # Determine if above or below horizon (houses 7-12 = above, 1-6 = below)
+        above_horizon = house in [7, 8, 9, 10, 11, 12]
+        below_horizon = house in [1, 2, 3, 4, 5, 6]
+
+        # Check hayz condition
+        in_hayz = False
+
+        if name in DIURNAL_PLANETS:
+            # Diurnal planet needs: day chart + above horizon + masculine sign
+            if sect_type == 'day' and above_horizon and sign in MASCULINE_SIGNS:
+                in_hayz = True
+        elif name in NOCTURNAL_PLANETS:
+            # Nocturnal planet needs: night chart + below horizon + feminine sign
+            if sect_type == 'night' and below_horizon and sign in FEMININE_SIGNS:
+                in_hayz = True
+
+        hayz_conditions[name] = {
+            'in_hayz': in_hayz,
+            'planet_sect': 'diurnal' if name in DIURNAL_PLANETS else 'nocturnal' if name in NOCTURNAL_PLANETS else 'neutral',
+            'chart_sect': sect_type,
+            'position': 'above horizon' if above_horizon else 'below horizon',
+            'sign_gender': 'masculine' if sign in MASCULINE_SIGNS else 'feminine'
+        }
+
+    return hayz_conditions
+
+
+def calculate_planetary_conditions(planet_data, aspects):
+    """
+    Calculate various planetary conditions (stationary, swift/slow, oriental/occidental, peregrine, feral).
+    Returns dict of conditions for each planet.
+    """
+    # Mean daily motions (approximate degrees per day)
+    MEAN_MOTIONS = {
+        'Sun': 0.9856,
+        'Moon': 13.176,
+        'Mercury': 1.383,
+        'Venus': 1.602,
+        'Mars': 0.524,
+        'Jupiter': 0.083,
+        'Saturn': 0.033,
+    }
+
+    conditions = {}
+    sun = next((p for p in planet_data if p['name'] == 'Sun'), None)
+    sun_lon = sun['longitude'] if sun else 0
+
+    for planet in planet_data:
+        name = planet['name']
+        if name not in TRADITIONAL_PLANETS:
+            continue
+
+        speed = planet.get('speed', 0)
+        mean_speed = MEAN_MOTIONS.get(name, 0)
+
+        # Stationary check (within 10% of zero speed for outer planets, 20% for inner)
+        station_threshold = 0.1 if name in ['Mars', 'Jupiter', 'Saturn'] else 0.2
+        is_stationary = abs(speed) < (mean_speed * station_threshold)
+
+        # Swift/slow check
+        is_swift = speed > (mean_speed * 1.1)
+        is_slow = 0 < speed < (mean_speed * 0.9)
+
+        # Oriental/Occidental (only for Mercury, Venus, Mars, Jupiter, Saturn)
+        oriental = False
+        occidental = False
+        if name != 'Sun' and name != 'Moon':
+            # Oriental = rises before Sun (planet longitude < Sun longitude, accounting for wrap)
+            diff = (planet['longitude'] - sun_lon) % 360
+            if 0 < diff < 180:
+                occidental = True
+            else:
+                oriental = True
+
+        # Peregrine check (no essential dignities)
+        dignities = planet.get('dignities', {}).get('essential', {})
+        is_peregrine = not any([
+            dignities.get('domicile'),
+            dignities.get('exaltation'),
+            dignities.get('triplicity'),
+            dignities.get('term'),
+            dignities.get('face')
+        ])
+
+        # Feral check (no major aspects)
+        planet_aspects = [a for a in aspects if planet['name'] in [a['planet_1'], a['planet_2']]]
+        is_feral = len(planet_aspects) == 0
+
+        conditions[name] = {
+            'stationary': is_stationary,
+            'swift': is_swift,
+            'slow': is_slow,
+            'oriental': oriental,
+            'occidental': occidental,
+            'peregrine': is_peregrine,
+            'feral': is_feral,
+            'speed': speed,
+            'mean_speed': mean_speed,
+        }
+
+    return conditions
+
+
+def calculate_aspect_dynamics(aspects, planet_data):
+    """
+    Calculate overcoming and enclosure/besiegement from aspects.
+    """
+    dynamics = {}
+
+    # Overcoming: planet in superior position in square/opposition
+    # Superior = later in zodiacal order within the aspect
+    for aspect in aspects:
+        if aspect['aspect_type'] in ['square', 'opposition']:
+            p1 = next(p for p in planet_data if p['name'] == aspect['planet_1'])
+            p2 = next(p for p in planet_data if p['name'] == aspect['planet_2'])
+
+            lon1 = p1['longitude']
+            lon2 = p2['longitude']
+
+            # Determine which is ahead in zodiacal order
+            diff = (lon2 - lon1) % 360
+            if diff < 180:
+                # p2 is ahead, so p2 overcomes p1
+                if p2['name'] not in dynamics:
+                    dynamics[p2['name']] = {'overcomes': [], 'overcome_by': []}
+                if p1['name'] not in dynamics:
+                    dynamics[p1['name']] = {'overcomes': [], 'overcome_by': []}
+                dynamics[p2['name']]['overcomes'].append(p1['name'])
+                dynamics[p1['name']]['overcome_by'].append(p2['name'])
+            else:
+                # p1 is ahead, so p1 overcomes p2
+                if p1['name'] not in dynamics:
+                    dynamics[p1['name']] = {'overcomes': [], 'overcome_by': []}
+                if p2['name'] not in dynamics:
+                    dynamics[p2['name']] = {'overcomes': [], 'overcome_by': []}
+                dynamics[p1['name']]['overcomes'].append(p2['name'])
+                dynamics[p2['name']]['overcome_by'].append(p1['name'])
+
+    # Enclosure/Besiegement: planet between two others within ~15°
+    BENEFICS = ['Venus', 'Jupiter']
+    MALEFICS = ['Mars', 'Saturn']
+
+    sorted_planets = sorted([p for p in planet_data if p['traditional']],
+                           key=lambda x: x['longitude'])
+
+    enclosure = {}
+    for i, planet in enumerate(sorted_planets):
+        if i == 0 or i == len(sorted_planets) - 1:
+            continue  # Skip first and last
+
+        prev_planet = sorted_planets[i-1]
+        next_planet = sorted_planets[i+1]
+
+        # Check if within ~15° on each side
+        dist_prev = abs(planet['longitude'] - prev_planet['longitude'])
+        dist_next = abs(next_planet['longitude'] - planet['longitude'])
+
+        if dist_prev <= 15 and dist_next <= 15:
+            prev_name = prev_planet['name']
+            next_name = next_planet['name']
+
+            # Determine enclosure type
+            if prev_name in BENEFICS and next_name in BENEFICS:
+                enclosure_type = 'benefic_enclosure'
+            elif prev_name in MALEFICS and next_name in MALEFICS:
+                enclosure_type = 'malefic_besiegement'
+            else:
+                enclosure_type = 'mixed_enclosure'
+
+            enclosure[planet['name']] = {
+                'type': enclosure_type,
+                'between': [prev_name, next_name],
+                'distances': {'prev': round(dist_prev, 2), 'next': round(dist_next, 2)}
+            }
+
+    return {'overcoming': dynamics, 'enclosure': enclosure}
+
+
 def generate_seed_data(args):
     """Main function to generate complete seed data."""
     # Initialize Swiss Ephemeris
@@ -882,12 +1178,18 @@ def generate_seed_data(args):
     # Calculate elemental balance
     elements, modalities = calculate_elemental_balance(planet_data)
 
+    # Calculate new planetary conditions
+    stelliums = calculate_stelliums(planet_data)
+    hayz_conditions = calculate_hayz(planet_data, sect['type'], house_info['houses'])
+    planetary_conditions = calculate_planetary_conditions(planet_data, aspects)
+    aspect_dynamics = calculate_aspect_dynamics(aspects, planet_data)
+
     # Assemble complete seed data
     seed_data = {
         'metadata': {
             'profile_name': args.name,
             'generated_at': datetime.now().isoformat(),
-            'schema_version': '1.0',
+            'schema_version': '1.1',  # Bumped for new calculations
         },
         'birth_data': {
             'date': args.date,
@@ -912,6 +1214,10 @@ def generate_seed_data(args):
         'lunar_nodes': nodes,
         'antiscia': antiscia,
         'fixed_stars': fixed_stars,
+        'stelliums': stelliums,
+        'hayz_conditions': hayz_conditions,
+        'planetary_conditions': planetary_conditions,
+        'aspect_dynamics': aspect_dynamics,
         'elemental_balance': elements,
         'modality_balance': modalities,
     }
