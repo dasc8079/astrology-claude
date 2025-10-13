@@ -88,19 +88,34 @@ The seed data now includes extensive planetary conditions beyond basic placement
 </div>
 ```
 
-### Page 2: Chart Overview (~300 words)
-- Sect determination (day/night chart)
-- Chart ruler and sect light with brief interpretation
-- Angular planets (1st, 4th, 7th, 10th houses)
-- Stelliums (if present) - note ruler and planets involved
-- Dominant elements/modalities
-- Key patterns (major configurations, overcoming dynamics, enclosure)
+### Page 2: Chart Overview (Technical Quick Reference)
+**Format**: SPARSE bullet points and tables ONLY (8-12 bullets max, NOT narrative prose)
+**Purpose**: Quick reference for astrologers, scannable at a glance
+**Audience**: For technical verification
 
-### Page 3: Introduction (~300 words)
+Include ONLY these items as concise bullets:
+- **Sect**: [Day/Night] chart ([Sun above/below horizon])
+- **Chart Ruler**: [Planet] in [Sign] in [House] ([dignity state])
+- **Sect Light**: [Sun/Moon] in [Sign] ([strength/condition])
+- **Angular Planets**: [List planets in 1st, 4th, 7th, 10th houses]
+- **Stellium**: [If present: X planets in Y sign/house]
+- **Key Dignities**: [2-3 strongest planetary placements]
+- **Major Aspects**: [2-3 most significant aspect patterns]
+- **Elemental Emphasis**: [Dominant element, if any]
+
+**NO narrative prose on this page - just sparse structured data**
+
+### Page 3: Synthesis Introduction (600-800 words)
+**Format**: Flowing narrative prose (NO bullet points, NO headings, NO jargon)
+**Purpose**: Welcome non-astrologers and set up the synthesis
+**Audience**: The native (person receiving the reading)
+
+Begin directly with narrative (no heading on this page):
 - Essential nature and core themes
 - The overarching story of this chart
 - Central tension or life question
 - What makes this chart unique
+- Sets up the detailed synthesis that follows
 
 ### Pages 4-19: SYNTHESIS FOR THE NATIVE (~4,800 words total)
 

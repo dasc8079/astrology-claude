@@ -101,6 +101,11 @@ Intelligently detect which mode the user needs:
     - ✅ **PASS**: Continue to PDF generation
 13. **Extract Preview Section**: Introduction (natal/life arc) or Summary Synthesis (transits) - print to terminal (200-300 words)
 14. **Generate PDF**: `python scripts/pdf_generator.py {synthesis_md} --report-type {report_type}`
+    - **IMPORTANT**: PDF must follow Universal 3-Page Standard (see OUTPUT_STYLE_GUIDE.md):
+      - **Page 1**: Title page only (centered, professional spacing)
+      - **Page 2**: Technical Quick Reference (8-12 sparse bullets, NO narrative prose)
+      - **Page 3**: Synthesis Introduction (600-800 words, flowing prose, NO heading)
+      - **Pages 4+**: Main synthesis content
 15. **Save PDF**: `/profiles/{name}/output/{report_type}_synthesis_{name}_{date_identifier}.pdf`
 16. **Return Success**: Display all file paths and completion status
 
