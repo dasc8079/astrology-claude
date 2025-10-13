@@ -419,6 +419,48 @@ def calculate_aspects(planet_data):
     return aspects
 
 
+def calculate_angle_aspects(planet_data, asc_longitude, mc_longitude):
+    """Calculate aspects from planets to chart angles (ASC, MC, DSC, IC)."""
+    angle_aspects = []
+
+    # Define angles
+    angles = {
+        'Ascendant': asc_longitude,
+        'Midheaven': mc_longitude,
+        'Descendant': (asc_longitude + 180) % 360,
+        'IC': (mc_longitude + 180) % 360,
+    }
+
+    # Check each planet for aspects to each angle
+    for planet in planet_data:
+        planet_lon = planet['longitude']
+
+        for angle_name, angle_lon in angles.items():
+            # Calculate angular separation
+            diff = abs(planet_lon - angle_lon)
+            if diff > 180:
+                diff = 360 - diff
+
+            # Check for aspects (using classical aspects only)
+            for aspect_name, aspect_angle in ASPECTS.items():
+                orb = abs(diff - aspect_angle)
+                if orb <= ORB_TOLERANCE[aspect_name]:
+                    angle_aspects.append({
+                        'planet': planet['name'],
+                        'angle': angle_name,
+                        'aspect_type': aspect_name,
+                        'orb': round(orb, 2),
+                        'traditional': planet['traditional'],
+                        'interpretation_notes': {
+                            'nature': 'harmonious' if aspect_name in ['sextile', 'trine'] else 'challenging' if aspect_name in ['square', 'opposition'] else 'neutral',
+                            'strength': 'strong' if orb < 3 else 'moderate' if orb < 6 else 'weak',
+                            'significance': 'high' if angle_name in ['Ascendant', 'Midheaven'] else 'moderate',
+                        }
+                    })
+
+    return angle_aspects
+
+
 def calculate_lots(jd, asc_longitude, planet_data, sect_type):
     """Calculate Hermetic lots (Fortune, Spirit, and 5 additional lots)."""
     sun = next(p for p in planet_data if p['name'] == 'Sun')
@@ -1163,6 +1205,9 @@ def generate_seed_data(args):
     # Calculate aspects
     aspects = calculate_aspects(planet_data)
 
+    # Calculate angle aspects (aspects from planets to ASC/MC/DSC/IC)
+    angle_aspects = calculate_angle_aspects(planet_data, house_info['ascendant']['longitude'], house_info['midheaven']['longitude'])
+
     # Calculate lots
     lots = calculate_lots(jd, house_info['ascendant']['longitude'], planet_data, sect['type'])
 
@@ -1210,6 +1255,7 @@ def generate_seed_data(args):
         'planets': planet_data,
         'houses': house_info['houses'],
         'aspects': aspects,
+        'angle_aspects': angle_aspects,
         'lots': lots,
         'lunar_nodes': nodes,
         'antiscia': antiscia,

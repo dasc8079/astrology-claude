@@ -9,6 +9,7 @@
 
 Features we may implement but haven't fully planned yet:
 
+- refactor docs for current spec, future plans, and archive
 - are there multiople scripts that run for a horoscope? can we consolidate?
 - check that the planning agents use context7 when appropriate.
 - setting to allow for uncertain birth times, just use houses/signs, no asc, mc, etc.
@@ -50,10 +51,10 @@ Features we may implement but haven't fully planned yet:
 
 2. **Structure Changes**:
    - Page 1: Title page only
-   - Page 2: Chart Overview (300 words) - expanded technical summary
-   - Page 3: Synthesis Introduction (300 words) - essential you overview
+   - Page 2: Chart Overview (8-12 sparse bullets) - technical quick reference, NO narrative prose
+   - Page 3: Synthesis Introduction (600-800 words) - essential you overview, flowing narrative
    - Pages 4-19: Main Synthesis (~4,800 words) - woven narrative
-   - Page 20: Integration & Closing (300 words) - poetic synthesis
+   - Page 20: Synthesis & Integration (300 words) - poetic wrapup at END of document
    - Remove all technical sections (goes to separate process file)
    - Target: 5,700-6,000 words = 19-20 pages
 

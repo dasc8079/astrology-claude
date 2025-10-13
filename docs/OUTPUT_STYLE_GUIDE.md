@@ -91,9 +91,11 @@ and feeling the weight of responsibility...
 
 ---
 
-## Universal 3-Page Standard (All Reports)
+## ⚠️ CRITICAL: Universal 3-Page Standard (All Reports)
 
-**Every report (natal, life arc, transit) follows this structure for the first 3 pages:**
+**UPDATED**: 2025-10-13 - This is the NEW standard for all reports going forward.
+
+**Every report (natal, life arc, transit) MUST follow this structure for the first 3 pages:**
 
 ### Page 1: Cover Page (IDENTICAL FOR ALL REPORTS)
 - **Content**: Title, profile name, date range, birth data, report metadata
@@ -102,13 +104,15 @@ and feeling the weight of responsibility...
 
 ### Page 2: Technical Quick Reference (VARIES BY REPORT TYPE)
 - **Purpose**: Essential astrological data for quick reference
-- **Format**: Sparse bulleted lists, tables, structured data (NOT narrative prose)
-- **Length**: 8-12 bullet points max (scannable, not exhaustive)
+- **Format**: ⚠️ **SPARSE bulleted lists, tables, structured data ONLY** (NOT narrative prose)
+- **Length**: ⚠️ **8-12 bullet points maximum** (scannable, not exhaustive)
 - **Audience**: For astrologers or technical verification
 - **Content varies by report type**:
   - **Natal**: Chart Overview (sect, chart ruler, angular planets, stelliums, key dignities, major aspect patterns, elemental emphasis)
   - **Life Arc**: Life Arc Overview (current age, current ZR chapter, major chapters summary, profection year, key progression themes)
   - **Transit**: Transit Period Overview (date range, auspicious/challenging periods, major ingresses, retrogrades, key aspects)
+
+⚠️ **CRITICAL**: Page 2 is NOT a narrative summary. It is a scannable quick-reference list for technical verification.
 
 ### Page 3: Synthesis Introduction (SIMILAR STRUCTURE FOR ALL)
 - **Purpose**: Start of main synthesis narrative (NO jargon)
