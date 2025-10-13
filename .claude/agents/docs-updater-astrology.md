@@ -136,6 +136,14 @@ These files (in /docs/) rarely change - only update when foundational changes oc
 - Update CLAUDE.md Project Agents section when new agents are created
 - Update individual agent READMEs in .claude/agents/ directory when agents are modified
 - Document agent handoffs and coordination patterns
+- **Update mode-orchestrator agent catalog** when new interpreter agents created (natal, life-arc, transit analyzers)
+
+**Mode-Orchestrator Coordination** (automatic when new interpreter agents created):
+- When agent-creator finishes creating a new astrology interpreter agent, YOU are triggered
+- Update `.claude/agents/mode-orchestrator.md` "Existing Agents" section (around line 335-343)
+- Add new agent to the list with handler type and status
+- Format: `- **agent-name**: Mode X handler - STATUS`
+- This ensures mode-orchestrator knows about all available interpreters
 
 ### 6. Agent Maintenance & Cross-Reference Validation (NEW RESPONSIBILITY)
 

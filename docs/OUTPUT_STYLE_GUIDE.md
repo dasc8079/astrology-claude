@@ -91,6 +91,48 @@ and feeling the weight of responsibility...
 
 ---
 
+## Universal 3-Page Standard (All Reports)
+
+**Every report (natal, life arc, transit) follows this structure for the first 3 pages:**
+
+### Page 1: Cover Page (IDENTICAL FOR ALL REPORTS)
+- **Content**: Title, profile name, date range, birth data, report metadata
+- **Format**: Centered text, professional spacing
+- **NO other content on this page** - just cover information
+
+### Page 2: Technical Quick Reference (VARIES BY REPORT TYPE)
+- **Purpose**: Essential astrological data for quick reference
+- **Format**: Sparse bulleted lists, tables, structured data (NOT narrative prose)
+- **Length**: 8-12 bullet points max (scannable, not exhaustive)
+- **Audience**: For astrologers or technical verification
+- **Content varies by report type**:
+  - **Natal**: Chart Overview (sect, chart ruler, angular planets, stelliums, key dignities, major aspect patterns, elemental emphasis)
+  - **Life Arc**: Life Arc Overview (current age, current ZR chapter, major chapters summary, profection year, key progression themes)
+  - **Transit**: Transit Period Overview (date range, auspicious/challenging periods, major ingresses, retrogrades, key aspects)
+
+### Page 3: Synthesis Introduction (SIMILAR STRUCTURE FOR ALL)
+- **Purpose**: Start of main synthesis narrative (NO jargon)
+- **Format**: Full page of flowing narrative prose (600-800 words)
+- **Audience**: Non-astrologers (zero technical terminology)
+- **Content** (adapted to report type):
+  - Essential nature / current position in life story / current astrological weather
+  - Core themes and overarching patterns
+  - What makes this chart/period/time unique
+  - Sets up the detailed analysis that follows
+- **NO heading on this page** - starts directly with narrative
+
+### Pages 4+: Main Content (VARIES BY REPORT TYPE)
+- Structure determined by report template (A, B, or C)
+- See template-specific sections below for details
+
+**Why This Standard?**
+- Consistency: All reports feel cohesive
+- Usability: Page 2 serves as quick reference bookmark
+- Accessibility: Page 3 welcomes non-astrologers before diving deep
+- Professional: Clean, predictable structure for all outputs
+
+---
+
 ## Tone & Voice Standards
 
 ### For Synthesis/PDF (Non-Astrologers)
@@ -211,10 +253,11 @@ All reports follow one of three fundamental structures based on their organizing
 4. **Integration & Synthesis**
    - How all components work together
    - Core psychological patterns
-5. **Poetic Wrapup** (final paragraph - NO heading)
-   - 4-8 sentences, direct second person
-   - Reiterate key themes
+5. **Poetic Wrapup** (at END of entire synthesis document - NO heading)
+   - Final 4-8 sentences of the complete PDF
+   - Direct second person, reiterate key themes
    - NO astrological jargon
+   - Serves as document conclusion
 
 **Format Style**:
 - Flowing narrative paragraphs (4-8 sentences each)

@@ -9,7 +9,10 @@
 
 Features we may implement but haven't fully planned yet:
 
+- are there multiople scripts that run for a horoscope? can we consolidate?
+- check that the planning agents use context7 when appropriate.
 - setting to allow for uncertain birth times, just use houses/signs, no asc, mc, etc.
+- **Angle interpretations**: Add specific interpretations for chart angles (ASC/MC/DSC/IC sign rulers, aspects TO the angles)
 - **Electional astrology**: Add chart selection for optimal timing (doesn't help with transits, so later priority)
 - Daily report - runs automatically to genereate a daily report. Maybe make a whole workflwo to generate a horoscope and summarize my day/find any news sources I'm interested in.
 - **Module refinement**: After initial build, go back and refine individual modules - alreadY in progress
