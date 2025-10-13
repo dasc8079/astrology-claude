@@ -9,14 +9,16 @@
 
 Features we may implement but haven't fully planned yet:
 
-- **Claude Code API instead of ChatGPT**: Migrate from OpenAI to Claude API
-- **Birth data entry in chat interface**: Allow users to enter birth data during chat, automation fetches natal data
-- **Transit story/activation timeline**: Expand transit reports to include the totality of a transit's story in the native's life (transits tell stories, not isolated events)
-- **Module refinement**: After initial build, go back and refine individual modules
+- setting to allow for uncertain birth times, just use houses/signs, no asc, mc, etc.
+- **Electional astrology**: Add chart selection for optimal timing (doesn't help with transits, so later priority)
+- Daily report - runs automatically to genereate a daily report. Maybe make a whole workflwo to generate a horoscope and summarize my day/find any news sources I'm interested in.
+- **Module refinement**: After initial build, go back and refine individual modules - alreadY in progress
 - **Synastry**: Add relationship compatibility analysis
 - **Mobile app consideration**: May build over Telegram if we need to adjust settings
 - **Different input/output modes**: Various ways to interact with the system
-- **Electional astrology**: Add chart selection for optimal timing (doesn't help with transits, so later priority)
+
+- **Claude Code API instead of ChatGPT**: Migrate from OpenAI to Claude API
+
 
 ### Natal Horoscope Enhancement - Deeper Nuanced Synthesis (20 pages)
 
@@ -121,9 +123,12 @@ Build a comprehensive astrology application that provides:
 2. **Life Arc Report Generator**: Decades-long life timeline with convergence detection
 3. **Transit Report Generator**: Targeted transit analysis by area of life and timeframe
 4. **Additional Timing Techniques**: Zodiacal releasing, annual profections, and other traditional methods
-5. **Interactive Chat Interfaces** (Future): Two rolling conversation modes
-   - **Horoscope Inquirer**: Chat about natal chart, personality, ideal vocation
-   - **Transit/Advice Chatbot**: Chat about current situation, transits, and advice
+5. **Conversational Orchestrator** (Planned): Transform mode-orchestrator into rolling astrology assistant
+   - Quick question answering (without full reports)
+   - Full report generation when appropriate
+   - RAG integration for traditional interpretations
+   - Multi-turn conversational memory
+   - **See**: [orchestrator_conversational_upgrade_spec.md](orchestrator_conversational_upgrade_spec.md) for complete 5-phase plan
 
 **Ultimate Goal**: Make traditional/Hellenistic astrology insights accessible through natural conversation, grounded in authoritative sources (Brennan, Hand, George, Brady, Greene, Mason).
 
