@@ -243,36 +243,79 @@ All reports follow one of three fundamental structures based on their organizing
 
 **Organizing Principle**: Birth chart components (placements, aspects, houses)
 
-**Structure**:
-1. **Title Page** (see Title Page Standards below)
-2. **Introduction** (2-4 paragraphs)
-   - Essential nature and core character
-   - Overarching natal themes
-3. **Chart Components** (organized by astrological logic)
-   - Luminaries (Sun/Moon identity)
-   - Key planetary placements
-   - Angular planets and chart ruler
-   - Aspect patterns
-   - House emphases
-4. **Integration & Synthesis**
-   - How all components work together
-   - Core psychological patterns
-5. **Poetic Wrapup** (at END of entire synthesis document - NO heading)
-   - Final 4-8 sentences of the complete PDF
-   - Direct second person, reiterate key themes
-   - NO astrological jargon
-   - Serves as document conclusion
+**Two Structure Variants Available**:
 
-**Format Style**:
+#### Variant A1: Psychological Categories (Default)
+**Agent**: `natal-interpreter`
+**Organization**: Traditional psychological themes
+
+**Pages 4-19 Structure** (~4,800 words):
+- **Core Personality & Character** (~600 words)
+- **Psychological Makeup** (~1,500 words):
+  - The Ideal Self & Self-Image (~400 words)
+  - Emotional Nature & Inner Life (~400 words)
+  - Mental Style & Intellect (~350 words)
+  - Psychological Wounds & Healing (~350 words)
+- **Love & Intimate Relating** (~700 words)
+- **Relationships & Social Bonds** (~600 words)
+- **Life Path & Purpose** (~600 words)
+- **Strengths & Natural Gifts** (~500 words)
+- **Challenges & Growth Areas** (~600 words)
+- **Career & Vocation** (~700 words)
+- **Creative Expression & Play** (~500 words)
+
+**Best For**: Users who think in psychological frameworks, therapists, coaches, traditional horoscope readers
+
+---
+
+#### Variant A2: Experiential Domains (Alternative)
+**Agent**: `natal-interpreter-experiential`
+**Organization**: Life experience domains (inner vs outer life)
+
+**Pages 4-19 Structure** (~4,800 words):
+- **I. Inner Life** (~1,800 words):
+  - Emotional Landscape (~500 words)
+  - Inner Dialogue & Self-Perception (~450 words)
+  - Dreams, Fears & Shadows (~450 words)
+  - Psychological Wounds & Healing (~400 words)
+- **II. Outer Expression** (~1,600 words):
+  - Identity & Presence (~500 words)
+  - Voice & Communication Style (~400 words)
+  - Public Role & Reputation (~400 words)
+  - Style & Creative Self-Expression (~300 words)
+- **III. Relational Life** (~1,600 words):
+  - Intimate Partnership & Marriage (~600 words)
+  - Desire, Sexuality & Vulnerability (~450 words)
+  - Friendship & Community (~350 words)
+  - Family & Roots (~200 words)
+- **IV. Purpose & Calling** (~1,500 words):
+  - Soul's Intention & Life Path (~500 words)
+  - Vocation & Career (~550 words)
+  - Meaning, Philosophy & Growth (~450 words)
+
+**Best For**: Users who want clear inner/outer life distinction, emphasis on relational patterns, purpose-focused readers
+
+---
+
+**Both Variants Share**:
+1. **Title Page** (same for both)
+2. **Chart Overview** (Page 2: 8-12 sparse bullets)
+3. **Synthesis Introduction** (Page 3: 600-800 words)
+4. **Main Synthesis** (Pages 4-19: ~4,800 words with variant structure)
+5. **Poetic Wrapup** (Page 20: 300 words, NO heading)
+
+**Format Style** (identical for both):
 - Flowing narrative paragraphs (4-8 sentences each)
 - Extra paragraph spacing for readability
-- Minimal subsections (avoid over-structuring)
 - Smooth transitions between sections
 - Readable as unified psychological essay
+- Same 14-point integration formula applied to each subsection
 
-**CSS File**: `scripts/css/chart_based.css`
+**CSS File**: `scripts/css/chart_based.css` (same for both variants)
 
-**Examples**: `profiles/darren/output/natal_horoscope_synthesis.pdf`
+**Examples**:
+- Default structure: `profiles/darren/output/natal_horoscope_synthesis.pdf`
+- Experiential structure: `output/natal_synthesis_Darren_S_experiential_2025-10-13.pdf`
 
 ---
 
