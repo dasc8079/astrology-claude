@@ -9,7 +9,10 @@
 
 Features we may implement but haven't fully planned yet:
 
-- refactor docs for current spec, future plans, and archive
+-  add scoring system to natal interpreter?
+- update agents/orchistrator so the agetns outpout the final files
+- make poetic wrap up more poetic and 3-5 sentences
+- refactor docs folder for current spec, future plans, and archive
 - are there multiople scripts that run for a horoscope? can we consolidate?
 - check that the planning agents use context7 when appropriate.
 - setting to allow for uncertain birth times, just use houses/signs, no asc, mc, etc.
@@ -20,6 +23,7 @@ Features we may implement but haven't fully planned yet:
 - **Synastry**: Add relationship compatibility analysis
 - **Mobile app consideration**: May build over Telegram if we need to adjust settings
 - **Different input/output modes**: Various ways to interact with the system
+- optimize system with rag
 
 - **Claude Code API instead of ChatGPT**: Migrate from OpenAI to Claude API
 
