@@ -1,12 +1,54 @@
 # Current Work - Astrology Application
 
 **Last Updated**: 2025-10-14
-**Current Focus**: PDF Formatting & Output Quality - Implementation Complete
+**Current Focus**: Documentation Structure Optimization - Complete
 **Default Profile**: Darren_S (use this profile for all analyses unless specified otherwise)
 
 ---
 
 ## 🎯 Recent Milestone (2025-10-14)
+
+### Docs Folder Refactoring - COMPLETE ✅
+
+**Major Achievement**: Systematic documentation workflow established
+
+**What Was Completed**:
+1. ✅ **Created systematic docs/ folder structure**:
+   - docs/features/ - Feature specifications
+   - docs/agents/ - Agent specifications
+   - docs/updates/ - Update specifications (temporary)
+   - docs/archive/ - Archived updates and old versions
+   - docs/reference/ - Static reference docs
+   - docs/guides/ - Operational guides
+   - docs/technical/ - System documentation
+
+2. ✅ **Migrated all existing files to new locations**:
+   - Feature specs → docs/features/
+   - Agent specs → docs/agents/
+   - Completed updates → docs/archive/updates/2025/10-October/
+   - Reference docs → docs/reference/
+   - Guides → docs/guides/
+   - Technical docs → docs/technical/
+
+3. ✅ **Created README files for each subfolder** - explaining workflow and purpose
+
+4. ✅ **Updated docs-updater-astrology agent**:
+   - New docs/ folder maintenance responsibilities
+   - Proactive update spec archiving and integration workflow
+   - Clear ownership of ALL documentation (root + docs/)
+
+**Result**: Systematic workflow established:
+Design → Spec → Agent → Implementation → Updates → Integration → Archive
+
+**Benefits**:
+- Clear separation between active work (docs/updates/), reference material (docs/reference/), and completed work (docs/archive/)
+- Documented workflows in each subfolder README
+- Proactive archiving prevents documentation bloat
+- Easy navigation and maintenance
+
+---
+
+## 🎯 Previous Milestone (2025-10-14)
 
 ### Antiscia & Fixed Stars Implementation + Profile Settings Loader - COMPLETE ✅
 
@@ -145,8 +187,16 @@
 - Antiscia: EASY implementation, HIGH value (calculated from longitude)
 - Fixed Stars: EASY implementation, HIGH value (5 major stars: Regulus, Spica, Algol, Aldebaran, Antares)
 
+**Next Steps** (IMMEDIATE):
+1. ⏳ **Astrology Reference Documentation Review** - Audit docs/reference/ASTROLOGY_REFERENCE.md to ensure all calculation methods are documented
+   - Verify antiscia calculation formula documented
+   - Verify fixed stars calculation method documented
+   - Verify all dignities, aspects, house systems match implementation
+   - **NOTE**: Any time calculation methods change, docs/reference/ASTROLOGY_REFERENCE.md MUST be updated
+2. ⏳ Life Arc Report Rebuild - Enhance with new narrative techniques and styling (ACTIVE NOW)
+
 **Next Steps** (FUTURE):
-1. ⏳ Life Arc Report Rebuild - Enhance with new narrative techniques and styling (deferred for future session)
+1. ⏳ Adaptive Weighting System - Make PRIMARY/SECONDARY/TERTIARY percentages context-sensitive based on orb tightness and cumulative patterns
 2. ⏳ Obtain sefstars.txt ephemeris file - enables remaining 4 fixed stars (Regulus, Algol, Aldebaran, Antares)
 3. ⏳ Test antiscia/fixed stars with chart that has close connections (to verify mention logic works when thresholds met)
 
