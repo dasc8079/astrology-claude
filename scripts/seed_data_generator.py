@@ -28,10 +28,12 @@ PLANETS = {
     'Uranus': swe.URANUS,  # Modern
     'Neptune': swe.NEPTUNE,  # Modern
     'Pluto': swe.PLUTO,  # Modern
+    'Chiron': swe.CHIRON,  # Modern (asteroid/comet)
+    'Lilith': swe.MEAN_APOG,  # Modern (Black Moon Lilith - mean lunar apogee)
 }
 
 TRADITIONAL_PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn']
-MODERN_PLANETS = ['Uranus', 'Neptune', 'Pluto']
+MODERN_PLANETS = ['Uranus', 'Neptune', 'Pluto', 'Chiron', 'Lilith']
 
 SIGNS = [
     'Aries', 'Taurus', 'Gemini', 'Cancer',
@@ -50,6 +52,8 @@ PLANET_SYMBOLS = {
     'Uranus': '♅',
     'Neptune': '♆',
     'Pluto': '♇',
+    'Chiron': '⚷',
+    'Lilith': '⚸',
 }
 
 # Dignity tables
@@ -176,11 +180,62 @@ def calculate_julian_day(date_str, time_str, timezone_str):
     return jd, dt_utc
 
 
-def calculate_planets(jd):
-    """Calculate positions of all planets."""
+def read_profile_settings(profile_name):
+    """
+    Read profile settings from profile.md file.
+    Returns dict with include_chiron and include_lilith settings.
+    """
+    profile_path = Path(f'profiles/{profile_name}/profile.md')
+
+    if not profile_path.exists():
+        # If profile doesn't exist, use defaults
+        return {'include_chiron': False, 'include_lilith': False}
+
+    try:
+        with open(profile_path, 'r') as f:
+            content = f.read()
+
+        # Simple parsing: look for include_chiron and include_lilith settings
+        include_chiron = False
+        include_lilith = False
+        for line in content.split('\n'):
+            if 'include_chiron:' in line:
+                # Extract value (true/false)
+                if 'true' in line.lower():
+                    include_chiron = True
+            if 'include_lilith:' in line:
+                # Extract value (true/false)
+                if 'true' in line.lower():
+                    include_lilith = True
+
+        return {'include_chiron': include_chiron, 'include_lilith': include_lilith}
+
+    except Exception as e:
+        print(f"Warning: Could not read profile settings: {e}")
+        return {'include_chiron': False, 'include_lilith': False}
+
+
+def calculate_planets(jd, include_chiron=False, include_lilith=False):
+    """
+    Calculate positions of all planets.
+
+    Args:
+        jd: Julian day number
+        include_chiron: Whether to include Chiron in calculations (default: False)
+        include_lilith: Whether to include Lilith in calculations (default: False)
+    """
     planet_data = []
 
-    for name, planet_id in PLANETS.items():
+    # Determine which planets to calculate
+    planets_to_calculate = PLANETS.copy()
+    if not include_chiron:
+        # Remove Chiron if not enabled
+        planets_to_calculate = {k: v for k, v in PLANETS.items() if k != 'Chiron'}
+    if not include_lilith:
+        # Remove Lilith if not enabled
+        planets_to_calculate = {k: v for k, v in planets_to_calculate.items() if k != 'Lilith'}
+
+    for name, planet_id in planets_to_calculate.items():
         result = swe.calc_ut(jd, planet_id)
         longitude = result[0][0]
         speed = result[0][3]
@@ -1172,14 +1227,22 @@ def calculate_aspect_dynamics(aspects, planet_data):
 
 def generate_seed_data(args):
     """Main function to generate complete seed data."""
-    # Initialize Swiss Ephemeris
-    swe.set_ephe_path(None)  # Use default ephemeris
+    # Initialize Swiss Ephemeris with project's ephemeris directory
+    ephe_path = str(Path(__file__).parent.parent / 'ephemeris')
+    swe.set_ephe_path(ephe_path)
+
+    # Read profile settings to determine what to calculate
+    settings = read_profile_settings(args.name)
+    include_chiron = settings.get('include_chiron', False)
+    include_lilith = settings.get('include_lilith', False)
+
+    print(f"Profile settings: include_chiron={include_chiron}, include_lilith={include_lilith}")
 
     # Calculate Julian day
     jd, dt_utc = calculate_julian_day(args.date, args.time, args.timezone)
 
-    # Calculate chart components
-    planet_data = calculate_planets(jd)
+    # Calculate chart components (passing include_chiron and include_lilith flags)
+    planet_data = calculate_planets(jd, include_chiron=include_chiron, include_lilith=include_lilith)
     house_info = calculate_houses(jd, args.lat, args.lon)
     sect = determine_sect(planet_data, house_info['ascendant'], jd, args.lat, args.lon)
 

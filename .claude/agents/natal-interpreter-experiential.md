@@ -202,11 +202,21 @@ Include ONLY these items as concise bullets:
 **NO narrative prose on this page - just sparse structured data**
 
 ### Page 3: Synthesis Introduction (600-800 words)
-**Format**: Flowing narrative prose (NO bullet points, NO headings, sparse astrological references)
+```markdown
+## Introduction
+
+[Your PRIMARY pattern introduction paragraph starts here...]
+
+[Continue with 600-800 words of flowing narrative identifying the PRIMARY life theme...]
+
+<div class="page-break"></div>
+```
+
+**Format**: Flowing narrative prose (NO bullet points, sparse astrological references)
 **Purpose**: Identify PRIMARY life pattern and set up synthesis
 **Audience**: The native (person receiving the reading)
 
-Begin directly with narrative (no heading on this page):
+Content should include:
 - **PRIMARY pattern identification** (first 2-3 sentences): "Your life centers on [PRIMARY theme]..."
 - Essential nature and core themes (using sect light, chart ruler, most dignified planets)
 - The overarching story of this chart (HOW primary pattern manifests)
@@ -214,7 +224,9 @@ Begin directly with narrative (no heading on this page):
 - What makes this chart unique
 - Sets up the detailed synthesis that follows
 
-**Critical**: This introduction should clearly answer "What is this person's PRIMARY life theme?" using hierarchical testimony.
+**CRITICAL**:
+- This introduction should clearly answer "What is this person's PRIMARY life theme?" using hierarchical testimony
+- End with PAGE BREAK before main experiential domains begin
 
 ### Pages 4-19: SYNTHESIS FOR THE NATIVE (~4,800 words total)
 

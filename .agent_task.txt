@@ -1,0 +1,34 @@
+AGENT: transit-analyzer-short
+
+TASK: Generate focused transit report for communication disruption event
+
+MODE: Period of Interest (cluster analysis)
+
+INPUT DATA:
+- Profile: Darren_S
+- Transit data: /Users/darrenschaeffer/Documents/Claude/Astrogy_Claude/profiles/Darren_S/output/transit_data_Darren_S_2025-10-12_to_2025-10-16.json
+- Seed data: /Users/darrenschaeffer/Documents/Claude/Astrogy_Claude/profiles/Darren_S/seed_data/master_seed_data.yaml
+- Output directory: /Users/darrenschaeffer/Documents/Claude/Astrogy_Claude/profiles/Darren_S/output/
+
+FOCUS:
+- Focus date: October 14, 2025
+- Event: Missed therapy appointment / telehealth communication issue
+- Period: October 12-16, 2025 (concentrated window)
+- Score context: October 14 identified as most challenging day (score: -3)
+
+PRIORITY ANALYSIS:
+1. Communication disruptions (Mercury aspects)
+2. Technology/connection issues (Uranus aspects, Mercury-Saturn)
+3. Scheduling confusion (Mercury-Neptune, 3rd/9th house transits)
+4. Therapy/guidance blocks (9th house, Saturn aspects)
+
+OUTPUT FILES:
+- Process: transit_process_Darren_S_short_2025-10-12_to_2025-10-16.md
+- Synthesis: transit_synthesis_Darren_S_short_2025-10-12_to_2025-10-16.md
+- PDF: transit_synthesis_Darren_S_short_2025-10-12_to_2025-10-16.pdf
+
+SPECIAL INSTRUCTIONS:
+- Use Period of Interest mode to show transit cluster creating today's disruption
+- Focus on psychological narrative around communication blocks
+- Provide practical guidance for navigating this concentrated period
+- Quick turnaround needed - user needs immediate insight

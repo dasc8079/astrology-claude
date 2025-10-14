@@ -180,8 +180,42 @@ Planets operating contrary to sect are either:
 
 ### Special Points
 - North Node (☊) / South Node (☋) - Lunar nodes
-- Chiron (⚷) - Wounded healer archetype (modern)
-- Lilith (⚸) - Black Moon Lilith mean position (modern)
+- Chiron (⚷) - Wounded healer archetype (modern, toggleable)
+- Lilith (⚸) - Black Moon Lilith mean position (modern, toggleable)
+
+**Chiron Interpretation** (when `include_chiron: true`):
+- Represents core wound and healing gifts
+- Shows where one experienced early rejection or inadequacy that becomes source of wisdom
+- Indicates areas of deep teaching ability born from personal wounding
+- By house: WHERE the wound manifests and WHERE healing gifts emerge
+- By sign: HOW the wound manifests and the NATURE of healing gifts
+- By aspects: Challenging aspects show areas where wound is activated; harmonious aspects show easier access to healing gifts
+- Integration: TERTIARY or SECONDARY depending on prominence (angular placement or major aspects = SECONDARY)
+- Tone: Frame as wound-to-wisdom transformation, teaching others what you had to learn the hard way
+
+**Example Interpretations**:
+- Chiron in 1st house: Identity wound, learning to embody authentic self, teaching others about self-acceptance
+- Chiron in 6th house: Health/service wound, becoming healer through own health crisis or service challenges
+- Chiron in 10th house: Career/authority wound, teaching others about authentic vocation and leadership
+- Chiron-Sun square: Father wound or core identity rejection, teaching others about authentic self-worth
+- Chiron-Moon trine: Emotional healing gifts flow naturally, intuitive understanding of others' pain
+
+**Lilith Interpretation** (when `include_lilith: true`):
+- Represents shadow feminine, repressed desires, primal instincts
+- Shows WHERE one confronts societal taboos and experiences alienation
+- Indicates areas where authentic primal self was rejected/suppressed
+- By house: WHERE shadow material emerges and WHERE rejection occurred
+- By sign: HOW shadow manifests and the NATURE of repressed qualities
+- By aspects: Challenging aspects show internal shadow conflicts; harmonious aspects show easier integration
+- Integration: TERTIARY or SECONDARY depending on prominence (angular placement or major aspects = SECONDARY)
+- Tone: Frame as reclamation of power and authenticity, not pathology
+
+**Example Interpretations**:
+- Lilith in 1st house: Shadow self visible to others, identity formed through confronting rejection
+- Lilith in 7th house: Projection of shadow onto partners, relationships trigger primal instincts
+- Lilith in 10th house: Public role involves taboo subjects or confronting societal norms
+- Lilith-Moon square: Emotional needs conflict with primal instincts, maternal rejection themes
+- Lilith-Venus trine: Easier integration of shadow feminine with love/beauty expression
 
 ---
 

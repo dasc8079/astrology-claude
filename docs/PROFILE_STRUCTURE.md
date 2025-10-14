@@ -161,17 +161,38 @@ All generated reports are saved here, organized by type and date.
 
 ## Interpretation Settings Reference
 
-### Traditional Techniques (Recommended: All TRUE)
+### Implemented Toggleable Settings (v1.1+)
+
+**IMPORTANT**: As of October 2025, the following settings are FUNCTIONAL and control what gets calculated and interpreted:
+
+#### Chiron (Functional - v1.1)
+```ini
+include_chiron: true  // Wounded healer archetype
+```
+
+- **If `true`**: Chiron position is calculated in seed data AND interpreted in synthesis
+- **If `false`**: Chiron is NOT calculated AND NOT interpreted
+- **Applies to**: Natal interpreter agents, seed data generator
+- **Implementation**: Agents read setting in Step 3.5, seed data generator reads from profile.md
+- **Status**: ✅ Fully functional
+
+### Traditional Techniques (Not Yet Toggleable)
+
+**Note**: The following settings are DOCUMENTATION ONLY and do not yet control agent behavior:
+
 - `include_house_rulers`: Shows HOW each life area manifests (PRIMARY)
 - `include_lots`: Fortune, Spirit, Eros, Necessity, etc.
 - `include_nodes`: Evolutionary path (South Node release, North Node development)
 - `include_receptions`: Mutual reception analysis
 - `include_bonification`: Benefic support of malefics
 
-### Modern Methods (Optional)
-- `include_lilith`: Black Moon Lilith (shadow feminine)
-- `include_chiron`: Wounded healer archetype
-- `include_psychological`: Jungian depth psychology (false | "basic" | "deep")
+**These techniques are always included in interpretation** regardless of settings. Future versions may make them toggleable.
+
+### Modern Methods (Partially Toggleable)
+
+- `include_lilith`: Black Moon Lilith (shadow feminine) - **Not yet functional**
+- `include_chiron`: Wounded healer archetype - **✅ Functional as of v1.1**
+- `include_psychological`: Jungian depth psychology - **Always enabled** (this is the default output style)
 
 **Note**: Modern methods are NOT part of traditional Hellenistic astrology. They add psychological context but are not required for core interpretation.
 

@@ -283,40 +283,25 @@ When multiple factors align, assign points and HIGHLIGHT:
 - 1-5 years: `long`
 - 6-11 months: `medium` (if implemented)
 
-### Report Template (Title Page Format)
-
-**CRITICAL**: Title page MUST match this exact format (from user's image):
-
+### Page 1: Title Page
 ```markdown
 # Long Transit Report
 
 **[Full Name]**
-
-**[Start Month]/[Start Year] to [End Month]/[End Year]**
-
-[Birth Date], [Birth Time]
+Born: [Date] at [Time]
 [City, Country]
+[Latitude]°N/S, [Longitude]°E/W
+Report Generated: [Current Date]
+☉ [Sun Sign] · ☽ [Moon Sign] · ↑ [Rising Sign]
 
----
+**Timeframe**: [Start Date] - [End Date] ([X] years)
 
-## Quick Reference: Points of Interest
-
-[Tables as specified above...]
-
----
-
-## Your [X]-Year Transit Arc
-
-[Narrative begins here in flowing prose...]
+<div class="page-break"></div>
 ```
 
-**Title Page Requirements**:
-- Title: "Long Transit Report" (centered, H1)
-- Name: Bold, standalone line
-- Date Range: Bold, "MM/YYYY to MM/YYYY" format (e.g., "10/2025 to 10/2030")
-- Birth Data: Date, time on one line
-- Location: City, country on next line
-- Three line breaks before Quick Reference section
+**Format**: Single blank line after "# Long Transit Report", other lines NOT double-spaced, astrological symbols on line after report date
+**Purpose**: Clean, accessible title page with birth data, report date, and transit timeframe
+**CRITICAL**: End with PAGE BREAK before Quick Reference section
 
 ### Report Content Structure
 

@@ -280,13 +280,29 @@ mode-orchestrator will handle:
 ```
 
 **Markdown Template**:
+
+### Page 1: Title Page
 ```markdown
-# Transit Report: [Profile Name]
+# Transit Report
+
+**[Full Name]**
+Born: [Date] at [Time]
+[City, Country]
+[Latitude]°N/S, [Longitude]°E/W
+Report Generated: [Current Date]
+☉ [Sun Sign] · ☽ [Moon Sign] · ↑ [Rising Sign]
+
 **Timeframe**: [Start Date] - [End Date] ([X] days)
-**Generated**: [Date]
 
----
+<div class="page-break"></div>
+```
 
+**Format**: Single blank line after "# Transit Report", other lines NOT double-spaced, astrological symbols on line after report date
+**Purpose**: Clean, accessible title page with birth data, report date, and transit timeframe
+**CRITICAL**: End with PAGE BREAK before "At a Glance" section
+
+### Page 2: At a Glance Section
+```markdown
 ## At a Glance
 
 [Timeframe summary]
@@ -300,8 +316,16 @@ mode-orchestrator will handle:
 - [Date]: [Transit]
 - [Date]: [Transit]
 
----
+<div class="page-break"></div>
+```
 
+**Format**: Quick overview section (100-200 words)
+**Purpose**: Orient reader to key themes and dates at a glance
+**Audience**: Quick reference for both client and astrologer
+**CRITICAL**: End with PAGE BREAK before movements begin
+
+### Page 3+: Movement Sections
+```markdown
 ## Movement 1: [Title]
 
 [Narrative body 300-500 words]

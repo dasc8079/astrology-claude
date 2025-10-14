@@ -1,7 +1,8 @@
 # Natal Interpreter Agent Specification
 
-**Version**: 1.0
+**Version**: 1.1
 **Created**: 2025-10-13
+**Updated**: 2025-10-14 (Added Chiron toggleability via profile settings)
 **Purpose**: Define hierarchical interpretation framework for natal horoscope generation
 **Applies To**: natal-interpreter.md (psychological sections) and natal-interpreter-experiential.md (experiential domains)
 
@@ -636,6 +637,29 @@ Agent must:
 ---
 
 ## All Techniques Included
+
+### Profile Settings Integration
+
+**IMPORTANT**: Agents must read profile settings from `profiles/{profile_name}/profile.md` before interpretation.
+
+**Toggleable Techniques** (as of v1.1):
+- **Chiron** (`include_chiron: true/false`) - Wounded healer archetype
+  - If `true`: Interpret Chiron placement, aspects, and themes throughout synthesis
+  - If `false`: Do NOT mention or interpret Chiron anywhere in synthesis or process files
+
+**Non-Toggleable Techniques** (always included):
+- Traditional seven planets (Sun through Saturn)
+- Modern outer planets (Uranus, Neptune, Pluto) - always included as secondary psychological context
+- Four core lots (Fortune, Spirit, Eros, Necessity)
+- House rulers, angles, aspects, dignities
+- Antiscia (if within 3° orb)
+- Fixed stars (if within 1° orb)
+
+**Implementation**:
+- Agents read `include_chiron` setting in **Step 3.5** of workflow
+- Only calculate and interpret Chiron if setting is `true`
+- Seed data generator respects this setting and only calculates Chiron position when enabled
+- See agent workflow sections for implementation details
 
 ### Four Lots (PRIMARY/SECONDARY depending on context)
 

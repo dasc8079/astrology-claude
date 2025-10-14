@@ -173,40 +173,58 @@ The seed data now includes extensive planetary conditions beyond basic placement
 **TARGET**: 5,700-6,000 words synthesis = 19-20 pages @ 11pt Helvetica
 
 ### Page 1: Title Page
-```html
-<div class="title-page">
-  <h1>Natal Horoscope</h1>
-  <div class="profile-name">[Name]</div>
-  <div class="birth-data">Born: [Date] at [Time]<br>[Location]<br>[Coordinates]</div>
-  <div class="report-date">Report Generated: [Date]</div>
-</div>
+```markdown
+# Natal Horoscope
+
+**[Full Name]**
+Born: [Date] at [Time]
+[City, Country]
+[Latitude]°N/S, [Longitude]°E/W
+Report Generated: [Current Date]
+☉ [Sun Sign] · ☽ [Moon Sign] · ↑ [Rising Sign]
+
+<div class="page-break"></div>
 ```
 
 ### Page 2: Chart Overview (Technical Quick Reference)
-**Format**: SPARSE bullet points and tables ONLY (8-12 bullets max, NOT narrative prose)
+```markdown
+## Chart Overview
+
+**Sect**: [Day/Night] chart ([Sun above/below horizon])
+**Chart Ruler**: [Planet] in [Sign] in [House] ([dignity state])
+**Sect Light**: [Sun/Moon] in [Sign] ([strength/condition])
+**Angular Planets**: [List planets in 1st, 4th, 7th, 10th houses]
+**Stellium**: [If present: X planets in Y sign/house]
+**Key Dignities**: [2-3 strongest planetary placements - domicile/exaltation]
+**Key Challenges**: [1-2 planets in detriment/fall or malefic contrary to sect]
+**Major Aspects**: [2-3 most significant aspect patterns]
+**Lot of Spirit**: [Sign and house - career purpose]
+**Lot of Fortune**: [Sign and house - material well-being]
+
+<div class="page-break"></div>
+```
+
+**Format**: SPARSE bullet points ONLY (8-12 bullets max, NOT narrative prose)
 **Purpose**: Quick reference for astrologers, scannable at a glance
 **Audience**: For technical verification
-
-Include ONLY these items as concise bullets:
-- **Sect**: [Day/Night] chart ([Sun above/below horizon])
-- **Chart Ruler**: [Planet] in [Sign] in [House] ([dignity state])
-- **Sect Light**: [Sun/Moon] in [Sign] ([strength/condition])
-- **Angular Planets**: [List planets in 1st, 4th, 7th, 10th houses]
-- **Stellium**: [If present: X planets in Y sign/house]
-- **Key Dignities**: [2-3 strongest planetary placements - domicile/exaltation]
-- **Key Challenges**: [1-2 planets in detriment/fall or malefic contrary to sect]
-- **Major Aspects**: [2-3 most significant aspect patterns]
-- **Lot of Spirit**: [Sign and house - career purpose]
-- **Lot of Fortune**: [Sign and house - material well-being]
-
-**NO narrative prose on this page - just sparse structured data**
+**CRITICAL**: End with PAGE BREAK before Introduction
 
 ### Page 3: Synthesis Introduction (600-800 words)
-**Format**: Flowing narrative prose (NO bullet points, NO headings, sparse astrological references)
+```markdown
+## Introduction
+
+[Your PRIMARY pattern introduction paragraph starts here...]
+
+[Continue with 600-800 words of flowing narrative identifying the PRIMARY life theme...]
+
+<div class="page-break"></div>
+```
+
+**Format**: Flowing narrative prose (NO bullet points, sparse astrological references)
 **Purpose**: Identify PRIMARY life pattern and set up synthesis
 **Audience**: The native (person receiving the reading)
 
-Begin directly with narrative (no heading on this page):
+Content should include:
 - **PRIMARY pattern identification** (first 2-3 sentences): "Your life centers on [PRIMARY theme]..."
 - Essential nature and core themes (using sect light, chart ruler, most dignified planets)
 - The overarching story of this chart (HOW primary pattern manifests)
@@ -214,7 +232,9 @@ Begin directly with narrative (no heading on this page):
 - What makes this chart unique
 - Sets up the detailed synthesis that follows
 
-**Critical**: This introduction should clearly answer "What is this person's PRIMARY life theme?" using hierarchical testimony.
+**CRITICAL**:
+- This introduction should clearly answer "What is this person's PRIMARY life theme?" using hierarchical testimony
+- End with PAGE BREAK before main report sections begin
 
 ### Pages 4-19: SYNTHESIS FOR THE NATIVE (~4,800 words total)
 
@@ -366,13 +386,29 @@ Before writing synthesis, identify the central PRIMARY pattern:
 
 **This PRIMARY pattern becomes the opening of Page 3 and the thread through entire synthesis.**
 
+### Step 3.5: Check Chiron Setting
+Before running enhancement modules, check if Chiron should be interpreted:
+
+1. **Read Profile Settings**: Open `profiles/{profile_name}/profile.md`
+2. **Find Chiron Setting**: Look for `include_chiron:` in the `[INTERPRETATION_SETTINGS]` section
+3. **Store Result**: Remember whether to include Chiron in interpretation
+
+**Chiron Interpretation Rules**:
+- If `include_chiron: true` → Interpret Chiron as wounded healer archetype throughout synthesis
+- If `include_chiron: false` → Do NOT mention or interpret Chiron anywhere
+
+**Lilith Interpretation Rules**:
+- If `include_lilith: true` → Interpret Black Moon Lilith as shadow feminine archetype throughout synthesis
+- If `include_lilith: false` → Do NOT mention or interpret Lilith anywhere
+
 ### Step 4: Run Enhancement Modules
 Use `scripts/natal_interpreter.py` for comprehensive enhancement analysis:
 - House rulers, nodes, angles, receptions, bonification
 - **Lots**: 4 core lots for natal work (Fortune, Spirit, Eros, Necessity)
 - **Antiscia**: Mirror degrees - mention only if within 3° of planet/angle (TERTIARY)
 - **Fixed Stars**: 5 major stars - mention when conjunct planet/angle within 1° (TERTIARY, rare)
-- Psychological/Jungian, Lilith, Chiron (if enabled)
+- **Chiron**: Wounded healer archetype (ONLY if `include_chiron: true` in profile.md)
+- **Lilith**: Shadow feminine archetype (ONLY if `include_lilith: true` in profile.md)
 
 ### Step 5: Query RAG Database
 For each significant placement (PRIMARY and SECONDARY factors only), query `scripts/query_rag_database.py`:
@@ -433,6 +469,22 @@ End the Synthesis section with 3-8 sentence closing paragraph. DO NOT add headin
 - ✅ Validate dignity assessments follow hierarchy (domicile/exaltation PRIMARY, detriment/fall PRIMARY challenges)
 - ✅ Confirm accessible tone in Synthesis, technical in Analysis
 - ✅ Verify thematic coherence around PRIMARY pattern
+
+### Step 12: Save Files and Generate PDF
+After completing interpretation and quality check:
+
+1. **Save Process File**: `profiles/{profile_name}/output/natal_process_{profile_name}_{date}.md`
+2. **Save Synthesis File**: `profiles/{profile_name}/output/natal_synthesis_{profile_name}_{date}.md`
+3. **Generate PDF**: Immediately run pdf_generator.py on synthesis file
+   ```bash
+   python scripts/pdf_generator.py \
+     profiles/{profile_name}/output/natal_synthesis_{profile_name}_{date}.md \
+     profiles/{profile_name}/output/natal_synthesis_{profile_name}_{date}.pdf \
+     --report-type natal
+   ```
+4. **Confirm Success**: Report all three file paths to user
+
+**IMPORTANT**: PDF generation is the FINAL step - the PDF is the primary deliverable for the user.
 
 ---
 

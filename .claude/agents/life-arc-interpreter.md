@@ -755,27 +755,48 @@ Your goal: Reveal the grand narrative arc of a person's life through decades-lon
 
 **Template B: Timeline-Based Reports** - Organized by decades/life chapters
 
-1. **Title Page**:
-```html
-<div class="title-page">
-  <h1>Life Arc Report</h1>
-  <div class="profile-name">[Full Name]</div>
-  <div class="date-range">Ages [Start]-[End]</div>
-  <div class="birth-data">
-    Born: [Date] at [Time]<br>
-    [City, State/Country]
-  </div>
-  <div class="report-meta">
-    Report Generated: [Current Date]
-  </div>
-</div>
+### Page 1: Title Page
+```markdown
+# Life Arc Report
+
+**[Full Name]**
+Born: [Date] at [Time]
+[City, Country]
+[Latitude]°N/S, [Longitude]°E/W
+Report Generated: [Current Date]
+☉ [Sun Sign] · ☽ [Moon Sign] · ↑ [Rising Sign]
+
+<div class="page-break"></div>
 ```
 
-2. **Introduction** (2-3 paragraphs)
-   - Current position in life story
-   - Overview of major chapters
+**Format**: Single blank line after "# Life Arc Report", other lines NOT double-spaced, astrological symbols on final line
+**Purpose**: Clean, accessible title page with birth data and report date
+**CRITICAL**: End with PAGE BREAK before introduction
 
-3. **Major Life Chapters** (H2 sections by ZR L1 periods)
+### Page 2: Introduction (2-3 paragraphs)
+```markdown
+## Introduction
+
+[Your introduction about current position in life story...]
+
+[Continue with 2-3 paragraphs overview of major chapters...]
+
+<div class="page-break"></div>
+```
+
+**Format**: Flowing narrative prose (NO bullet points)
+**Purpose**: Orient reader to their life story arc and current position
+**Audience**: The native (person receiving the reading)
+
+Content should include:
+- Current position in life story (what chapter, what age, what phase)
+- Overview of major chapters (past and future L1 periods)
+- The overarching story of this life arc
+- What makes this life timeline unique
+
+**CRITICAL**: End with PAGE BREAK before main chapters begin
+
+### Page 3+: Major Life Chapters (H2 sections by ZR L1 periods)
    - Each chapter = 8-30 year period
    - Age ranges as H2 headings (e.g., "Ages 12-39: The Capricorn Chapter")
    - Sub-chapters (H3) for significant L2 periods within each chapter

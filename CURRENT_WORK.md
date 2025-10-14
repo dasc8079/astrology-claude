@@ -1,12 +1,121 @@
 # Current Work - Astrology Application
 
-**Last Updated**: 2025-10-12
-**Current Focus**: Natal Horoscope Optimization - Implementation Phase
+**Last Updated**: 2025-10-14
+**Current Focus**: PDF Formatting & Output Quality - Implementation Complete
 **Default Profile**: Darren_S (use this profile for all analyses unless specified otherwise)
 
 ---
 
-## 🎯 Recent Milestone (2025-10-12)
+## 🎯 Recent Milestone (2025-10-14)
+
+### Antiscia & Fixed Stars Implementation + Profile Settings Loader - COMPLETE ✅
+
+**Major Achievements**:
+1. ✅ **Antiscia Calculation**: Already implemented in seed_data_generator.py - working correctly
+2. ✅ **Fixed Stars Calculation**: Already implemented - Spica calculated successfully (requires sefstars.txt for all 5 stars)
+3. ✅ **Profile Settings Loader**: Created centralized parser (profile_settings_loader.py)
+4. ✅ **Verification**: Confirmed natal interpreter has proper antiscia/fixed star instructions (TERTIARY testimony)
+5. ✅ **Validation**: Tested with Darren_S chart - system correctly omits mentions when no close connections
+
+**Technical Details**:
+- **Antiscia Formula**: antiscion = 180° - longitude (mirror across 0° Cancer/Capricorn axis)
+- **Antiscia Threshold**: Only mentioned if within 3° of planet/angle (TERTIARY)
+- **Fixed Stars**: 5 major stars (Regulus, Spica, Algol, Aldebaran, Antares) with 1° conjunction orb
+- **Fixed Stars Note**: Spica calculated successfully; other 4 require `sefstars.txt` ephemeris file
+
+**Profile Settings Loader Features**:
+- Parses profile.md settings (including inside ```ini code blocks)
+- Handles C-style comments (//)
+- Provides validation warnings
+- Summary display with enabled features by category
+- Centralized settings management for all scripts
+
+**Verification Results (Darren_S Chart)**:
+- Fixed Stars: Spica at Libra 23°41' - no conjunctions within 1° ✅ (correctly not mentioned)
+- Antiscia: Moon's antiscion at Taurus 4°32' - 3.83° from MC ✅ (correctly not mentioned - outside 3° threshold)
+- System working as designed: antiscia/fixed stars mentioned ONLY when thresholds met
+
+---
+
+## 🎯 Previous Milestone (2025-10-14)
+
+### PDF Formatting & Output Quality - COMPLETE ✅
+
+**Major Achievements**:
+1. ✅ **Title Page Vertical Centering**: CSS updated with flexbox for true vertical+horizontal centering
+2. ✅ **Unicode Symbol Rendering**: Added DejaVu Sans/Arial Unicode MS fonts for proper ☉ ☽ ↑ display
+3. ✅ **Page Break Rendering**: Added `.page-break` CSS class for proper PDF pagination
+4. ✅ **Introduction Headings**: Added `## Introduction` to all natal/life-arc agents for proper structure
+5. ✅ **Sam_P Experimental Report**: Generated natal horoscope using experiential domains structure
+
+**CSS Fixes** (scripts/css/base.css):
+- Title page: Changed to `display: flex; justify-content: center;` for vertical centering
+- Fonts: Added symbol-capable fonts (DejaVu Sans, Arial Unicode MS) to body and all headings
+- Page breaks: Added `.page-break` class with `page-break-after: always; break-after: always;`
+
+**Agent Updates**:
+- natal-interpreter.md: Added `## Introduction` heading on Page 3
+- natal-interpreter-experiential.md: Added `## Introduction` heading on Page 3
+- life-arc-interpreter.md: Added `## Introduction` heading on Page 2
+
+**Transit Agent Structural Note**:
+- Transit agents (short/long) have different structure by design: Title → Quick Reference/At a Glance Tables → Narrative
+- No Introduction section needed - tables serve that purpose
+- Structural consistency deferred until transit agent rebuild
+
+---
+
+## 🎯 Previous Milestone (2025-10-14)
+
+### Lilith Toggleability - COMPLETE ✅
+
+**Major Achievements**:
+1. ✅ **Lilith Toggleability Implemented**: Second profile setting - `include_lilith: true/false`
+2. ✅ **Full Calculation Pipeline**: seed_data_generator.py updated with Lilith support (swe.MEAN_APOG)
+3. ✅ **Agent Guidelines Updated**: Both natal-interpreter.md and natal-interpreter-experiential.md with Lilith interpretation rules
+4. ✅ **Reference Documentation**: ASTROLOGY_REFERENCE.md updated with comprehensive Lilith interpretation guidelines
+5. ✅ **Tested Successfully**: Darren_S profile calculated with Lilith in Virgo 25°13'19"
+
+**Lilith Implementation Details**:
+- **Symbol**: ⚸ (Black Moon Lilith)
+- **Calculation**: Mean lunar apogee (swe.MEAN_APOG)
+- **Interpretation**: Shadow feminine archetype, repressed desires, primal instincts, taboo areas
+- **Integration Level**: TERTIARY or SECONDARY depending on prominence (angular or major aspects)
+- **Profile Control**: `include_lilith: true` in profile.md enables calculation AND interpretation
+- **Implementation Files**: seed_data_generator.py, natal-interpreter.md, natal-interpreter-experiential.md, ASTROLOGY_REFERENCE.md
+
+**Lilith Interpretation Guidelines** (in ASTROLOGY_REFERENCE.md):
+- By house: WHERE shadow material emerges and WHERE rejection occurred
+- By sign: HOW shadow manifests and the NATURE of repressed qualities
+- By aspects: Challenging aspects = internal conflicts; harmonious aspects = easier integration
+- Tone: Frame as reclamation of power and authenticity, not pathology
+- Examples: Lilith in 1st (shadow self visible), Lilith in 7th (projection onto partners), Lilith-Moon square (emotional-primal conflicts)
+
+---
+
+## 🎯 Previous Milestone (2025-10-14)
+
+### Experimental Natal Horoscope + Chiron Toggleability - COMPLETE ✅
+
+**Major Achievements**:
+1. ✅ **Experimental Natal Horoscope**: Generated natal horoscope for Darren_S using experiential domains structure (natal-interpreter-experiential)
+2. ✅ **Chiron Toggleability Implemented**: First functional profile setting - `include_chiron: true/false`
+3. ✅ **Documentation Updated**: natal_interpreter_agent_spec.md (v1.1) and PROFILE_STRUCTURE.md reflect new functionality
+4. ✅ **Tested Successfully**: Sam_P profile with Chiron disabled generated correctly (7 traditional + 3 modern planets)
+
+**Experimental Natal Structure**:
+- **Domains**: Inner Life, Outer Expression, Relational Life, Purpose & Calling (instead of 11 psychological categories)
+- **Output**: 43KB synthesis (5,900 words), 89KB PDF with chart-based CSS
+- **PRIMARY Pattern**: "Creative system-builder who manifests vision through disciplined daily work"
+
+**Chiron Toggleability Details**:
+- Profile settings now control whether Chiron is calculated AND interpreted
+- Implementation in: seed_data_generator.py, natal-interpreter.md, natal-interpreter-experiential.md
+- Status: ✅ Fully functional (requires seas_18.se1 ephemeris file for actual calculations)
+
+---
+
+## 🎯 Previous Milestone (2025-10-12)
 
 ### Extended-Thinking Integration + Natal Optimization Planning - COMPLETE ✅
 
@@ -36,11 +145,10 @@
 - Antiscia: EASY implementation, HIGH value (calculated from longitude)
 - Fixed Stars: EASY implementation, HIGH value (5 major stars: Regulus, Spica, Algol, Aldebaran, Antares)
 
-**Next Steps** (IMMEDIATE):
-1. ⏳ Implement antiscia calculation in seed_data_generator.py
-2. ⏳ Implement fixed stars calculation (5 major stars with 1° orb)
-3. ⏳ Create profile_settings_loader.py (read settings from profile.md)
-4. ⏳ Test regenerated natal horoscopes with new enhancements
+**Next Steps** (FUTURE):
+1. ⏳ Life Arc Report Rebuild - Enhance with new narrative techniques and styling (deferred for future session)
+2. ⏳ Obtain sefstars.txt ephemeris file - enables remaining 4 fixed stars (Regulus, Algol, Aldebaran, Antares)
+3. ⏳ Test antiscia/fixed stars with chart that has close connections (to verify mention logic works when thresholds met)
 
 ---
 
