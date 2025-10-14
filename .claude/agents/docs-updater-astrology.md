@@ -234,6 +234,10 @@ These files (in /docs/reference/) rarely change - only update when foundational 
 - House system modifications
 - New dignities or aspects
 - Planetary set changes
+- **CRITICAL POLICY**: Any time calculation methods change in `seed_data_generator.py` or other calculation scripts, `docs/reference/ASTROLOGY_REFERENCE.md` MUST be updated accordingly
+- **When to update**: New calculations added (antiscia, fixed stars, lots), calculation formulas modified, orbs/thresholds changed
+- **What to document**: Calculation method, formula, orbs/thresholds, interpretation guidelines, integration level (PRIMARY/SECONDARY/TERTIARY)
+- **Example triggers**: "Added antiscia calculation", "Changed aspect orbs", "Implemented new timing technique"
 
 **DEVELOPMENT_GUIDE.md**: Update when workflow changes
 - New development patterns

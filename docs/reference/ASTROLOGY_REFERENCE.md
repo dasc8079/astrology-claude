@@ -11,15 +11,19 @@ This document contains static astrological reference information for the project
 1. [House System](#house-system)
 2. [Rulerships](#rulerships)
 3. [Dignities and Debilities](#dignities-and-debilities)
-4. [Sect (Day/Night Chart Analysis)](#sect-dayn
-
-ight-chart-analysis)
+4. [Sect (Day/Night Chart Analysis)](#sect-daynight-chart-analysis)
 5. [Aspects](#aspects)
 6. [Planetary Set](#planetary-set)
 7. [Planetary Conditions](#planetary-conditions)
-8. [House Meanings](#house-meanings)
-9. [Zodiacal Signs](#zodiacal-signs)
-10. [Glossary](#glossary)
+8. [Lots (Hermetic Parts)](#lots-hermetic-parts)
+9. [Antiscia and Contra-Antiscia](#antiscia-and-contra-antiscia)
+10. [Fixed Stars](#fixed-stars)
+11. [Stelliums](#stelliums)
+12. [Hayz](#hayz)
+13. [Aspect Dynamics](#aspect-dynamics)
+14. [House Meanings](#house-meanings)
+15. [Zodiacal Signs](#zodiacal-signs)
+16. [Glossary](#glossary)
 
 ---
 
@@ -263,6 +267,244 @@ Planets operating contrary to sect are either:
 - Preparatory, learning, behind-the-scenes
 - Requires more effort to activate
 
+### Additional Planetary Conditions
+
+**Swift vs Slow Motion**:
+- Swift: Planet moving faster than mean daily motion (> 110% of mean speed)
+- Slow: Planet moving slower than mean daily motion (< 90% of mean speed but > 0)
+- Mean daily motions: Sun 0.99°, Moon 13.18°, Mercury 1.38°, Venus 1.60°, Mars 0.52°, Jupiter 0.08°, Saturn 0.03°
+
+**Oriental vs Occidental**:
+- Oriental: Planet rises before Sun (ahead in zodiacal order, eastern position)
+- Occidental: Planet rises after Sun (behind in zodiacal order, western position)
+- Applies to Mercury, Venus, Mars, Jupiter, Saturn (not Sun or Moon)
+
+**Peregrine**:
+- Planet with no essential dignities (no domicile, exaltation, triplicity, term, or face)
+- Weakened position, "wandering" without strength
+
+**Feral**:
+- Planet making no major aspects to any other planet
+- Isolated, acting independently without connection to chart themes
+
+---
+
+## Lots (Hermetic Parts)
+
+Hermetic lots are calculated points using the formula: **ASC + Planet A - Planet B**
+
+Many lots use different formulas for day vs night charts to maintain sect alignment.
+
+### Primary Lots
+
+**Lot of Fortune (⊗)**:
+- Day formula: ASC + Moon - Sun
+- Night formula: ASC + Sun - Moon
+- Signifies: Material resources, body, health, fortune
+
+**Lot of Spirit (⊙)**:
+- Day formula: ASC + Sun - Moon
+- Night formula: ASC + Moon - Sun
+- Signifies: Character, soul, life purpose, vocation
+
+**Lot of Eros (♡)**:
+- Day formula: ASC + Venus - Spirit
+- Night formula: ASC + Spirit - Venus
+- Signifies: Desires, love, passionate attachment
+
+**Lot of Necessity (⚙)**:
+- Day formula: ASC + Fortune - Mercury
+- Night formula: ASC + Mercury - Fortune
+- Signifies: Fate, constraint, compulsion, unavoidable circumstances
+
+### Secondary Lots
+
+**Lot of Courage (⚔)**:
+- Day formula: ASC + Fortune - Mars
+- Night formula: ASC + Mars - Fortune
+- Signifies: Bravery, assertion, martial activity
+
+**Lot of Victory (🏆)**:
+- Day formula: ASC + Spirit - Jupiter
+- Night formula: ASC + Jupiter - Spirit
+- Signifies: Success, expansion, recognition, triumph
+
+**Lot of Basis (⚓)**:
+- Day formula: ASC + Fortune - Saturn
+- Night formula: ASC + Saturn - Fortune
+- Signifies: Foundation, structure, stability
+
+**Lot of Exaltation (👑)**:
+- Formula: ASC + Mars - Sun (same for day and night)
+- Signifies: Career peak, honors, public recognition
+
+**Lot of Marriage (💍)**:
+- Formula: ASC + Venus - Saturn (same for day and night)
+- Signifies: Partnership, committed relationships
+
+**Lot of Children (👶)**:
+- Day formula: ASC + Jupiter - Saturn
+- Night formula: ASC + Saturn - Jupiter
+- Signifies: Offspring, generativity, legacy
+
+---
+
+## Antiscia and Contra-Antiscia
+
+Antiscia are mirror points across the 0° Cancer/Capricorn axis (solstice points), revealing hidden connections and symmetries between chart placements.
+
+### Calculation Method
+
+**Antiscion Formula**: `180° - longitude`
+
+**Contra-Antiscion Formula**: `antiscion + 180°`
+
+### Example
+- Planet at Aries 15° (longitude 15°)
+- Antiscion: 180° - 15° = 165° = Virgo 15°
+- Contra-antiscion: 165° + 180° = 345° = Pisces 15°
+
+### Interpretation Guidelines
+
+**Integration Level**: TERTIARY testimony (supportive evidence)
+
+**Orb**: 3° for antiscia connections to planets or angles
+
+**Significance**:
+- Antiscia reveal hidden connections between planets/angles at mirror degrees
+- Like a "shadow aspect" - planets at antiscia points share subtle resonance
+- Traditional technique showing equal power/equal darkness relationships
+- Only mentioned in interpretation when within 3° threshold
+
+---
+
+## Fixed Stars
+
+Five major fixed stars with traditional significance. Only conjunctions within 1° orb are considered.
+
+### Calculation Method
+
+Uses Swiss Ephemeris `fixstar_ut()` function for precise fixed star positions at birth time.
+
+**Orb**: 1.0° for conjunctions (traditional standard)
+
+**Checked Against**: All planets AND all angles (ASC, MC, DSC, IC)
+
+### The Five Major Stars
+
+**1. Regulus (Cor Leonis - Heart of the Lion)**:
+- Nature: Success, royalty, honor, leadership
+- Magnitude: 1.4
+- Traditional: Royal star of kings and nobility
+
+**2. Spica (Spica Virginis - Ear of Wheat)**:
+- Nature: Gifts, protection, success through skill
+- Magnitude: 1.0
+- Traditional: Benefic star of harvest and abundance
+
+**3. Algol (Caput Medusae - Medusa's Head)**:
+- Nature: Violence, danger, challenges (use with caution)
+- Magnitude: 2.1
+- Traditional: Most notorious malefic star
+
+**4. Antares (Cor Scorpii - Heart of Scorpion)**:
+- Nature: Conflict, courage, obsession
+- Magnitude: 1.0
+- Traditional: Rival of Mars, associated with war
+
+**5. Aldebaran (Oculus Tauri - Eye of the Bull)**:
+- Nature: Honor, integrity, achievement
+- Magnitude: 0.9
+- Traditional: Royal star of success
+
+### Integration Level
+
+**TERTIARY testimony** when conjunct natal planet/angle within 1°
+
+**NOTE**: Requires `sefstars.txt` ephemeris file for Regulus, Algol, Antares, Aldebaran. Spica calculates without additional files.
+
+---
+
+## Stelliums
+
+A stellium occurs when 3 or more traditional planets occupy the same sign OR the same house.
+
+### Calculation Method
+
+**Sign Stellium**: 3+ traditional planets in same zodiacal sign
+**House Stellium**: 3+ traditional planets in same house (by whole-sign system)
+
+### Interpretation Guidelines
+
+- Stellium ruler: The planet ruling the sign containing the stellium
+- Intensity: Concentrated energy in that sign/house's themes
+- Significance: Major life emphasis in that area
+- Count: Number of planets involved (3-planet minimum, 4+ = very strong stellium)
+
+### Example
+- Sun, Mercury, Venus all in Virgo = Virgo stellium (ruled by Mercury)
+- Emphasis on Virgoan themes: analysis, service, refinement, craft
+
+---
+
+## Hayz
+
+Hayz is a condition where a planet is in its optimal sect position, combining three factors: chart sect, horizon position, and sign gender.
+
+### Conditions for Hayz
+
+**Diurnal Planets** (Sun, Jupiter, Saturn) in hayz when:
+- Day chart (Sun above horizon at birth)
+- AND planet above horizon (houses 7-12)
+- AND planet in masculine sign (Aries, Gemini, Leo, Libra, Sagittarius, Aquarius)
+
+**Nocturnal Planets** (Moon, Venus, Mars) in hayz when:
+- Night chart (Sun below horizon at birth)
+- AND planet below horizon (houses 1-6)
+- AND planet in feminine sign (Taurus, Cancer, Virgo, Scorpio, Capricorn, Pisces)
+
+**Mercury**: Neutral - does not have hayz condition (adapts to chart sect)
+
+### Significance
+
+Planets in hayz have optimal expression - all three sect factors aligned for maximum effectiveness and ease of function.
+
+---
+
+## Aspect Dynamics
+
+### Overcoming
+
+**Definition**: In square or opposition aspects, the planet later in zodiacal order "overcomes" the earlier planet.
+
+**Calculation**: Planet ahead in zodiacal order (within the aspect) has superior position.
+
+**Significance**:
+- Overcoming planet has dominance in the dynamic
+- Applies to challenging aspects (square, opposition)
+- Shows which planet has upper hand in the relationship
+
+**Example**: Mars at Aries 10° square Saturn at Cancer 12° → Saturn overcomes Mars (Saturn is ahead in zodiacal order from Aries to Cancer)
+
+### Enclosure and Besiegement
+
+**Definition**: Planet positioned between two other planets within ~15° on each side.
+
+**Types**:
+- **Benefic Enclosure**: Planet between Venus and Jupiter (supportive, protective)
+- **Malefic Besiegement**: Planet between Mars and Saturn (challenging, restrictive)
+- **Mixed Enclosure**: Planet between benefic and malefic (mixed influence)
+
+**Calculation**:
+1. Sort traditional planets by longitude
+2. Check if any planet has another planet within 15° on both sides
+3. Determine enclosure type based on nature of enclosing planets
+
+**Significance**:
+- Benefic enclosure: Protection, support, ease
+- Malefic besiegement: Restriction, challenge, difficulty
+- Shows whether planet operates with help or hindrance
+
 ---
 
 ## House Meanings
@@ -413,7 +655,7 @@ Traditional significations for each of the 12 houses:
 
 **Fall**: Planet in sign opposite its exaltation
 
-**Lot/Part**: Calculated point using formula (ASC + Planet A - Planet B)
+**Lot/Part**: Calculated point using formula (ASC + Planet A - Planet B). See [Lots section](#lots-hermetic-parts) for complete formulas.
 
 **Malefic**: Mars and Saturn (bringers of challenge and difficulty)
 
@@ -435,7 +677,23 @@ Traditional significations for each of the 12 houses:
 
 **Whole-Sign Houses**: House system where each house = one complete sign
 
+**Antiscia**: Mirror point across 0° Cancer/Capricorn axis (formula: 180° - longitude). See [Antiscia section](#antiscia-and-contra-antiscia).
+
+**Contra-Antiscia**: Point 180° from antiscion (formula: antiscion + 180°)
+
+**Stellium**: 3 or more traditional planets in same sign or house. See [Stelliums section](#stelliums).
+
+**Hayz**: Planet in optimal sect condition (chart sect + horizon position + sign gender aligned). See [Hayz section](#hayz).
+
+**Overcoming**: Planet ahead in zodiacal order dominates in square/opposition. See [Aspect Dynamics section](#aspect-dynamics).
+
+**Enclosure**: Planet between two others within ~15°. See [Aspect Dynamics section](#aspect-dynamics).
+
 ---
 
-*For programmatic access to this data, see `/scripts/astrology_reference.py`*
-*For astronomical calculations, see `/scripts/ephemeris_helper.py`*
+**IMPORTANT NOTE**: This document describes the calculation methods used in this project. Any time calculation methods change in `seed_data_generator.py` or other calculation scripts, this reference document MUST be updated accordingly to maintain accuracy.
+
+---
+
+*For astronomical calculations implementation, see `/scripts/seed_data_generator.py`*
+*For ephemeris helper functions, see `/scripts/ephemeris_helper.py`*
