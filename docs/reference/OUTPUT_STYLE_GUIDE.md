@@ -331,7 +331,7 @@ All reports follow one of three fundamental structures based on their organizing
 2. **Chart Overview** (Page 2: 8-12 sparse bullets)
 3. **Synthesis Introduction** (Page 3: 600-800 words)
 4. **Main Synthesis** (Pages 4-19: ~4,800 words with variant structure)
-5. **Poetic Wrapup** (Page 20: 300 words, NO heading)
+5. **Reflection** (Final section: `## Reflection` heading, 3-5 sentences verbose poetic reflection)
 
 **Format Style** (identical for both):
 - Flowing narrative paragraphs (4-8 sentences each)
@@ -369,8 +369,8 @@ All reports follow one of three fundamental structures based on their organizing
 5. **Near Future** (next 1-5 years)
    - Upcoming transitions
    - Next major chapter (if approaching)
-6. **Poetic Wrapup** (final paragraph - NO heading)
-   - 4-8 sentences, direct second person
+6. **Reflection** (final section - `## Reflection` heading)
+   - 3-5 sentences verbose poetic reflection, direct second person
    - Reiterate journey themes
    - NO astrological jargon
 
@@ -416,8 +416,8 @@ All reports follow one of three fundamental structures based on their organizing
    - Bold dates woven naturally into narrative
    - Retrograde loops as story arcs (3-pass structure)
    - Convergence periods highlighted (timing lord alignment)
-6. **Poetic Wrapup** (final paragraph - NO heading)
-   - 4-8 sentences, direct second person
+6. **Reflection** (final section - `## Reflection` heading)
+   - 3-5 sentences verbose poetic reflection, direct second person
    - Reiterate timing themes and life chapter arc
    - NO astrological jargon
 
@@ -478,8 +478,8 @@ All reports follow one of three fundamental structures based on their organizing
 5. **Integration & Synthesis**
    - The full story across all movements
    - Decision points and timing considerations
-6. **Poetic Wrapup** (final paragraph - NO heading)
-   - 4-8 sentences, direct second person
+6. **Reflection** (final section - `## Reflection` heading)
+   - 3-5 sentences verbose poetic reflection, direct second person
    - Reiterate movement themes
    - NO astrological jargon
 
@@ -891,15 +891,16 @@ disguise. You should be grateful for all your obstacles because they make
 you stronger!
 ```
 
-### Poetic Wrapup (Required Final Paragraph - No Heading)
+### Reflection Section (Required - With Heading)
 
-Every synthesis PDF MUST end with a 4-8 sentence poetic closing paragraph. **IMPORTANT**: Do NOT add a heading for this paragraph - it should flow naturally as the final paragraph of the last section.
+Every synthesis PDF MUST end with a Reflection section. **UPDATED**: Use `## Reflection` heading (changed from NO heading).
 
 **Requirements**:
-- **Length**: 4-8 sentences
+- **Heading**: `## Reflection` (H2 level)
+- **Length**: 3-5 sentences (verbose poetic reflection)
 - **Tone**: Visionary, commanding voice
 - **Voice**: Direct second person ("You are here to...", "You must...", "There is within you...")
-- **Purpose**: Reiterate key themes to deepen the emotional impact of the reading
+- **Purpose**: Reiterate PRIMARY themes in lyrical, accessible language to deepen emotional impact
 - **Language**: Accessible psychological language - NO astrological jargon
 
 **✅ Excellent Examples**:

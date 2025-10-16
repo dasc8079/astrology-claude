@@ -164,6 +164,211 @@ def calculate_progression_sign_changes(profile_name: str, start_age: int = 0, en
     return sign_changes
 
 
+def assess_saturn_return_difficulty(profile_name: str) -> Dict[str, Any]:
+    """
+    Assess whether Saturn return will be difficult based on natal condition.
+
+    Checks:
+    - House placement (6H/8H/12H = difficult)
+    - Sect (malefic contrary to sect = difficult)
+    - Dignity (detriment/fall = challenged)
+    - Afflictions (difficult aspects from Mars/Saturn)
+
+    Args:
+        profile_name: Profile to analyze
+
+    Returns:
+        {
+            'difficulty_level': 'extreme' | 'difficult' | 'moderate' | 'easy',
+            'indicators': [list of difficulty factors],
+            'aftermath_years': int (1-5),
+            'aftermath_bonus': int (3-8 per year),
+            'difficulty_score': int
+        }
+    """
+    profile = load_profile(profile_name)
+    seed_data = profile.seed_data
+
+    if not seed_data:
+        # Default to moderate if can't assess
+        return {
+            'difficulty_level': 'moderate',
+            'indicators': [],
+            'aftermath_years': 2,
+            'aftermath_bonus': 5,
+            'difficulty_score': 1
+        }
+
+    difficulty_score = 0
+    indicators = []
+
+    # Get Saturn data
+    planets = seed_data.get('planets', [])
+    saturn = next((p for p in planets if p['name'] == 'Saturn'), None)
+
+    if not saturn:
+        return {
+            'difficulty_level': 'moderate',
+            'indicators': ['Saturn data not found'],
+            'aftermath_years': 2,
+            'aftermath_bonus': 5,
+            'difficulty_score': 1
+        }
+
+    # Get chart framework for sect
+    framework = seed_data.get('chart_framework', {})
+    sect_data = framework.get('sect', {})
+    sect_type = sect_data.get('type', 'day')
+
+    # Check house placement (6H/8H/12H = difficult)
+    saturn_house = saturn.get('house')
+    if saturn_house in [6, 8, 12]:
+        difficulty_score += 2
+        house_names = {6: '6H (health/service)', 8: '8H (death/crisis)', 12: '12H (loss/isolation)'}
+        indicators.append(house_names.get(saturn_house, f'{saturn_house}H placement'))
+
+    # Check sect (malefic contrary to sect = difficult)
+    # Saturn is malefic of sect in day charts, benefic of sect in night charts
+    if sect_type == 'day':
+        difficulty_score += 2
+        indicators.append("Malefic contrary to sect (Saturn in day chart)")
+
+    # Check dignity (detriment/fall = challenged)
+    dignities = saturn.get('dignities', {})
+    essential = dignities.get('essential', {})
+
+    if essential.get('detriment'):
+        difficulty_score += 1
+        indicators.append("Detriment (Cancer)")
+    elif essential.get('fall'):
+        difficulty_score += 1
+        indicators.append("Fall (Aries)")
+
+    # Check afflictions (difficult aspects from Mars/Saturn)
+    aspects = seed_data.get('aspects', [])
+    saturn_afflictions = []
+
+    for aspect in aspects:
+        # Check if Saturn is involved
+        if aspect.get('planet_1') == 'Saturn' or aspect.get('planet_2') == 'Saturn':
+            aspect_type = aspect.get('aspect_type', '')
+            other_planet = aspect.get('planet_2') if aspect.get('planet_1') == 'Saturn' else aspect.get('planet_1')
+
+            # Count difficult aspects from Mars or other malefics
+            if aspect_type in ['square', 'opposition'] and other_planet in ['Mars', 'Saturn']:
+                saturn_afflictions.append(f"{aspect_type} {other_planet}")
+
+    if len(saturn_afflictions) >= 2:
+        difficulty_score += 1
+        indicators.append(f"{len(saturn_afflictions)} difficult aspects ({', '.join(saturn_afflictions[:2])})")
+
+    # Determine level and aftermath based on difficulty score
+    if difficulty_score >= 4:
+        level = 'extreme'
+        aftermath_years = 5
+        aftermath_bonus = 8
+    elif difficulty_score >= 2:
+        level = 'difficult'
+        aftermath_years = 3
+        aftermath_bonus = 8
+    elif difficulty_score == 1:
+        level = 'moderate'
+        aftermath_years = 2
+        aftermath_bonus = 5
+    else:
+        level = 'easy'
+        aftermath_years = 1
+        aftermath_bonus = 3
+
+    return {
+        'difficulty_level': level,
+        'indicators': indicators,
+        'aftermath_years': aftermath_years,
+        'aftermath_bonus': aftermath_bonus,
+        'difficulty_score': difficulty_score
+    }
+
+
+def detect_traditional_periods(timeline: Dict[str, Any]) -> Dict[str, List[Dict[str, Any]]]:
+    """
+    Detect traditional Hellenistic significant periods.
+
+    Detects:
+    - Loosing of Bond: Final L2 before L1 transitions (intense preparatory phase)
+    - Peak Periods: L2 matches L1 sign (empowered/smooth expression)
+    - Climax Periods: Midpoint of L1 periods (culmination)
+    - Opening Phases: First 2 years of new L1 (new chapter begins)
+
+    Args:
+        timeline: Full timeline data with ZR periods
+
+    Returns:
+        {
+            'loosing_of_bond': [{'ages': (start, end), 'l1_sign': str, 'l2_sign': str}, ...],
+            'peak_periods': [{'ages': (start, end), 'sign': str}, ...],
+            'climax_periods': [{'age': int, 'l1_sign': str}, ...],
+            'opening_phases': [{'ages': (start, end), 'l1_sign': str}, ...]
+        }
+    """
+    periods = {
+        'loosing_of_bond': [],
+        'peak_periods': [],
+        'climax_periods': [],
+        'opening_phases': []
+    }
+
+    # Process Fortune ZR periods
+    if timeline.get('zr_fortune'):
+        l1_periods = timeline['zr_fortune'].get('l1_periods', [])
+        l2_periods = timeline['zr_fortune'].get('l2_periods', [])
+
+        # Detect Loosing of Bond (final L2 before each L1 transition)
+        for i, l1_period in enumerate(l1_periods[:-1]):  # Skip last L1 (no transition after)
+            # Find L2 periods within this L1
+            l2_in_l1 = [l2 for l2 in l2_periods
+                       if l1_period['start_age'] <= l2['start_age'] < l1_period['end_age']]
+
+            if l2_in_l1:
+                # Get final L2 period before L1 ends
+                final_l2 = l2_in_l1[-1]
+                periods['loosing_of_bond'].append({
+                    'ages': (int(final_l2['start_age']), int(l1_period['end_age'])),
+                    'l1_sign': l1_period['sign'],
+                    'l2_sign': final_l2['sign']
+                })
+
+        # Detect Peak Periods (L2 matches L1 sign)
+        for l1_period in l1_periods:
+            l2_in_l1 = [l2 for l2 in l2_periods
+                       if l1_period['start_age'] <= l2['start_age'] < l1_period['end_age']]
+
+            for l2 in l2_in_l1:
+                if l2['sign'] == l1_period['sign']:
+                    periods['peak_periods'].append({
+                        'ages': (int(l2['start_age']), int(l2['end_age'])),
+                        'sign': l1_period['sign']
+                    })
+
+        # Detect Climax (midpoint of L1 periods)
+        for l1_period in l1_periods:
+            midpoint = (l1_period['start_age'] + l1_period['end_age']) / 2
+            periods['climax_periods'].append({
+                'age': int(midpoint),
+                'l1_sign': l1_period['sign']
+            })
+
+        # Detect Opening Phases (first 2 years of L1)
+        for l1_period in l1_periods:
+            start_age = int(l1_period['start_age'])
+            opening_end = min(start_age + 2, int(l1_period['end_age']))
+            periods['opening_phases'].append({
+                'ages': (start_age, opening_end),
+                'l1_sign': l1_period['sign']
+            })
+
+    return periods
+
+
 def calculate_convergence_score(age: int, snapshot: Dict[str, Any], timeline: Dict[str, Any], simplified_mode: bool = False) -> tuple[int, List[str]]:
     """
     Calculate convergence score for a given age.
@@ -238,6 +443,164 @@ def calculate_convergence_score(age: int, snapshot: Dict[str, Any], timeline: Di
 
     # Always add 1 point for profection (baseline)
     score += 1
+
+    # TIMING POINT ACTIVATIONS - When profections/ZR activate natal features
+    # These add convergence when timing techniques activate special chart points
+
+    # Get profile name and load seed data for activation checks
+    profile_name = timeline.get('profile')
+    if profile_name and snapshot['profection']:
+        try:
+            from profile_loader import load_profile
+            profile = load_profile(profile_name)
+            seed_data = profile.seed_data
+
+            if seed_data:
+                profected_house = snapshot['profection']['profection']['profected_house']
+
+                # 1. STELLIUM ACTIVATION (+5 pts): Profection enters house with 3+ planets
+                stelliums = seed_data.get('stelliums', [])
+                house_stelliums = [s for s in stelliums if s.get('type') == 'house']
+                for stellium in house_stelliums:
+                    # Extract house number from "House N" format
+                    location = stellium.get('location', '')
+                    if location.startswith('House '):
+                        stellium_house = int(location.split(' ')[1])
+                        if stellium_house == profected_house:
+                            score += 5
+                            planet_names = ', '.join(stellium['planets'])
+                            reasons.append(f"Stellium activation: House {profected_house} ({planet_names})")
+                            break  # Only count once per house
+
+                # 2. FIXED STAR ACTIVATION (+3 pts): Profection activates natal fixed star
+                # Check if any planets in the profected house are conjunct fixed stars
+                houses = seed_data.get('houses', [])
+                for house in houses:
+                    if house.get('number') == profected_house:
+                        planets_in_house = house.get('planets_in_house', [])
+                        if planets_in_house:
+                            fixed_stars_data = seed_data.get('fixed_stars', {})
+                            stars = fixed_stars_data.get('stars', [])
+
+                            for planet in planets_in_house:
+                                planet_name = planet.get('name')
+                                # Check if this planet is conjunct a fixed star
+                                for star in stars:
+                                    for conj in star.get('conjunctions', []):
+                                        if conj.get('planet') == planet_name:
+                                            score += 3
+                                            star_name = star.get('traditional_name', star.get('name'))
+                                            reasons.append(f"Fixed star activation: {planet_name} conjunct {star_name}")
+                                            break
+
+                # 3. ANTISCIA ACTIVATION (+2 pts): Profection activates planet's antiscion
+                # Check if any planet's antiscion or contra-antiscion falls in the profected house's sign
+                antiscia_list = seed_data.get('antiscia', [])
+                houses = seed_data.get('houses', [])
+
+                # Get the sign of the profected house
+                profected_sign = None
+                for house in houses:
+                    if house.get('number') == profected_house:
+                        profected_sign = house.get('sign')
+                        break
+
+                if profected_sign:
+                    # Check each planet's antiscia
+                    for antiscion_data in antiscia_list:
+                        antiscion_sign = antiscion_data.get('antiscion', {}).get('sign')
+                        contra_sign = antiscion_data.get('contra_antiscion', {}).get('sign')
+
+                        if antiscion_sign == profected_sign or contra_sign == profected_sign:
+                            score += 2
+                            planet_name = antiscion_data.get('planet')
+                            activation_type = 'antiscion' if antiscion_sign == profected_sign else 'contra-antiscion'
+                            reasons.append(f"Antiscia activation: {planet_name} {activation_type} in {profected_sign}")
+                            break  # Only count once per profection
+
+                # PROFECTION HOUSE OVERLAYS - Traditional house bonuses
+                if profected_house == 11:
+                    score += 3
+                    reasons.append("11H profection (fortunate - friends, hopes)")
+                elif profected_house == 5:
+                    score += 2
+                    reasons.append("5H profection (joyful - creativity, pleasure)")
+                elif profected_house == 10:
+                    score += 2
+                    reasons.append("10H profection (career, public status)")
+                elif profected_house in [6, 8, 12]:
+                    score += 3
+                    house_names = {6: '6H (health/service)', 8: '8H (death/crisis)', 12: '12H (loss/isolation)'}
+                    reasons.append(f"{house_names.get(profected_house)} profection (difficult)")
+
+                # PROFECTION LORD OVERLAYS - Benefic/malefic ruled years
+                lord_name = snapshot['profection']['profection'].get('lord_of_year')
+                if lord_name:
+                    if lord_name in ['Jupiter', 'Venus']:
+                        score += 2
+                        reasons.append(f"{lord_name} year (benefic)")
+                    elif lord_name in ['Saturn', 'Mars']:
+                        # Only add bonus if malefic of sect
+                        framework = seed_data.get('chart_framework', {})
+                        sect_type = framework.get('sect', {}).get('type', 'day')
+                        # Saturn malefic in day charts, Mars malefic in night charts
+                        if (lord_name == 'Saturn' and sect_type == 'day') or (lord_name == 'Mars' and sect_type == 'night'):
+                            score += 2
+                            reasons.append(f"{lord_name} year (malefic of sect)")
+
+        except Exception as e:
+            # Silently skip if profile loading fails (don't break convergence calculation)
+            pass
+
+    # TRADITIONAL PERIOD OVERLAYS - Traditional Hellenistic periods
+    # Check if timeline has traditional_periods data
+    traditional_periods = timeline.get('traditional_periods')
+    if traditional_periods:
+        # Loosing of Bond: Final L2 before L1 transition (intense preparatory phase)
+        for loosing in traditional_periods.get('loosing_of_bond', []):
+            if loosing['ages'][0] <= age <= loosing['ages'][1]:
+                score += 10
+                reasons.append(f"Loosing of Bond ({loosing['l1_sign']} → next L1)")
+                break
+
+        # Peak Periods: L2 matches L1 sign (empowered/smooth expression)
+        for peak in traditional_periods.get('peak_periods', []):
+            if peak['ages'][0] <= age <= peak['ages'][1]:
+                score += 10
+                reasons.append(f"Peak Period ({peak['sign']} empowerment)")
+                break
+
+        # Climax Periods: Midpoint of L1 (culmination)
+        for climax in traditional_periods.get('climax_periods', []):
+            if abs(age - climax['age']) <= 0.5:
+                score += 5
+                reasons.append(f"L1 Climax ({climax['l1_sign']} midpoint)")
+                break
+
+        # Opening Phases: First 2 years of L1 (new chapter begins)
+        for opening in traditional_periods.get('opening_phases', []):
+            if opening['ages'][0] <= age <= opening['ages'][1]:
+                score += 5
+                reasons.append(f"Opening Phase ({opening['l1_sign']} begins)")
+                break
+
+    # SATURN RETURN AFTERMATH - Multi-year difficulty overlay
+    # Check if timeline has saturn_assessment data
+    saturn_assessment = timeline.get('saturn_assessment')
+    if saturn_assessment:
+        # Find Saturn returns in timeline
+        for return_event in timeline.get('planetary_returns', []):
+            if return_event['planet'] == 'Saturn':
+                saturn_return_age = return_event['age']
+                aftermath_years = saturn_assessment['aftermath_years']
+                aftermath_bonus = saturn_assessment['aftermath_bonus']
+
+                # Check if current age is within aftermath window
+                if saturn_return_age < age <= saturn_return_age + aftermath_years:
+                    score += aftermath_bonus
+                    years_after = age - int(saturn_return_age)
+                    level = saturn_assessment['difficulty_level']
+                    reasons.append(f"Saturn aftermath year {years_after}/{aftermath_years} ({level})")
 
     return score, reasons
 
@@ -527,6 +890,15 @@ def generate_life_arc_timeline(
         'transits': transits,
         'lots': lots,
     }
+
+    # TRADITIONAL OVERLAYS - Assess Saturn returns and detect traditional periods
+    # Must be calculated AFTER timeline is built (needs ZR data) but BEFORE convergence scoring
+    saturn_assessment = assess_saturn_return_difficulty(profile_name)
+    traditional_periods = detect_traditional_periods(timeline)
+
+    # Add traditional analysis to timeline (will be used by calculate_convergence_score)
+    timeline['saturn_assessment'] = saturn_assessment
+    timeline['traditional_periods'] = traditional_periods
 
     # Calculate convergence events (needs complete timeline data)
     convergence = identify_convergence_events(timeline, simplified_mode)

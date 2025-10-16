@@ -168,82 +168,34 @@ The seed data now includes extensive planetary conditions beyond basic placement
 
 ---
 
-## Output Structure - Template A: Natal Chart (22 pages)
+## Output Structure
 
-**TARGET**: 5,700-6,000 words synthesis = 19-20 pages @ 11pt Helvetica
-**UPDATED**: 2025-10-15 - Added Table of Contents (Page 2)
+**TARGET**: 5,700-6,000 words synthesis
+**FORMAT**: Plain markdown (pdf-formatter handles presentation)
 
-### Page 1: Cover Page
+Start your synthesis file with this structure:
 
-**CRITICAL - START YOUR SYNTHESIS FILE WITH THIS EXACT HTML STRUCTURE**:
+```markdown
+# Natal Horoscope
 
-<div class="title-page">
-  <h1>Natal Horoscope</h1>
-  <div class="profile-name">[Full Name]</div>
-  <div class="birth-data">Born: [Date] at [Time]<br>[City, Country]<br>[Latitude]°N/S, [Longitude]°E/W</div>
-  <div class="report-date">Report Generated: [Current Date]</div>
-</div>
+[Profile name and birth data - pdf-formatter adds to cover page]
 
-## Table of Contents
+# Introduction
 
-### Page 2: Table of Contents
-**Purpose**: Navigate report quickly, understand scope at a glance
-**Format**: Hierarchical list of all major sections and subsections
+[300 words identifying PRIMARY life theme. First 2-3 sentences: "Your life centers on..."]
 
-### Page 3: Chart Overview (Technical Quick Reference)
+# Core Personality & Character
 
-**OUTPUT THIS EXACT STRUCTURE**:
+[450 words...]
 
-## Chart Overview
+[... all sections ...]
 
-**Sect**: [Day/Night] chart ([Sun above/below horizon])
-**Chart Ruler**: [Planet] in [Sign] in [House] ([dignity state])
-**Sect Light**: [Sun/Moon] in [Sign] ([strength/condition])
-**Angular Planets**: [List planets in 1st, 4th, 7th, 10th houses]
-**Stellium**: [If present: X planets in Y sign/house]
-**Key Dignities**: [2-3 strongest planetary placements - domicile/exaltation]
-**Key Challenges**: [1-2 planets in detriment/fall or malefic contrary to sect]
-**Major Aspects**: [2-3 most significant aspect patterns]
-**Lot of Spirit**: [Sign and house - career purpose]
-**Lot of Fortune**: [Sign and house - material well-being]
+## Reflection
 
-<div class="page-break"></div>
+[3-5 sentence verbose poetic reflection]
+```
 
-**Format**: SPARSE bullet points ONLY (8-12 bullets max, NOT narrative prose)
-**Purpose**: Quick reference for astrologers, scannable at a glance
-**Audience**: For technical verification
-**CRITICAL**: End with PAGE BREAK before Introduction
-
-### Page 4: Introduction (300 words - MUST FIT ON ONE PAGE)
-
-**OUTPUT THIS EXACT STRUCTURE**:
-
-## Introduction
-
-[Your PRIMARY pattern introduction paragraph starts here...]
-
-[Continue with 300 words of flowing narrative identifying the PRIMARY life theme...]
-
-<div class="page-break"></div>
-
-**Format**: Flowing narrative prose (NO bullet points, sparse astrological references)
-**Purpose**: Identify PRIMARY life pattern and set up synthesis
-**Audience**: The native (person receiving the reading)
-
-Content should include:
-- **PRIMARY pattern identification** (first 2-3 sentences): "Your life centers on [PRIMARY theme]..."
-- Essential nature and core themes (using sect light, chart ruler, most dignified planets)
-- The overarching story of this chart (HOW primary pattern manifests)
-- Central tension or life question (SECONDARY factors that modify)
-- What makes this chart unique
-- Sets up the detailed synthesis that follows
-
-**CRITICAL**:
-- This introduction should clearly answer "What is this person's PRIMARY life theme?" using hierarchical testimony
-- Include sparse astrological references (mention planet names, signs, houses naturally)
-- End with PAGE BREAK before main report sections begin
-
-### Pages 5-21: SYNTHESIS FOR THE NATIVE (~4,800 words total)
+### Content Sections (~5,700-6,000 words total)
 
 Apply the hierarchical testimony framework and 14-point integration formula to EACH section below. Consult `docs/natal_interpreter_agent_spec.md` priority tables for each life area.
 
@@ -336,14 +288,13 @@ Apply the hierarchical testimony framework and 14-point integration formula to E
 - **Decision Rules**: See spec Section 10 (Synthesis & Integration)
 - **Critical**: Synthesis MUST synthesize PRIMARY factors from all sections into coherent narrative. Avoid listing secondary factors unless they radically modify primary pattern. Focus on HOW primary factors work together.
 
-### Page 20: Poetic Wrapup - NO HEADING ⭐ **REQUIRED**
-- End with commanding, visionary final paragraph
-- **3-5 sentences**, direct second person ("You are here to...", "You must...", "There is within you...")
-- Reiterate PRIMARY themes from introduction in accessible language
-- NO technical astrological jargon (avoid terms like "trine", "sextile", "cadent")
-- Can mention planets/signs/houses sparingly if it adds resonance
-- Speak about purpose, challenges, and path with authority
-- Should echo the PRIMARY pattern identified in Page 3 introduction
+### Reflection Section ⭐ **REQUIRED**
+- End synthesis with `## Reflection` heading
+- **Verbose poetic reflection**: 3-5 sentences, direct second person
+- Use visionary, commanding voice ("You are here to...", "You must...", "There is within you...")
+- Reiterate PRIMARY themes in accessible, lyrical language
+- NO astrological jargon
+- Speak about purpose, challenges, and path with poetic authority
 
 ---
 
@@ -458,18 +409,18 @@ After completing Synthesis:
 - Include Planetary Strength Table showing dignity scores
 - Cite all sources
 
-### Step 10: Write Poetic Wrapup (No Heading)
-End the Synthesis section with 3-5 sentence closing paragraph. DO NOT add heading - flow naturally as final paragraph of "Synthesis & Integration". Use visionary voice ("You are here to...", "You must..."). Reiterate PRIMARY themes from Page 3 introduction. NO jargon.
+### Step 10: Write Reflection Section ⭐ **REQUIRED**
+End synthesis with `## Reflection` heading followed by verbose poetic reflection (3-5 sentences). Use visionary voice ("You are here to...", "You must...", "There is within you..."). Reiterate PRIMARY themes in lyrical, accessible language. NO technical jargon. Should echo the PRIMARY pattern identified in introduction.
 
 ### Step 11: Quality Check
 - ✅ Verify Synthesis has sparse astrological references (planet names, signs, houses mentioned naturally)
 - ✅ Verify Synthesis avoids technical jargon (no "trine", "sextile", "cadent", "angular", etc.)
 - ✅ Confirm Synthesis flows as narrative prose
 - ✅ **Verify PRIMARY factors get 70-80% of word count in each section**
-- ✅ **Confirm PRIMARY life pattern identified in Page 3 introduction**
+- ✅ **Confirm PRIMARY life pattern identified in introduction**
 - ✅ **Check that each section follows 4-part structure (opening, development, supporting, integration)**
 - ✅ Verify house ruler insights naturally integrated with hierarchical weighting
-- ✅ **Confirm poetic wrapup paragraph echoes PRIMARY pattern from introduction**
+- ✅ **Confirm Reflection section with verbose poetic reflection (3-5 sentences) echoes PRIMARY pattern from introduction**
 - ✅ Confirm technical sections cite traditional methods
 - ✅ Check Hellenistic foundation is clear
 - ✅ Ensure sect-based interpretations correct

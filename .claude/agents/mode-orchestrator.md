@@ -82,10 +82,10 @@ Intelligently detect which mode the user needs:
 4. **Check Agent Availability**: Verify interpreter agent exists for requested mode
 5. **Run Calculations** (if needed): Execute mode-specific calculator scripts
 6. **Invoke Interpreter**: Launch appropriate agent via Task tool with required data
-7. **Receive Output Files**: Agent produces TWO correctly formatted markdown files:
+7. **Receive Output Files**: Agent produces TWO plain markdown files:
    - `{report_type}_process_{name}_{date_identifier}.md` - Technical analysis with astrological terminology
-   - `{report_type}_synthesis_{name}_{date_identifier}.md` - Accessible synthesis with NO jargon
-   - **CRITICAL**: Agent owns output formatting. Orchestrator does NOT reformat, split, or restructure.
+   - `{report_type}_synthesis_{name}_{date_identifier}.md` - Plain markdown synthesis (NO HTML/CSS)
+   - **CRITICAL**: Interpreters now output PLAIN MARKDOWN ONLY (no formatting)
 8. **VERIFY OUTPUT PATHS** (agent should have saved to correct location):
    - ✅ Correct: `profiles/Darren_S/output/natal_synthesis_Darren_S_2025-10-13.md`
    - ✅ Correct: `profiles/Darren_S/output/natal_process_Darren_S_2025-10-13.md`
@@ -93,30 +93,42 @@ Intelligently detect which mode the user needs:
    - ❌ WRONG: `profiles/Darren_S/natal_synthesis_Darren_S_2025-10-13.md` (missing output/ subfolder)
    - If files are in wrong location, inform user and correct paths
 9. **Confirm Files Exist**: Verify both process and synthesis files were created by agent
-10. **Run Accuracy Checker BEFORE PDF** (OPTIONAL - user can skip):
+10. **Invoke pdf-formatter**: Transform plain markdown to formatted PDF-ready markdown:
+    - Input: `{report_type}_synthesis_{name}_{date_identifier}.md` (plain markdown)
+    - Seed data: `profiles/{name}/seed_data/seed_data.json`
+    - Report type: `{natal|life_arc|transit_short|transit_long}`
+    - Profile name and birth data
+    - pdf-formatter adds: Title page, TOC, Chart Overview, formatting structure
+    - Output: Overwrites synthesis.md with formatted version
+11. **Run Accuracy Checker BEFORE PDF** (OPTIONAL - user can skip):
     - Report type: `{natal|life_arc|transit_short|transit_long}`
     - Output file: synthesis markdown file
     - Data file(s): Appropriate seed data or calculation results
     - Profile name and date range (if applicable)
-11. **Check Accuracy Results** (if accuracy checker was run):
+12. **Check Accuracy Results** (if accuracy checker was run):
     - ❌ **CRITICAL errors**: Stop workflow, display errors, offer to regenerate
     - ⚠️ **WARNINGS**: Display warnings, ask user to proceed or fix
     - ✅ **PASS**: Continue to PDF generation
-12. **Extract Preview Section**: Introduction (natal/life arc) or Summary Synthesis (transits) - print to terminal (200-300 words)
-13. **Generate PDF**: `python scripts/pdf_generator.py {synthesis_md} --report-type {report_type}`
-    - **IMPORTANT**: Agent already formatted synthesis.md following Universal 3-Page Standard
+13. **Extract Preview Section**: Introduction (natal/life arc) or Summary Synthesis (transits) - print to terminal (200-300 words)
+14. **Generate PDF**: `python scripts/pdf_generator.py {synthesis_md} --report-type {report_type}`
+    - **IMPORTANT**: pdf-formatter already added all structure (title page, TOC, Chart Overview)
     - **Page 1**: Title page only (centered, professional spacing)
-    - **Page 2**: Technical Quick Reference (8-12 sparse bullets, NO narrative prose)
-    - **Page 3**: Synthesis Introduction (600-800 words, flowing prose, NO heading)
-    - **Pages 4+**: Main synthesis content
-    - PDF generator converts markdown to PDF WITHOUT reformatting structure
-14. **Save PDF**: `profiles/{name}/output/{report_type}_synthesis_{name}_{date_identifier}.pdf`
-15. **Return Success**: Display all file paths and completion status
+    - **Page 2**: Table of Contents (hierarchical list)
+    - **Page 3**: Chart Overview / Quick Reference (8-12 sparse bullets, NO narrative prose)
+    - **Page 4**: Introduction (600-800 words, flowing prose)
+    - **Pages 5+**: Main synthesis content
+    - **Final Page**: Reflection section (`## Reflection` heading)
+    - PDF generator converts formatted markdown to PDF with appropriate CSS
+15. **Save PDF**: `profiles/{name}/output/{report_type}_synthesis_{name}_{date_identifier}.pdf`
+16. **Return Success**: Display all file paths and completion status
 
 ### 4. Mode-Specific Parameters
 
+**ARCHITECTURAL NOTE (2025-10-16)**: All interpreters now output plain markdown. After interpretation, invoke `pdf-formatter` agent to add title page, TOC, Chart Overview, and formatting structure. This reduces interpreter prompt sizes by ~240 lines (17-18% token reduction).
+
 **Mode 1 (Natal Horoscope)**:
-- Interpreter: `natal-interpreter`
+- Interpreter: `natal-interpreter` (outputs plain markdown)
+- Formatter: `pdf-formatter` (adds structure)
 - Report type: `natal`
 - Date identifier: `{date}` (e.g., `2025-10-13`)
 - Calculator: None (seed data sufficient)
@@ -193,12 +205,11 @@ All interpretation reports generate TWO files:
    - Accessible to non-astrologers
    - Save both .md and .pdf versions
 
-**File Splitting Instructions**:
-- Interpreter agents return a SINGLE markdown document containing both process + synthesis
-- Split this document into two files based on section marker
-- Look for: `---SYNTHESIS SECTION---` or `# Synthesis` or similar clear divider
-- If no marker, detect transition point from technical jargon to accessible prose
-- Process content goes BEFORE marker, synthesis content goes AFTER marker
+**NEW WORKFLOW (2025-10-16)**:
+- Interpreter agents output TWO SEPARATE plain markdown files (process + synthesis)
+- Synthesis file contains ONLY content (no HTML, no CSS, no formatting)
+- pdf-formatter agent adds all structural elements (title page, TOC, Chart Overview)
+- This separation reduces interpreter prompt size by ~240 lines (17-18% token reduction)
 
 ### 6. Accuracy Checker Integration
 

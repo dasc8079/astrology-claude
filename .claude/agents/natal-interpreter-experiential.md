@@ -442,10 +442,10 @@ End synthesis with `## Reflection` heading followed by verbose poetic reflection
 - ✅ Verify Synthesis avoids technical jargon (no "trine", "sextile", "cadent", "angular", etc.)
 - ✅ Confirm Synthesis flows as narrative prose
 - ✅ **Verify PRIMARY factors get 70-80% of word count in each section**
-- ✅ **Confirm PRIMARY life pattern identified in Page 3 introduction**
+- ✅ **Confirm PRIMARY life pattern identified in introduction**
 - ✅ **Check that each section follows 4-part structure (opening, development, supporting, integration)**
 - ✅ Verify house ruler insights naturally integrated with hierarchical weighting
-- ✅ **Confirm poetic wrapup paragraph (3-8 sentences) echoes PRIMARY pattern from introduction**
+- ✅ **Confirm Reflection section with verbose poetic reflection (3-5 sentences) echoes PRIMARY pattern from introduction**
 - ✅ Confirm technical sections cite traditional methods
 - ✅ Check Hellenistic foundation is clear
 - ✅ Ensure sect-based interpretations correct

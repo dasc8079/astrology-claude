@@ -29,15 +29,25 @@
 
 ### ⏳ Pending Features
 
-1. **Adaptive Thresholds** (Phase 3 - NOT STARTED):
-   - ⏳ Percentile-based thresholds (95th, 85th, 70th) instead of fixed (25, 15, 8)
-   - ⏳ `calculate_adaptive_thresholds()` function
-   - ⏳ Score distribution analysis across profiles
+1. **Adaptive Thresholds** (Phase 3 - DEFERRED):
+   - ❌ **NOT IMPLEMENTING** - Testing showed fixed thresholds work well across profiles
+   - **Reason**: Fixed thresholds (25/15/8) produce consistent ~26-30 events across all profiles tested
+   - **Data Analysis (2025-10-16)**: Tested 3 profiles (Darren_S, Sam_P, Jamie_S)
+     - All had similar score distributions (mean ~7, median 1-3, std dev ~9.5)
+     - Adaptive thresholds would create too much noise (Darren: 47 events vs 26 with fixed)
+     - Period clustering already provides chapter structure without needing adaptive scaling
+   - **Note**: Only tested with 3 profiles - may revisit if more diverse profiles show need
+   - **Alternative Achieved**: Period-based clustering system provides adaptive chapter structure
 
-2. **Timing Point Activations** (Phase 3 - NOT STARTED):
-   - ⏳ Antiscia activation detection (+2 points)
-   - ⏳ Fixed star activation detection (+3 points)
-   - ⏳ Stellium activation detection (+5 points)
+2. **Timing Point Activations** (Phase 3 - COMPLETE):
+   - ✅ Antiscia activation detection (+2 points) - Implemented and tested
+   - ✅ Fixed star activation detection (+3 points) - Implemented and tested
+   - ✅ Stellium activation detection (+5 points) - Implemented and tested
+   - **Testing Results (2025-10-16)**:
+     - Tested with Darren_S profile (ages 0-46)
+     - Stellium activations: Detected at ages 5, 17, 29, 41 (House 6 stellium)
+     - Antiscia activations: Detected throughout timeline (appropriate frequency)
+     - Fixed star activations: Working correctly (none for Darren - no natal conjunctions)
 
 3. **Traditional Overlays** (Phase 1 & 2 - NOT STARTED):
    - ⏳ Saturn Return contextual assessment
@@ -52,7 +62,7 @@
 
 ### 🎯 Current Focus
 
-Analyzing convergence data from Darren_S and Sam_P to inform adaptive threshold design. Next step: Implement adaptive thresholds based on real profile score distributions.
+Implementing timing point activations (antiscia, fixed stars, stelliums) to add convergence scoring when profections/ZR periods activate these natal features. This will add 2-5 points when profections hit significant natal timing points.
 
 ---
 
