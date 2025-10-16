@@ -285,6 +285,118 @@ def identify_convergence_events(timeline: Dict[str, Any], simplified_mode: bool 
     }
 
 
+def identify_period_clusters(scores: Dict[int, Dict[str, Any]], min_score: int = 8, gap_tolerance: int = 2) -> List[Dict[str, Any]]:
+    """
+    Identify multi-year periods of elevated astrological activity.
+
+    Groups consecutive ages with elevated convergence scores into cohesive periods,
+    allowing for brief gaps (gap_tolerance) to capture extended chapter-like experiences.
+
+    Args:
+        scores: Dictionary mapping ages to their score data (score, reasons, snapshot)
+        min_score: Minimum score to be considered elevated activity (default 8 = notable threshold)
+        gap_tolerance: Number of consecutive low-scoring years allowed within a period (default 2)
+
+    Returns:
+        List of period clusters with start/end ages, peak detection, and duration
+
+    Example:
+        Ages 27-32 with scores [9, 10, 15, 8, 9, 12] becomes one 6-year period
+        even if there's a brief dip, because Saturn return experience extends over time
+    """
+    clusters = []
+    current_cluster = None
+    gap_count = 0
+
+    for age in sorted(scores.keys()):
+        score_data = scores[age]
+        score = score_data['score']
+
+        if score >= min_score:
+            if current_cluster is None:
+                # Start new cluster
+                current_cluster = {
+                    'start': age,
+                    'end': age,
+                    'ages': [age],
+                    'peak_age': age,
+                    'peak_score': score
+                }
+            else:
+                # Continue cluster
+                current_cluster['end'] = age
+                current_cluster['ages'].append(age)
+                if score > current_cluster['peak_score']:
+                    current_cluster['peak_age'] = age
+                    current_cluster['peak_score'] = score
+            gap_count = 0
+        else:
+            # Low-scoring year
+            if current_cluster is not None:
+                gap_count += 1
+                if gap_count > gap_tolerance:
+                    # Gap too large, end this cluster
+                    clusters.append(current_cluster)
+                    current_cluster = None
+                    gap_count = 0
+
+    # Add final cluster if exists
+    if current_cluster:
+        clusters.append(current_cluster)
+
+    return clusters
+
+
+def analyze_period_nature(cluster: Dict[str, Any], scores: Dict[int, Dict[str, Any]]) -> str:
+    """
+    Determine the nature of a multi-year period based on convergence patterns.
+
+    Classification priority:
+    1. Challenging: Saturn return, Uranus opposition, South Node periods
+    2. Transformative: Major chapter changes (ZR L1, Progressed Sun sign changes)
+    3. Favorable: Jupiter return, North Node periods
+    4. Mixed: Significant activity without clear challenging/favorable indicators
+
+    Args:
+        cluster: Period cluster with start/end/peak data
+        scores: Full score dictionary for looking up reasons
+
+    Returns:
+        Classification string: 'challenging', 'transformative', 'favorable', or 'mixed'
+    """
+    peak_age = cluster['peak_age']
+    reasons = scores[peak_age]['reasons']
+
+    # Challenging indicators (hardship, restructuring, crisis)
+    challenging = (
+        any('Saturn Return' in r for r in reasons) or
+        any('Uranus Opposition' in r for r in reasons) or
+        any('South Node' in r for r in reasons)
+    )
+
+    # Favorable indicators (growth, opportunity, support)
+    favorable = (
+        any('Jupiter Return' in r for r in reasons) or
+        any('North Node' in r for r in reasons)
+    )
+
+    # Transformative indicators (major chapter changes - neutral/mixed)
+    transformative = (
+        any('ZR Fortune L1' in r or 'ZR Spirit L1' in r for r in reasons) or
+        any('Progressed Sun' in r for r in reasons)
+    )
+
+    # Classification priority (challenging takes precedence over favorable)
+    if challenging:
+        return 'challenging'
+    elif transformative:
+        return 'transformative'
+    elif favorable:
+        return 'favorable'
+    else:
+        return 'mixed'
+
+
 def generate_life_arc_timeline(
     profile_name: str,
     start_age: int = 0,
@@ -420,6 +532,46 @@ def generate_life_arc_timeline(
     convergence = identify_convergence_events(timeline, simplified_mode)
     timeline['convergence'] = convergence
     timeline['simplified_mode'] = simplified_mode
+
+    # Calculate period clusters (groups consecutive elevated-activity ages into multi-year periods)
+    # Build score dictionary for all ages
+    scores = {}
+    for age in range(start_age, end_age + 1):
+        snapshot = get_year_snapshot(timeline, age)
+        score, reasons = calculate_convergence_score(age, snapshot, timeline, simplified_mode)
+        scores[age] = {
+            'score': score,
+            'reasons': reasons,
+            'snapshot': snapshot
+        }
+
+    # Identify period clusters (min_score=8 = notable threshold, gap_tolerance=2 years)
+    clusters = identify_period_clusters(scores, min_score=8, gap_tolerance=2)
+
+    # Classify each period's nature
+    for cluster in clusters:
+        cluster['nature'] = analyze_period_nature(cluster, scores)
+        cluster['duration'] = cluster['end'] - cluster['start'] + 1
+
+    # Categorize periods by nature
+    period_analysis = {
+        'clusters': clusters,
+        'by_nature': {
+            'challenging': [c for c in clusters if c['nature'] == 'challenging'],
+            'transformative': [c for c in clusters if c['nature'] == 'transformative'],
+            'favorable': [c for c in clusters if c['nature'] == 'favorable'],
+            'mixed': [c for c in clusters if c['nature'] == 'mixed']
+        },
+        'statistics': {
+            'total_periods': len(clusters),
+            'challenging_count': len([c for c in clusters if c['nature'] == 'challenging']),
+            'transformative_count': len([c for c in clusters if c['nature'] == 'transformative']),
+            'favorable_count': len([c for c in clusters if c['nature'] == 'favorable']),
+            'mixed_count': len([c for c in clusters if c['nature'] == 'mixed'])
+        }
+    }
+
+    timeline['period_analysis'] = period_analysis
 
     return timeline
 

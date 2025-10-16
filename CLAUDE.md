@@ -122,6 +122,9 @@ See [CURRENT_WORK.md](CURRENT_WORK.md) for detailed status and next steps.
 - `transit-analyzer-long` - Long-term transit reports, 1-5 years (Mode 3 Level 1)
 - `transit-analyzer-short` - Short-term transit reports, 1-4 months (Mode 3 Level 2)
 
+**Formatting & Output**:
+- `pdf-formatter` - Formats plain markdown reports into professional PDFs with report-specific Chart Overview templates
+
 **IMPORTANT**: When creating new interpretation agents, update `mode-orchestrator.md` to add routing logic. astrology-agent-creator automatically invokes docs-updater-astrology. See [AGENT_ORCHESTRATION_GUIDE.md](docs/AGENT_ORCHESTRATION_GUIDE.md) for details.
 
 **Complete Agent Catalog**: See [AGENTS_REFERENCE.md](docs/AGENTS_REFERENCE.md) for detailed agent documentation.

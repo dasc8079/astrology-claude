@@ -527,7 +527,7 @@ Write narrative broken into sections by L1 periods (8-30 year chapters). Use H3 
 [After completing full narrative, add blank line and write poetic closing paragraph]
 
 **Requirements**:
-- 5-8 sentences
+- 3-5 sentences
 - HIGHLY poetic - use metaphor, imagery, lyrical language
 - Visionary and commanding voice
 - Reiterate key themes from reading
@@ -755,36 +755,54 @@ Your goal: Reveal the grand narrative arc of a person's life through decades-lon
 
 **Template B: Timeline-Based Reports** - Organized by decades/life chapters
 
-### Page 1: Title Page
-```markdown
-# Life Arc Report
+### Page 1: Cover Page
 
-**[Full Name]**
-Born: [Date] at [Time]
-[City, Country]
-[Latitude]°N/S, [Longitude]°E/W
-Report Generated: [Current Date]
-☉ [Sun Sign] · ☽ [Moon Sign] · ↑ [Rising Sign]
+**CRITICAL - START YOUR SYNTHESIS FILE WITH THIS EXACT HTML STRUCTURE**:
 
-<div class="page-break"></div>
-```
+<div class="title-page">
+  <h1>Life Arc Report</h1>
+  <div class="profile-name">[Full Name]</div>
+  <div class="birth-data">Born: [Date] at [Time]<br>[City, Country]<br>[Latitude]°N/S, [Longitude]°E/W</div>
+  <div class="report-date">Report Generated: [Current Date]</div>
+</div>
 
-**Format**: Single blank line after "# Life Arc Report", other lines NOT double-spaced, astrological symbols on final line
+## Table of Contents
+
+**Format**: HTML div blocks for title page elements (CSS handles page break automatically)
 **Purpose**: Clean, accessible title page with birth data and report date
-**CRITICAL**: End with PAGE BREAK before introduction
 
-### Page 2: Introduction (2-3 paragraphs)
-```markdown
+### Page 2: Table of Contents
+**Purpose**: Navigate report quickly, understand scope at a glance
+**Format**: Hierarchical list of all major life chapters (ZR L1 periods) and key milestones
+
+### Page 3: Life Arc Overview (Technical Quick Reference)
+**Format**: SPARSE bullet points and tables ONLY (8-12 bullets max, NOT narrative prose)
+**Purpose**: Quick reference for current position and major transitions
+**Audience**: For technical verification
+
+Include ONLY these items as concise bullets:
+- **Current Age**: [Age]
+- **Current Chapter**: [ZR L1 period - ages X-Y in Z sign]
+- **Major Chapters Summary**: [List of all L1 periods with age ranges]
+- **Next Major Transition**: [Age and what shifts]
+- **Profection Year**: [Current house profection]
+- **Key Progression Themes**: [Major progressed aspects or sign changes]
+
+**NO narrative prose on this page - just sparse structured data**
+
+### Page 4: Introduction (300 words - MUST FIT ON ONE PAGE)
+
+**OUTPUT THIS EXACT STRUCTURE**:
+
 ## Introduction
 
 [Your introduction about current position in life story...]
 
-[Continue with 2-3 paragraphs overview of major chapters...]
+[Continue with 300 words overview of major chapters...]
 
 <div class="page-break"></div>
-```
 
-**Format**: Flowing narrative prose (NO bullet points)
+**Format**: Flowing narrative prose (NO bullet points, sparse astrological references)
 **Purpose**: Orient reader to their life story arc and current position
 **Audience**: The native (person receiving the reading)
 
@@ -794,9 +812,11 @@ Content should include:
 - The overarching story of this life arc
 - What makes this life timeline unique
 
-**CRITICAL**: End with PAGE BREAK before main chapters begin
+**CRITICAL**:
+- Include sparse astrological references (mention planets, signs naturally)
+- End with PAGE BREAK before main chapters begin
 
-### Page 3+: Major Life Chapters (H2 sections by ZR L1 periods)
+### Pages 5+: Major Life Chapters (H2 sections by ZR L1 periods)
    - Each chapter = 8-30 year period
    - Age ranges as H2 headings (e.g., "Ages 12-39: The Capricorn Chapter")
    - Sub-chapters (H3) for significant L2 periods within each chapter
@@ -835,7 +855,7 @@ Content should include:
 - ✅ "At age 39, you'll step into an entirely new 27-year chapter. The weight of proving yourself through relentless discipline will lift, and you'll enter a phase where innovation, collaboration, and freedom become primary"
 
 **Poetic Wrapup Requirements**:
-- **Length**: 4-8 sentences
+- **Length**: 3-5 sentences
 - **Tone**: Visionary, commanding voice
 - **Voice**: Direct second person ("You stand at...", "The journey ahead...")
 - **Purpose**: Reiterate life arc themes

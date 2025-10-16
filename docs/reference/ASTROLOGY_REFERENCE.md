@@ -329,14 +329,12 @@ Many lots use different formulas for day vs night charts to maintain sect alignm
 - Night formula: ASC + Jupiter - Spirit
 - Signifies: Success, expansion, recognition, triumph
 
-**Lot of Basis (⚓)**:
+**Lot of Saturn (Basis/Nemesis) (⚓)**:
 - Day formula: ASC + Fortune - Saturn
 - Night formula: ASC + Saturn - Fortune
-- Signifies: Foundation, structure, stability
-
-**Lot of Exaltation (👑)**:
-- Formula: ASC + Mars - Sun (same for day and night)
-- Signifies: Career peak, honors, public recognition
+- **Dual Interpretation** (same formula, context-dependent):
+  - When Saturn is dignified (domicile, exaltation, strong triplicity): Interpreted as **"Lot of Basis"** - Foundation, structure, stability, long-term building
+  - When Saturn is debilitated (detriment, fall, peregrine, afflicted): Interpreted as **"Lot of Nemesis"** - Retribution, enemies, downfall, consequences, karmic debt
 
 **Lot of Marriage (💍)**:
 - Formula: ASC + Venus - Saturn (same for day and night)
@@ -346,6 +344,47 @@ Many lots use different formulas for day vs night charts to maintain sect alignm
 - Day formula: ASC + Jupiter - Saturn
 - Night formula: ASC + Saturn - Jupiter
 - Signifies: Offspring, generativity, legacy
+
+### Relational & Life Domain Lots
+
+**Lot of Father (👨)**:
+- Day formula: ASC + Sun - Saturn
+- Night formula: ASC + Saturn - Sun
+- Signifies: Paternal relationships, authority figures, inheritance from father
+
+**Lot of Mother (👩)**:
+- Day formula: ASC + Moon - Venus
+- Night formula: ASC + Venus - Moon
+- Signifies: Maternal relationships, nurturing, emotional foundation
+
+**Lot of Siblings (👥)**:
+- Day formula: ASC + Jupiter - Saturn
+- Night formula: ASC + Saturn - Jupiter
+- Signifies: Peer relationships, siblings, equals, collaborators
+
+**Lot of Accusation (⚖️)**:
+- Day formula: ASC + Mars - Saturn
+- Night formula: ASC + Saturn - Mars
+- Signifies: Legal issues, conflicts, accusations, disputes
+
+**Lot of Friends (🤝)**:
+- Day formula: ASC + Moon - Mercury
+- Night formula: ASC + Mercury - Moon
+- Signifies: Social networks, beneficial connections, community
+
+### Excluded Lots
+
+**Lot of Exaltation** (ASC + Mars - Sun):
+- ❌ **EXCLUDED** - Formula doesn't match traditional Hellenistic sources
+- Cannot verify authenticity from primary sources (Chris Brennan, Demetra George, Robert Hand)
+- Possibly modern invention or miscalculation
+- **Status**: Kept in implementation but marked for review/verification
+
+**Lot of Commerce** (ASC + Fortune - Spirit):
+- ❌ **EXCLUDED** - Cannot verify this is traditional Hellenistic
+- Possibly Renaissance or modern invention
+- Insufficient source documentation
+- **Replacement**: Lot of Friends serves similar social/network function
 
 ---
 

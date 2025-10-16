@@ -17,6 +17,7 @@
 | life-arc-interpreter | Lifetime timeline (ages 0-100) | Want to see life chapters and major transitions | Life arc report (markdown + PDF) |
 | transit-analyzer-short | Dual-mode: (1) 1-4 month transit report (2) Period-of-interest cluster analysis | Need near-term timing OR zoom into high-score periods | Short transit report OR cluster deep-dive |
 | transit-analyzer-long | 1-5 year transit report | Need strategic life planning | Long transit report with chapters |
+| pdf-formatter | Format markdown to styled PDF | After interpretation completes OR reformatting needed | Professional PDF with cover/TOC/chart overview |
 | astrology-output-debugger | Verify interpretation quality | Output seems wrong or inconsistent | Diagnostic report |
 
 ---
@@ -277,6 +278,73 @@
 ---
 
 ## Support Agents
+
+### pdf-formatter
+
+**What It Does**: Formats plain markdown astrology reports into professionally styled PDFs with cover pages, table of contents, report-specific chart overview, and proper page layout. Separates presentation logic from interpretation logic.
+
+**When to Use** (triggers automatically or manually):
+- After any interpretation agent completes markdown output
+- mode-orchestrator completes interpretation and needs PDF generation
+- User requests PDF formatting for existing markdown report
+- Reformatting needed after style changes
+
+**How It Works**:
+1. Reads plain markdown synthesis file + seed data
+2. Builds HTML title page structure
+3. Generates Table of Contents from markdown headings
+4. Creates report-specific Chart Overview:
+   - **Template A (natal)**: Astrological data bullets (sect, ruler, dignities, auto-fill to ~12 items)
+   - **Template B (life_arc)**: Major Life Events Timeline table with accessible descriptions
+   - **Template C (transit)**: Current timing context (L1, L2, profections, active transits)
+5. Formats Introduction section (~300 words with page break)
+6. Formats main content (converts headings, adds strategic page breaks)
+7. Formats Reflection section (poetic wrapup with ## Reflection heading)
+8. Generates PDF using pdf_generator.py with appropriate --report-type
+
+**Key Features**:
+- **Separation of Concerns**: Interpreters focus on content, pdf-formatter handles presentation
+- **Report-Type Specific**: Different Chart Overview templates for natal/life_arc/transit reports
+- **Auto-Fill Intelligence**: Natal Chart Overview fills to ~12 bullets (fixed stars, lots, receptions, etc.)
+- **Accessible Language**: Life arc timeline uses NO jargon (translates "Saturn return" to "major crisis and reckoning")
+- **L1 Context**: Transit reports ALWAYS include L1 chapter for framing
+
+**Technical Details**:
+- Model: Sonnet (fast, efficient for formatting tasks)
+- Extended Thinking: false (straightforward formatting logic)
+- Color: Cyan (utility/infrastructure agent)
+- CSS Loading: base.css + report-specific CSS (chart_based/timeline_based/movement_based)
+
+**Output**: Formatted markdown + professional PDF with:
+- Title page with birth data
+- Hierarchical Table of Contents
+- Report-specific Chart Overview
+- ~300 word Introduction
+- Main content with strategic page breaks
+- Reflection section with proper heading
+
+**Coordination**:
+```
+interpreter completes → passes to pdf-formatter:
+  - markdown_file path
+  - seed_data_file path
+  - report_type (natal/life_arc/transit_short/transit_long)
+  - profile info
+
+pdf-formatter generates → confirms success:
+  - formatted markdown path
+  - final PDF path
+```
+
+**Benefits**:
+- Reduces interpreter token count by ~80-100 lines (17-18% reduction)
+- Single source of truth for PDF formatting
+- Easy style changes without touching interpreters
+- Consistent output across all report types
+
+**See**: `docs/pdf_formatter_design.md` for complete specification
+
+---
 
 ### feature-designer-astrology
 

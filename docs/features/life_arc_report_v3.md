@@ -1,13 +1,75 @@
 # Life Arc V3 Significance System Specification
 
-**Version**: 3.0
+**Version**: 3.1
 **Created**: 2025-10-12
-**Status**: Draft - Ready for Implementation
+**Updated**: 2025-10-16
+**Status**: IN PROGRESS - Period Clustering Implemented
 **Author**: Collaborative design session (User + Claude)
 
 ---
 
+## Implementation Status (2025-10-16)
+
+### ✅ Completed Features
+
+1. **15 Lots System** (Phase 0 - COMPLETE):
+   - ✅ Added 5 new relational lots to seed_data_generator.py (Father, Mother, Siblings, Accusation, Friends)
+   - ✅ Implemented Lot of Saturn dual interpretation (Basis/Nemesis based on dignities)
+   - ✅ Updated ASTROLOGY_REFERENCE.md with complete lot documentation
+   - ✅ Regenerated seed data for Darren_S and Sam_P profiles
+   - ✅ Verified all 15 lots calculate correctly
+
+2. **Period-Based Clustering System** (NEW - COMPLETE):
+   - ✅ Implemented `identify_period_clusters()` - Groups consecutive elevated-activity ages into multi-year periods
+   - ✅ Implemented `analyze_period_nature()` - Classifies periods as challenging/transformative/favorable/mixed
+   - ✅ Integrated into `generate_life_arc_timeline()` with comprehensive statistics
+   - ✅ Gap tolerance (2 years) handles extended experiences like Saturn returns
+   - ✅ Peak detection within each period
+   - ✅ Tested with real data (Darren_S: 5 periods, Sam_P: 5 periods)
+
+### ⏳ Pending Features
+
+1. **Adaptive Thresholds** (Phase 3 - NOT STARTED):
+   - ⏳ Percentile-based thresholds (95th, 85th, 70th) instead of fixed (25, 15, 8)
+   - ⏳ `calculate_adaptive_thresholds()` function
+   - ⏳ Score distribution analysis across profiles
+
+2. **Timing Point Activations** (Phase 3 - NOT STARTED):
+   - ⏳ Antiscia activation detection (+2 points)
+   - ⏳ Fixed star activation detection (+3 points)
+   - ⏳ Stellium activation detection (+5 points)
+
+3. **Traditional Overlays** (Phase 1 & 2 - NOT STARTED):
+   - ⏳ Saturn Return contextual assessment
+   - ⏳ Loosing of Bond detection
+   - ⏳ Peak Period detection
+   - ⏳ Profection house overlays (11H, 5H, 10H bonuses)
+
+4. **V3 Agent Creation** (Phase 4 - NOT STARTED):
+   - ⏳ Create life-arc-interpreter-v3.md agent
+   - ⏳ Generate test reports
+   - ⏳ Create V2→V3 comparison document
+
+### 🎯 Current Focus
+
+Analyzing convergence data from Darren_S and Sam_P to inform adaptive threshold design. Next step: Implement adaptive thresholds based on real profile score distributions.
+
+---
+
 ## Overview
+
+### What's New in V3.1 (2025-10-15)
+
+**Major Enhancements**:
+1. **Expanded Lots System**: Added 5 new traditional lots (Father, Mother, Siblings, Accusation, Friends) - **15 total lots**
+2. **Lot of Saturn Dual Interpretation**: Same formula interpreted as "Basis" (when Saturn dignified) or "Nemesis" (when Saturn debilitated)
+3. **Data-Driven Threshold System**: Replaced arbitrary thresholds with percentile-based adaptive scaling
+4. **Timing Point Activations**: Added antiscia, fixed stars, and stelliums as convergence scoring factors
+5. **V2/V3 Coexistence**: Both life-arc-interpreter-v2 and life-arc-interpreter-v3 agents remain operational
+
+**Philosophy Shift**: Reports now scale with profile eventfulness - more eventful lives generate longer reports, quieter lives generate shorter reports. Thresholds determined from actual data distribution, not arbitrary numbers.
+
+---
 
 ### Problem Statement
 
@@ -90,6 +152,267 @@ The current Life Arc significance detection system (V1/V2) fails to capture mult
 4. **Loosing of Bond + Saturn Return convergence**: Age 37-39 has both Loosing of Bond (+10) AND approaches major L1 shift (+15) → Scores stack appropriately
 5. **Jupiter Return during Peak Period**: Age 12 has both Jupiter Return (+8) and Peak Period (+10) → Correctly highlights fortunate transition
 6. **11H profection year + Peak Period**: Age where both occur → Bonuses stack (+3 + +10 = +13), creates NOTABLE event
+
+---
+
+## Lots System (V3.1 Enhancement)
+
+### Overview
+
+V3.1 expands the lots system from 10 to **15 traditional lots**, adding valuable timing data for relational, parental, social, and legal themes across the life arc.
+
+### Included Lots (15 Total)
+
+**Core Tier** (4 lots):
+1. **Lot of Fortune** (⊗) - Material resources, body, health, fortune
+2. **Lot of Spirit** (⊙) - Character, soul, life purpose, vocation
+3. **Lot of Eros** (♡) - Desires, love, passionate attachment
+4. **Lot of Necessity** (⚙) - Fate, constraint, compulsion
+
+**Planetary Tier** (3 lots):
+5. **Lot of Courage** (⚔) - Bravery, assertion, martial activity
+6. **Lot of Victory** (🏆) - Success, expansion, recognition, triumph
+7. **Lot of Saturn (Basis/Nemesis)** (⚓) - Foundation/structure OR retribution/enemies (see dual interpretation below)
+
+**Relational/Life Domain Tier** (8 lots):
+8. **Lot of Marriage** (💍) - Partnership, committed relationships
+9. **Lot of Children** (👶) - Offspring, generativity, legacy
+10. **Lot of Father** (👨) - Paternal relationships, authority figures, inheritance from father
+11. **Lot of Mother** (👩) - Maternal relationships, nurturing, emotional foundation
+12. **Lot of Siblings** (👥) - Peer relationships, siblings, equals, collaborators
+13. **Lot of Accusation** (⚖️) - Legal issues, conflicts, accusations, disputes
+14. **Lot of Friends** (🤝) - Social networks, beneficial connections, community
+15. **Lot of Exaltation** (👑) - Career peak, honors, public recognition
+
+### Lot of Saturn: Dual Interpretation
+
+**Same Formula, Context-Dependent Interpretation**:
+- **Formula**: ASC + Fortune - Saturn (day), ASC + Saturn - Fortune (night)
+- **When Saturn is dignified** (domicile, exaltation, strong triplicity):
+  - Interpreted as **"Lot of Basis"**
+  - Themes: Foundation, structure, stability, long-term building, endurance
+  - Life arc timing: Constructive periods, building phases, establishing foundations
+- **When Saturn is debilitated** (detriment, fall, peregrine, afflicted):
+  - Interpreted as **"Lot of Nemesis"**
+  - Themes: Retribution, enemies, downfall, consequences, karmic debt
+  - Life arc timing: Challenge periods, confronting consequences, facing opposition
+
+**Implementation**:
+- Calculate lot once per profile
+- Check natal Saturn dignities
+- Flag primary interpretation in seed data
+- Life arc interpreter uses appropriate lens based on Saturn's natal condition
+
+### Excluded Lots (With Reasoning)
+
+**Lot of Exaltation** (ASC + Mars - Sun):
+- ❌ **EXCLUDED** - Formula doesn't match traditional Hellenistic sources
+- Possibly modern invention or miscalculation
+- Cannot verify authenticity
+- **Alternative**: Kept in implementation but marked for review/verification
+
+**Lot of Commerce** (ASC + Fortune - Spirit):
+- ❌ **EXCLUDED** - Cannot verify this is traditional Hellenistic
+- Possibly Renaissance or modern invention
+- Insufficient source documentation
+- **Replacement**: Lot of Friends serves similar social/network timing function
+
+### Lots as Life Arc Timing Points
+
+**Lots Activation Detection**:
+When profections or ZR periods activate a lot (conjunction within 3°), add convergence points:
+
+```python
+LOT_ACTIVATION_POINTS = {
+    'fortune': 3,    # Core lot activation
+    'spirit': 3,     # Core lot activation
+    'relational': 2, # Marriage, Father, Mother, Siblings, Friends
+    'domain': 2,     # Victory, Courage, Accusation, Children
+}
+```
+
+**Example**: "Age 34: 11H profection activates Lot of Friends at Aquarius 12° (natal placement Aquarius 10°) → +2pts bonus"
+
+---
+
+## Data-Driven Threshold System (V3.1 Enhancement)
+
+### Problem with Fixed Thresholds
+
+**V3.0 Approach** (arbitrary):
+```python
+THRESHOLDS = {
+    'major': 25,        # ← Arbitrary number
+    'significant': 15,  # ← Arbitrary number
+    'notable': 8        # ← Arbitrary number
+}
+```
+
+**Issues**:
+- No basis in actual data distribution
+- Assumes all profiles have similar eventfulness
+- Cannot scale reports based on life complexity
+- Some profiles over-reported, others under-reported
+
+### V3.1 Solution: Percentile-Based Adaptive Thresholds
+
+**Philosophy**: Let the DATA determine what's significant for each profile.
+
+**Workflow**:
+1. **Add new lots** → Regenerate seed data for multiple profiles
+2. **Calculate scores** for all ages (0-100) across all profiles
+3. **Analyze distribution** → Find mean, median, percentiles per profile
+4. **Set thresholds** based on percentiles WITHIN each profile's distribution
+
+**Implementation**:
+```python
+def calculate_adaptive_thresholds(profile_scores: List[int]) -> dict:
+    """
+    Calculate profile-specific thresholds from score distribution.
+
+    Args:
+        profile_scores: List of convergence scores for ages 0-100
+
+    Returns:
+        Thresholds dict with major/significant/notable cutoffs
+    """
+    import numpy as np
+
+    # Calculate percentiles within THIS profile's distribution
+    thresholds = {
+        'major': np.percentile(profile_scores, 95),      # Top 5% of THEIR events
+        'significant': np.percentile(profile_scores, 85), # Top 15% of THEIR events
+        'notable': np.percentile(profile_scores, 70)      # Top 30% of THEIR events
+    }
+
+    # Ensure minimum separation
+    if thresholds['significant'] < thresholds['major'] - 5:
+        thresholds['significant'] = thresholds['major'] - 5
+    if thresholds['notable'] < thresholds['significant'] - 3:
+        thresholds['notable'] = thresholds['significant'] - 3
+
+    return thresholds
+```
+
+**Benefit**: Eventful lives (like Darren ages 29-35) → More events qualify → Longer report ✅
+Quieter lives → Fewer events qualify → Shorter report ✅
+
+**Result**: ~15 major events per profile, but based on THEIR distribution, not arbitrary numbers.
+
+### Scoring Distribution Analysis
+
+**Before setting thresholds, analyze across profiles**:
+
+```python
+def analyze_scoring_distribution(profiles: List[str]) -> dict:
+    """
+    Analyze score distribution across multiple profiles to validate approach.
+
+    Returns statistics for comparison and threshold validation.
+    """
+    results = {}
+
+    for profile in profiles:
+        scores = calculate_all_ages(profile, start=0, end=100)
+
+        results[profile] = {
+            'mean': np.mean(scores),
+            'median': np.median(scores),
+            'std_dev': np.std(scores),
+            'percentiles': {
+                '50th': np.percentile(scores, 50),
+                '75th': np.percentile(scores, 75),
+                '90th': np.percentile(scores, 90),
+                '95th': np.percentile(scores, 95),
+                '99th': np.percentile(scores, 99),
+            },
+            'events_above_threshold': {
+                'fixed_25': len([s for s in scores if s >= 25]),
+                'fixed_15': len([s for s in scores if s >= 15]),
+                'adaptive_95th': len([s for s in scores if s >= np.percentile(scores, 95)]),
+                'adaptive_85th': len([s for s in scores if s >= np.percentile(scores, 85)]),
+            }
+        }
+
+    return results
+```
+
+**Validation Profiles** (minimum 4):
+- Darren_S (eventful ages 29-35)
+- Sam_P
+- Mom_S
+- Jamie_S
+
+**Expected Insight**: Compare fixed vs adaptive thresholds to see which produces more meaningful event counts.
+
+---
+
+## Timing Point Activations (V3.1 Enhancement)
+
+### New Convergence Factors
+
+V3.1 adds timing point activations from natal calculation enhancements:
+
+**1. Antiscia Activation** (+2 points):
+- **Condition**: Profection or ZR activates planet's antiscion within 3°
+- **Formula**: Check if profection house contains antiscion of any natal planet
+- **Example**: "Age 42: 5H profection activates Moon's antiscion at Leo 15° (natal Moon Aquarius 15°)"
+- **Significance**: TERTIARY testimony activated → adds convergence value
+
+**2. Fixed Star Activation** (+3 points):
+- **Condition**: Profection activates natal fixed star conjunction within 1°
+- **Formula**: Check if profection house contains any of 5 major fixed stars (Regulus, Spica, Algol, Antares, Aldebaran)
+- **Example**: "Age 38: 10H profection activates Regulus conjunction to natal Sun (0.5° orb)"
+- **Significance**: Royal star conjunctions activated → major timing indicator
+
+**3. Stellium Activation** (+5 points):
+- **Condition**: Profection enters house containing 3+ traditional planets (natal stellium)
+- **Formula**: Check if profection house matches any stellium house
+- **Example**: "Age 28: 5H profection activates 5H stellium (Sun-Mercury-Venus)"
+- **Significance**: Concentrated energy activated → emphasized period
+
+### Integration into V3 Scoring
+
+```python
+# In calculate_convergence_score_v3(), add after profection overlays:
+
+# === TIMING POINT ACTIVATIONS (NEW in V3.1) ===
+
+# Antiscia activation
+profection_sign = get_sign_from_house(profection_house, natal_asc_sign)
+for planet_antiscia in natal_data['antiscia']:
+    if planet_antiscia['antiscion']['sign'] == profection_sign:
+        # Check orb within 3°
+        if is_within_orb(profection_sign, planet_antiscia['antiscion']['degree'], 3):
+            score += 2
+            reasons.append(f"Antiscia: {planet_antiscia['planet']} activated")
+            break
+
+# Fixed star activation
+for fixed_star in natal_data['fixed_stars']['stars']:
+    if len(fixed_star['conjunctions']) > 0:  # Has natal conjunctions
+        star_sign = fixed_star['position']['sign']
+        if star_sign == profection_sign:
+            score += 3
+            reasons.append(f"Fixed Star: {fixed_star['name']} activated")
+            break
+
+# Stellium activation
+for stellium in natal_data['stelliums']:
+    if stellium['type'] == 'house' and int(stellium['location'].split()[1]) == profection_house:
+        score += 5
+        reasons.append(f"Stellium activated ({stellium['count']} planets in {profection_house}H)")
+        break
+```
+
+### Timing Points NOT Used
+
+**Natal Context Only** (not timing points):
+- ❌ Hayz conditions - Static natal condition, doesn't change
+- ❌ Planetary conditions (swift/slow, oriental/occidental) - Inform interpretation but not timing
+- ❌ Aspect dynamics (overcoming, enclosure) - Describes relationships, not timing
+
+These inform HOW activated planets behave, but aren't timing triggers themselves.
 
 ---
 
@@ -465,18 +788,131 @@ def calculate_convergence_score_v3(age: int, snapshot: dict, timeline: dict,
 2. Add `detect_traditional_periods()` function
 3. Modify `calculate_convergence_score()` to accept `traditional_periods` and `saturn_assessment`
 4. Add `mode='v3'` parameter to `generate_life_arc_timeline()` function
-5. Keep backward compatibility: `mode='v2'` uses old scoring
+5. Add `calculate_adaptive_thresholds()` function for data-driven thresholds
+6. Add timing point activation detection (antiscia, fixed stars, stelliums)
+7. Keep backward compatibility: `mode='v2'` uses old scoring
 
-**life-arc-interpreter agent**:
-- Create new `life-arc-interpreter-v3.md` agent
-- Agent calls `generate_life_arc_timeline()` with `mode='v3'`
-- Agent interprets traditional periods narratively
-- Agent provides context for Saturn Return aftermath periods
-- Agent highlights good periods equivalently to difficult ones
+**life-arc-interpreter agents**:
+- **BOTH v2 and v3 remain operational** (two separate agents)
+- Create new `life-arc-interpreter-v3.md` agent (doesn't replace v2)
+- V3 agent calls `generate_life_arc_timeline()` with `mode='v3'`
+- V3 agent uses adaptive thresholds from score distribution
+- V3 agent interprets traditional periods narratively
+- V3 agent provides context for Saturn Return aftermath periods
+- V3 agent highlights good periods equivalently to difficult ones
+- **User choice**: Can run either v2 or v3 depending on preference
+
+---
+
+## V2 vs V3: Coexistence Strategy
+
+### Why Keep Both Agents?
+
+**V3 is an expansion, not a replacement**:
+- V2 remains valid for users who prefer fixed thresholds
+- V3 adds data-driven approach for adaptive scaling
+- Different philosophies serve different use cases
+
+### Feature Comparison
+
+| Feature | V2 | V3 |
+|---------|----|----|
+| **Base Convergence** | ✅ Yes | ✅ Yes |
+| **Traditional Overlays** | ✅ Yes | ✅ Yes |
+| **Lots System** | 10 lots | **15 lots** (5 new) |
+| **Lot of Saturn** | Single interpretation | **Dual interpretation** (Basis/Nemesis) |
+| **Thresholds** | **Fixed** (25/15/8) | **Adaptive** (percentile-based) |
+| **Timing Points** | Lots only | **Lots + Antiscia + Fixed Stars + Stelliums** |
+| **Report Length** | ~15 events (all profiles) | **Scales with eventfulness** |
+| **Saturn Return** | Contextual aftermath | Contextual aftermath |
+| **Traditional Periods** | Loosing, Peak, Climax | Loosing, Peak, Climax |
+
+### When to Use Which Agent
+
+**Use life-arc-interpreter-v2 when**:
+- You want consistent event count across profiles (~15 major events)
+- You prefer fixed, predictable thresholds
+- You want simpler lots system (10 lots)
+- You're comparing reports across multiple profiles with standardized criteria
+
+**Use life-arc-interpreter-v3 when**:
+- You want reports that scale with life eventfulness
+- You want maximum timing data (15 lots + activation points)
+- You want Lot of Saturn interpreted contextually (Basis vs Nemesis)
+- You want data-driven, personalized thresholds
+- You want the most comprehensive analysis available
+
+### Technical Separation
+
+**Implementation**:
+```python
+# V2 invocation
+timeline_v2 = generate_life_arc_timeline(
+    profile='darren',
+    start_age=0,
+    end_age=100,
+    mode='v2'  # Uses fixed thresholds
+)
+
+# V3 invocation
+timeline_v3 = generate_life_arc_timeline(
+    profile='darren',
+    start_age=0,
+    end_age=100,
+    mode='v3'  # Uses adaptive thresholds
+)
+```
+
+**Output Files**:
+- V2: `life_arc_interpretation_darren_ages_0-100_v2.md`
+- V3: `life_arc_interpretation_darren_ages_0-100_v3.md`
+- **Both can coexist** in same profile's output folder
 
 ---
 
 ## Implementation Plan
+
+### Phase 0: Data Preparation (NEW in V3.1) (Estimated: 2-3 hours)
+
+**Tasks**:
+1. Add 5 new lots to seed_data_generator.py
+   - Lot of Father (👨)
+   - Lot of Mother (👩)
+   - Lot of Siblings (👥)
+   - Lot of Accusation (⚖️)
+   - Lot of Friends (🤝)
+
+2. Implement Lot of Saturn dual interpretation logic
+   - Check natal Saturn dignities
+   - Flag as "Basis" or "Nemesis" in seed data
+   - Update YAML structure to include interpretation flag
+
+3. Update ASTROLOGY_REFERENCE.md
+   - Add 5 new lot formulas
+   - Document Lot of Saturn dual interpretation
+   - Document excluded lots (Exaltation, Commerce) with reasoning
+
+4. Regenerate seed data for validation profiles
+   - Darren_S
+   - Sam_P
+   - Mom_S
+   - Jamie_S
+   - (Minimum 4 profiles for distribution analysis)
+
+5. Run scoring distribution analysis
+   - Analyze score distribution across all profiles
+   - Generate statistics (mean, median, percentiles)
+   - Validate data-driven threshold approach
+   - Document findings in analysis report
+
+**Validation Criteria**:
+- ✅ All 15 lots calculated correctly in seed data
+- ✅ Lot of Saturn interpretation flag matches natal Saturn dignities
+- ✅ ASTROLOGY_REFERENCE.md updated with new lots and reasoning
+- ✅ Distribution analysis shows meaningful variation across profiles
+- ✅ Percentile-based thresholds produce ~15 major events per profile
+
+---
 
 ### Phase 1: Core Contextual Rules (Estimated: 4-6 hours)
 
@@ -520,26 +956,65 @@ def calculate_convergence_score_v3(age: int, snapshot: dict, timeline: dict,
 - ✅ Benefic-ruled years score appropriately
 - ✅ Good periods are narratively highlighted equivalently to difficult periods
 
-### Phase 3: Agent Creation & Testing (Estimated: 2-3 hours)
+### Phase 3: Data-Driven Thresholds & Timing Point Activations (NEW in V3.1) (Estimated: 3-4 hours)
+
+**Tasks**:
+1. Implement `calculate_adaptive_thresholds()` function
+   - Calculate percentile-based thresholds per profile
+   - Ensure minimum separation between tiers
+   - Add to life_arc_generator.py
+
+2. Implement timing point activation detection
+   - Antiscia activation (+2 points)
+   - Fixed star activation (+3 points)
+   - Stellium activation (+5 points)
+   - Add to calculate_convergence_score_v3()
+
+3. Update calculate_convergence_score_v3() to use adaptive thresholds
+   - Calculate thresholds from full 0-100 score distribution
+   - Apply thresholds to categorize events
+   - Return threshold metadata with results
+
+4. Test adaptive thresholds across profiles
+   - Validate ~15 major events per profile (regardless of eventfulness)
+   - Confirm longer reports for eventful profiles (Darren ages 29-35)
+   - Confirm shorter reports for quieter profiles
+
+**Validation Criteria**:
+- ✅ Adaptive thresholds produce ~15 major events per profile
+- ✅ Eventful profiles (Darren) have longer reports with more significant periods
+- ✅ Quieter profiles have shorter, focused reports
+- ✅ Timing point activations correctly detected and scored
+- ✅ All 3 activation types working (antiscia, fixed stars, stelliums)
+
+---
+
+### Phase 4: Agent Creation & Testing (Estimated: 2-3 hours)
 
 **Tasks**:
 1. Create life-arc-interpreter-v3.md agent
-   - Copy from v2 agent
+   - Copy from v2 agent as base
    - Update to call `generate_life_arc_timeline(mode='v3')`
    - Update narrative instructions to cover traditional periods
+   - Add instructions for Lot of Saturn dual interpretation
+   - Add instructions for timing point activations
    - Update to provide Saturn Return context
 
-2. Generate test report for Darren ages 0-100
-   - Compare against V1 output (if available)
-   - Compare against V2 output
-   - Validate ages 29-35 coverage
+2. Generate test reports for all validation profiles
+   - Darren ages 0-100 (v3 vs v2 comparison)
+   - Sam ages 0-100
+   - Mom ages 0-100
+   - Jamie ages 0-100
+   - Compare event counts and report lengths
 
-3. Create comparison document showing V2→V3 changes
-   - Document in docs/life_arc_interpreter_v2_to_v3_changes.md
+3. Create comparison document showing V2→V3.1 changes
+   - Document in docs/agent_changes/life_arc_v2_to_v3.1_changes.md
    - Show sample output differences
+   - Highlight new lots, timing points, adaptive thresholds
 
 4. Update version tracker
-   - Update docs/life_arc_interpreter_versions.md with V3 entry
+   - Update docs/agent_changes/life_arc_interpreter_versions.md with V3.1 entry
+   - Document philosophy shift (data-driven thresholds)
 
 **Validation Criteria**:
 - ✅ V3 report covers ages 29-35 difficult period narratively
@@ -547,6 +1022,9 @@ def calculate_convergence_score_v3(age: int, snapshot: dict, timeline: dict,
 - ✅ Peak periods are highlighted
 - ✅ Saturn Return includes aftermath context
 - ✅ Good periods receive equivalent emphasis to difficult periods
+- ✅ Lot of Saturn interpreted correctly (Basis for Darren's dignified Saturn)
+- ✅ Timing point activations mentioned when detected
+- ✅ Report length scales with profile eventfulness
 
 ---
 
@@ -755,7 +1233,12 @@ def test_life_arc_interpreter_v3_agent():
 | Keep L2 data, score selectively | Allows peak period and loosing detection while reducing noise | Remove L2 entirely (V2 approach - too aggressive) | 2025-10-12 |
 | +10pts for Loosing of Bond | Traditional significance warrants high bonus regardless of convergence | Lower bonus (5pts), or no bonus | 2025-10-12 |
 | +10pts for Peak Periods | Balances difficult period emphasis with traditional fortunate periods | Different bonus values, or omit entirely | 2025-10-12 |
-| Thresholds unchanged (25/15/8) | Raising would require all profiles to be re-scored; better to increase event scores | Lower thresholds to 20/12/6 | 2025-10-12 |
+| **Data-driven thresholds** (V3.1) | Let data distribution determine significance thresholds; allows reports to scale with eventfulness | Keep fixed thresholds (25/15/8) | **2025-10-15** |
+| **15 lots system** (V3.1) | Adds relational/family/social timing data; all traditional sources | Keep 10 lots only, or add modern lots | **2025-10-15** |
+| **Lot of Saturn dual interpretation** (V3.1) | Same formula, different meaning based on Saturn's natal dignity; honors traditional Saturn duality | Create two separate lots with different formulas | **2025-10-15** |
+| **Exclude Lot of Exaltation & Commerce** (V3.1) | Cannot verify formulas in traditional sources; maintain authenticity | Include anyway, mark as uncertain | **2025-10-15** |
+| **Add timing point activations** (V3.1) | Antiscia, fixed stars, stelliums already calculated; activate as timing points when profections hit them | Ignore these calculated points for timing | **2025-10-15** |
+| **Keep both v2 and v3 agents** (V3.1) | Different philosophies serve different use cases; v3 is expansion not replacement | Replace v2 with v3 | **2025-10-15** |
 | Saturn aftermath 3-5 years if difficult | Matches user experience (ages 29-35 = 6 years including return) | Fixed 3 years for all, or no aftermath at all | 2025-10-12 |
 | mode='v3' parameter for backward compat | V1/V2 agents continue working during transition | Break existing function signature | 2025-10-12 |
 
@@ -765,6 +1248,7 @@ def test_life_arc_interpreter_v3_agent():
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 3.1-draft | 2025-10-15 | **V3.1 Enhancements**: Expanded lots system (15 lots), Lot of Saturn dual interpretation (Basis/Nemesis), data-driven percentile-based thresholds, timing point activations (antiscia, fixed stars, stelliums), V2/V3 coexistence strategy, Phase 0 implementation plan added |
 | 3.0-draft | 2025-10-12 | Initial V3 specification created from collaborative design session |
 
 ---

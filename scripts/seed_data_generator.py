@@ -517,7 +517,7 @@ def calculate_angle_aspects(planet_data, asc_longitude, mc_longitude):
 
 
 def calculate_lots(jd, asc_longitude, planet_data, sect_type):
-    """Calculate Hermetic lots (Fortune, Spirit, and 5 additional lots)."""
+    """Calculate Hermetic lots (Fortune, Spirit, and 13 additional lots - 15 total)."""
     sun = next(p for p in planet_data if p['name'] == 'Sun')
     moon = next(p for p in planet_data if p['name'] == 'Moon')
     mercury = next(p for p in planet_data if p['name'] == 'Mercury')
@@ -604,6 +604,37 @@ def calculate_lots(jd, asc_longitude, planet_data, sect_type):
 
     basis_sign, basis_degree = get_sign_and_degree(basis_lon)
 
+    # Determine Lot of Saturn interpretation based on Saturn's natal dignities
+    # Dignified Saturn (domicile, exaltation, strong triplicity) = "Lot of Basis" (foundation, stability)
+    # Debilitated Saturn (detriment, fall, peregrine, afflicted) = "Lot of Nemesis" (retribution, downfall)
+    saturn_sign = saturn['sign']
+    saturn_dignities = saturn.get('dignities', {}).get('essential', {})
+
+    # Check if Saturn is dignified
+    is_dignified = (
+        saturn_dignities.get('domicile') or  # Capricorn, Aquarius
+        saturn_dignities.get('exaltation') or  # Libra
+        saturn_dignities.get('triplicity') in ['day', 'night']  # Strong triplicity ruler (not just participating)
+    )
+
+    # Check if Saturn is debilitated
+    is_debilitated = (
+        saturn_dignities.get('detriment') or  # Cancer, Leo
+        saturn_dignities.get('fall')  # Aries
+    )
+
+    # Determine interpretation (prioritize debilitation over dignity)
+    if is_debilitated:
+        saturn_interpretation = 'Nemesis'
+        saturn_themes = 'Retribution, enemies, downfall, consequences, karmic debt'
+    elif is_dignified:
+        saturn_interpretation = 'Basis'
+        saturn_themes = 'Foundation, structure, stability, long-term building, endurance'
+    else:
+        # Peregrine or mixed dignities - use Basis as default (more neutral)
+        saturn_interpretation = 'Basis'
+        saturn_themes = 'Foundation, structure, stability, long-term building, endurance'
+
     # Lot of Exaltation (career peak, honors, public recognition)
     # Same formula for day and night charts
     exaltation_lon = (asc_longitude + mars_lon - sun_lon) % 360
@@ -622,6 +653,51 @@ def calculate_lots(jd, asc_longitude, planet_data, sect_type):
     else:
         children_lon = (asc_longitude + saturn_lon - jupiter_lon) % 360
     children_sign, children_degree = get_sign_and_degree(children_lon)
+
+    # Lot of Father (paternal relationships, authority figures)
+    # Day: ASC + Sun - Saturn
+    # Night: ASC + Saturn - Sun
+    if sect_type == 'day':
+        father_lon = (asc_longitude + sun_lon - saturn_lon) % 360
+    else:
+        father_lon = (asc_longitude + saturn_lon - sun_lon) % 360
+    father_sign, father_degree = get_sign_and_degree(father_lon)
+
+    # Lot of Mother (maternal relationships, nurturing)
+    # Day: ASC + Moon - Venus
+    # Night: ASC + Venus - Moon
+    if sect_type == 'day':
+        mother_lon = (asc_longitude + moon_lon - venus_lon) % 360
+    else:
+        mother_lon = (asc_longitude + venus_lon - moon_lon) % 360
+    mother_sign, mother_degree = get_sign_and_degree(mother_lon)
+
+    # Lot of Siblings (peer relationships, siblings, collaborators)
+    # Day: ASC + Jupiter - Saturn
+    # Night: ASC + Saturn - Jupiter
+    if sect_type == 'day':
+        siblings_lon = (asc_longitude + jupiter_lon - saturn_lon) % 360
+    else:
+        siblings_lon = (asc_longitude + saturn_lon - jupiter_lon) % 360
+    siblings_sign, siblings_degree = get_sign_and_degree(siblings_lon)
+
+    # Lot of Accusation (legal issues, conflicts, disputes)
+    # Day: ASC + Mars - Saturn
+    # Night: ASC + Saturn - Mars
+    if sect_type == 'day':
+        accusation_lon = (asc_longitude + mars_lon - saturn_lon) % 360
+    else:
+        accusation_lon = (asc_longitude + saturn_lon - mars_lon) % 360
+    accusation_sign, accusation_degree = get_sign_and_degree(accusation_lon)
+
+    # Lot of Friends (social networks, beneficial connections)
+    # Day: ASC + Moon - Mercury
+    # Night: ASC + Mercury - Moon
+    if sect_type == 'day':
+        friends_lon = (asc_longitude + moon_lon - mercury_lon) % 360
+    else:
+        friends_lon = (asc_longitude + mercury_lon - moon_lon) % 360
+    friends_sign, friends_degree = get_sign_and_degree(friends_lon)
 
     return [
         {
@@ -709,7 +785,7 @@ def calculate_lots(jd, asc_longitude, planet_data, sect_type):
             }
         },
         {
-            'name': 'Lot of Basis',
+            'name': 'Lot of Saturn',
             'symbol': '⚓',
             'position': {
                 'sign': basis_sign,
@@ -720,6 +796,11 @@ def calculate_lots(jd, asc_longitude, planet_data, sect_type):
                 'formula': 'ASC + Fortune - Saturn (day) / ASC + Saturn - Fortune (night)',
                 'day_formula': 'ASC + Fortune - Saturn',
                 'night_formula': 'ASC + Saturn - Fortune',
+            },
+            'interpretation': {
+                'type': saturn_interpretation,
+                'themes': saturn_themes,
+                'determined_by': f"Saturn in {saturn_sign} ({'dignified' if is_dignified and not is_debilitated else 'debilitated' if is_debilitated else 'peregrine'})"
             }
         },
         {
@@ -762,6 +843,76 @@ def calculate_lots(jd, asc_longitude, planet_data, sect_type):
                 'formula': 'ASC + Jupiter - Saturn (day) / ASC + Saturn - Jupiter (night)',
                 'day_formula': 'ASC + Jupiter - Saturn',
                 'night_formula': 'ASC + Saturn - Jupiter',
+            }
+        },
+        {
+            'name': 'Lot of Father',
+            'symbol': '👨',
+            'position': {
+                'sign': father_sign,
+                'degree': round(father_degree, 4),
+                'dms': decimal_to_dms(father_degree),
+            },
+            'calculation': {
+                'formula': 'ASC + Sun - Saturn (day) / ASC + Saturn - Sun (night)',
+                'day_formula': 'ASC + Sun - Saturn',
+                'night_formula': 'ASC + Saturn - Sun',
+            }
+        },
+        {
+            'name': 'Lot of Mother',
+            'symbol': '👩',
+            'position': {
+                'sign': mother_sign,
+                'degree': round(mother_degree, 4),
+                'dms': decimal_to_dms(mother_degree),
+            },
+            'calculation': {
+                'formula': 'ASC + Moon - Venus (day) / ASC + Venus - Moon (night)',
+                'day_formula': 'ASC + Moon - Venus',
+                'night_formula': 'ASC + Venus - Moon',
+            }
+        },
+        {
+            'name': 'Lot of Siblings',
+            'symbol': '👥',
+            'position': {
+                'sign': siblings_sign,
+                'degree': round(siblings_degree, 4),
+                'dms': decimal_to_dms(siblings_degree),
+            },
+            'calculation': {
+                'formula': 'ASC + Jupiter - Saturn (day) / ASC + Saturn - Jupiter (night)',
+                'day_formula': 'ASC + Jupiter - Saturn',
+                'night_formula': 'ASC + Saturn - Jupiter',
+            }
+        },
+        {
+            'name': 'Lot of Accusation',
+            'symbol': '⚖️',
+            'position': {
+                'sign': accusation_sign,
+                'degree': round(accusation_degree, 4),
+                'dms': decimal_to_dms(accusation_degree),
+            },
+            'calculation': {
+                'formula': 'ASC + Mars - Saturn (day) / ASC + Saturn - Mars (night)',
+                'day_formula': 'ASC + Mars - Saturn',
+                'night_formula': 'ASC + Saturn - Mars',
+            }
+        },
+        {
+            'name': 'Lot of Friends',
+            'symbol': '🤝',
+            'position': {
+                'sign': friends_sign,
+                'degree': round(friends_degree, 4),
+                'dms': decimal_to_dms(friends_degree),
+            },
+            'calculation': {
+                'formula': 'ASC + Moon - Mercury (day) / ASC + Mercury - Moon (night)',
+                'day_formula': 'ASC + Moon - Mercury',
+                'night_formula': 'ASC + Mercury - Moon',
             }
         }
     ]

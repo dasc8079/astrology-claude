@@ -91,49 +91,78 @@ and feeling the weight of responsibility...
 
 ---
 
-## ⚠️ CRITICAL: Universal 3-Page Standard (All Reports)
+## ⚠️ CRITICAL: Universal Front Matter Standards
 
-**UPDATED**: 2025-10-13 - This is the NEW standard for all reports going forward.
+**UPDATED**: 2025-10-15 - Report types have DIFFERENT front matter structures.
 
-**Every report (natal, life arc, transit) MUST follow this structure for the first 3 pages:**
+---
 
-### Page 1: Cover Page (IDENTICAL FOR ALL REPORTS)
+### Template A & B: Natal and Life Arc Reports (4-Page Front Matter)
+
+**Page 1: Cover Page**
 - **Content**: Title, profile name, date range, birth data, report metadata
 - **Format**: Centered text, professional spacing
 - **NO other content on this page** - just cover information
 
-### Page 2: Technical Quick Reference (VARIES BY REPORT TYPE)
+**Page 2: Table of Contents**
+- **Content**: Hierarchical list of all major sections and subsections
+- **Format**: Clean, scannable list with page numbers
+- **Purpose**: Navigate report quickly, understand scope at a glance
+- **Audience**: All readers (natives and astrologers)
+
+**Page 3: Chart Overview** (Natal) or **Life Arc Overview** (Life Arc)
 - **Purpose**: Essential astrological data for quick reference
 - **Format**: ⚠️ **SPARSE bulleted lists, tables, structured data ONLY** (NOT narrative prose)
 - **Length**: ⚠️ **8-12 bullet points maximum** (scannable, not exhaustive)
 - **Audience**: For astrologers or technical verification
-- **Content varies by report type**:
+- **Content**:
   - **Natal**: Chart Overview (sect, chart ruler, angular planets, stelliums, key dignities, major aspect patterns, elemental emphasis)
   - **Life Arc**: Life Arc Overview (current age, current ZR chapter, major chapters summary, profection year, key progression themes)
-  - **Transit**: Transit Period Overview (date range, auspicious/challenging periods, major ingresses, retrogrades, key aspects)
 
-⚠️ **CRITICAL**: Page 2 is NOT a narrative summary. It is a scannable quick-reference list for technical verification.
+⚠️ **CRITICAL**: Page 3 is NOT a narrative summary. It is a scannable quick-reference list for technical verification.
 
-### Page 3: Synthesis Introduction (SIMILAR STRUCTURE FOR ALL)
-- **Purpose**: Start of main synthesis narrative (NO jargon)
+**Page 4: Introduction** (WITH HEADING)
+- **Heading**: `## Introduction` (H2 level)
+- **Purpose**: Start of main synthesis narrative (sparse astrological references)
 - **Format**: Full page of flowing narrative prose (600-800 words)
-- **Audience**: Non-astrologers (zero technical terminology)
+- **Audience**: The native (person receiving the reading)
+- **Voice**: SPARSE astrological references (mention planets/signs/houses naturally when helpful, NO technical jargon)
 - **Content** (adapted to report type):
-  - Essential nature / current position in life story / current astrological weather
-  - Core themes and overarching patterns
-  - What makes this chart/period/time unique
-  - Sets up the detailed analysis that follows
-- **NO heading on this page** - starts directly with narrative
+  - **Natal**: Essential nature, PRIMARY life pattern, core themes, what makes this chart unique
+  - **Life Arc**: Current position in life story, overview of major chapters, life trajectory
 
-### Pages 4+: Main Content (VARIES BY REPORT TYPE)
-- Structure determined by report template (A, B, or C)
+**Pages 5+: Main Content**
+- Structure determined by report template (A or B)
 - See template-specific sections below for details
 
-**Why This Standard?**
-- Consistency: All reports feel cohesive
-- Usability: Page 2 serves as quick reference bookmark
-- Accessibility: Page 3 welcomes non-astrologers before diving deep
-- Professional: Clean, predictable structure for all outputs
+**Why This 4-Page Standard?**
+- **Navigation**: TOC allows quick access to specific sections
+- **Usability**: Page 3 serves as quick reference bookmark for astrologers
+- **Accessibility**: Page 4 Introduction welcomes readers before deep analysis
+- **Professional**: Clean, predictable structure with clear heading hierarchy
+
+---
+
+### Template C: Transit Reports (3-Page Front Matter)
+
+**NOTE**: Transit reports do NOT include Table of Contents or Introduction heading.
+
+**Page 1: Cover Page**
+- **Content**: Title, profile name, date range, birth data, report metadata
+- **Format**: Centered text, professional spacing
+
+**Page 2: Quick Reference Tables**
+- **Content**: Most Auspicious Periods, Most Challenging Periods, Major Narrative Arcs
+- **Format**: Tables with scores, key transits, brief interpretations
+- **Purpose**: Navigate to specific dates/periods quickly
+
+**Page 3: Overview** (starts directly with narrative, NO heading)
+- **Format**: Flowing narrative prose (600-800 words)
+- **Content**: High-level narrative of entire period, dominant themes, turning points
+
+**Pages 4+: Main Content**
+- Chapter-by-chapter timeline or chronological movements
+- See Template C1 and C2 sections below for details
 
 ---
 

@@ -170,65 +170,36 @@ The seed data now includes extensive planetary conditions beyond basic placement
 
 ---
 
-## Output Structure - Template A: Natal Chart (20 pages)
+## Output Structure
 
-**TARGET**: 5,700-6,000 words synthesis = 19-20 pages @ 11pt Helvetica
+**TARGET**: 5,700-6,000 words synthesis
+**FORMAT**: Plain markdown (pdf-formatter handles presentation)
 
-### Page 1: Title Page
-```html
-<div class="title-page">
-  <h1>Natal Horoscope</h1>
-  <div class="profile-name">[Name]</div>
-  <div class="birth-data">Born: [Date] at [Time]<br>[Location]<br>[Coordinates]</div>
-  <div class="report-date">Report Generated: [Date]</div>
-</div>
-```
+Start your synthesis file with this structure:
 
-### Page 2: Chart Overview (Technical Quick Reference)
-**Format**: SPARSE bullet points and tables ONLY (8-12 bullets max, NOT narrative prose)
-**Purpose**: Quick reference for astrologers, scannable at a glance
-**Audience**: For technical verification
-
-Include ONLY these items as concise bullets:
-- **Sect**: [Day/Night] chart ([Sun above/below horizon])
-- **Chart Ruler**: [Planet] in [Sign] in [House] ([dignity state])
-- **Sect Light**: [Sun/Moon] in [Sign] ([strength/condition])
-- **Angular Planets**: [List planets in 1st, 4th, 7th, 10th houses]
-- **Stellium**: [If present: X planets in Y sign/house]
-- **Key Dignities**: [2-3 strongest planetary placements]
-- **Major Aspects**: [2-3 most significant aspect patterns]
-- **Elemental Emphasis**: [Dominant element, if any]
-
-**NO narrative prose on this page - just sparse structured data**
-
-### Page 3: Synthesis Introduction (600-800 words)
 ```markdown
-## Introduction
+# Introduction
 
-[Your PRIMARY pattern introduction paragraph starts here...]
+[300 words identifying PRIMARY life theme. First 2-3 sentences: "Your life centers on..."]
 
-[Continue with 600-800 words of flowing narrative identifying the PRIMARY life theme...]
+# Inner Life
 
-<div class="page-break"></div>
+## Emotional Landscape
+
+[500 words...]
+
+## Inner Dialogue & Self-Perception
+
+[450 words...]
+
+[... all sections ...]
+
+## Reflection
+
+[3-5 sentence poetic wrapup]
 ```
 
-**Format**: Flowing narrative prose (NO bullet points, sparse astrological references)
-**Purpose**: Identify PRIMARY life pattern and set up synthesis
-**Audience**: The native (person receiving the reading)
-
-Content should include:
-- **PRIMARY pattern identification** (first 2-3 sentences): "Your life centers on [PRIMARY theme]..."
-- Essential nature and core themes (using sect light, chart ruler, most dignified planets)
-- The overarching story of this chart (HOW primary pattern manifests)
-- Central tension or life question (SECONDARY factors that modify)
-- What makes this chart unique
-- Sets up the detailed synthesis that follows
-
-**CRITICAL**:
-- This introduction should clearly answer "What is this person's PRIMARY life theme?" using hierarchical testimony
-- End with PAGE BREAK before main experiential domains begin
-
-### Pages 4-19: SYNTHESIS FOR THE NATIVE (~4,800 words total)
+### Content Sections (~5,700-6,000 words total)
 
 Apply the 15-point hierarchical integration formula to EACH subsection below. Use sparse astrological references (mention planet names, signs, houses naturally) but avoid technical jargon (no "trine", "sextile", "cadent", "angular", etc.).
 
@@ -359,12 +330,13 @@ Apply the 15-point hierarchical integration formula to EACH subsection below. Us
 - Your relationship to learning and truth-seeking
 - **Integrate**: 9th house ruler & planets, Jupiter placement & aspects, Mercury condition (learning), Sagittarius/Gemini emphasis
 
-### Page 20: Poetic Wrapup (~300 words) - NO HEADING ⭐ **REQUIRED**
-- End with commanding, visionary final paragraph
-- **3-8 sentences**, direct second person ("You are here to...", "You must...", "There is within you...")
-- Reiterate key themes in accessible language
+### Reflection Section ⭐ **REQUIRED**
+- End synthesis with `## Reflection` heading
+- **Verbose poetic reflection**: 3-5 sentences, direct second person
+- Use visionary, commanding voice ("You are here to...", "You must...", "There is within you...")
+- Reiterate PRIMARY themes in accessible, lyrical language
 - NO astrological jargon
-- Speak about purpose, challenges, and path with authority
+- Speak about purpose, challenges, and path with poetic authority
 
 ---
 
@@ -462,8 +434,8 @@ After completing Synthesis:
 - Include Planetary Strength Table showing dignity scores
 - Cite all sources
 
-### Step 10: Write Poetic Wrapup (No Heading) ⭐ **REQUIRED**
-End the Synthesis section with 3-8 sentence closing paragraph. DO NOT add heading - flow naturally as final paragraph of last section. Use visionary voice ("You are here to...", "You must...", "There is within you..."). Reiterate PRIMARY themes from Page 3 introduction. NO technical jargon (avoid "trine", "sextile", "cadent"). Can mention planets/signs/houses sparingly if it adds resonance. Should echo the PRIMARY pattern identified in introduction.
+### Step 10: Write Reflection Section ⭐ **REQUIRED**
+End synthesis with `## Reflection` heading followed by verbose poetic reflection (3-5 sentences). Use visionary voice ("You are here to...", "You must...", "There is within you..."). Reiterate PRIMARY themes in lyrical, accessible language. NO technical jargon. Should echo the PRIMARY pattern identified in introduction.
 
 ### Step 11: Quality Check
 - ✅ Verify Synthesis has sparse astrological references (planet names, signs, houses mentioned naturally)

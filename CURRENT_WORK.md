@@ -1,12 +1,96 @@
 # Current Work - Astrology Application
 
-**Last Updated**: 2025-10-14
-**Current Focus**: Documentation Structure Optimization - Complete
+**Last Updated**: 2025-10-16
+**Current Focus**: Life Arc Report V3 - Period-Based Clustering - IN PROGRESS
 **Default Profile**: Darren_S (use this profile for all analyses unless specified otherwise)
 
 ---
 
-## 🎯 Recent Milestone (2025-10-14)
+## 🎯 Current Milestone (2025-10-16)
+
+### Life Arc Report V3 - Period-Based Clustering System - IN PROGRESS ⏳
+
+**Current Status**: Period clustering implemented, adaptive thresholds and timing point activations pending
+
+**What Was Completed**:
+1. ✅ **15 Lots System** (seed_data_generator.py):
+   - Lot of Saturn dual interpretation (Basis when dignified, Nemesis when debilitated)
+   - 5 new relational lots (Father, Mother, Siblings, Accusation, Friends)
+   - Updated ASTROLOGY_REFERENCE.md with complete lot documentation
+
+2. ✅ **Period-Based Clustering System** (life_arc_generator.py):
+   - `identify_period_clusters()` - Groups consecutive elevated-activity ages into multi-year periods
+   - `analyze_period_nature()` - Classifies periods as challenging/transformative/favorable/mixed
+   - Gap tolerance (2 years) to capture extended experiences like Saturn returns
+   - Peak detection within each period
+   - Integrated into `generate_life_arc_timeline()` with comprehensive statistics
+
+3. ✅ **Tested with Real Data**:
+   - Darren_S (ages 0-46): 5 periods (1 challenging, 4 transformative)
+   - Sam_P (ages 0-35): 5 periods (0 challenging, 4 transformative, 1 mixed)
+
+**Key Design Principles**:
+- **Truth Over Tone**: System reports all significant periods without artificial bias
+- **Chapter-Based Narrative**: Groups ages into multi-year periods instead of age-by-age enumeration
+- **Dynamic Adaptation**: Clusters related ages together even if brief dips occur (gap tolerance)
+- **Complete Coverage**: Highlights challenging AND favorable periods for balanced truth
+
+**V3 Features Still Pending**:
+1. ⏳ **Adaptive Thresholds**: Percentile-based (95th, 85th, 70th) instead of fixed (25, 15, 8)
+2. ⏳ **Timing Point Activations**: Antiscia, fixed stars, stelliums in convergence scoring
+
+**Next Steps**:
+1. ⏳ Analyze convergence data from Darren/Sam to inform adaptive threshold design
+2. ⏳ Implement adaptive thresholds based on real profile score distributions
+3. ⏳ Implement timing point activations (antiscia, fixed stars, stelliums)
+4. ⏳ Generate final life arc reports with complete V3 system
+5. ⏳ Update life_arc_report_v3.md with implementation status
+
+---
+
+## 🎯 Recent Milestone (2025-10-16)
+
+### PDF Formatter Agent - COMPLETE ✅
+
+**Major Achievement**: Separation of interpretation logic from presentation logic
+
+**What Was Completed**:
+1. ✅ **Created pdf-formatter agent** (.claude/agents/pdf-formatter.md):
+   - Model: Sonnet (fast formatting), Extended thinking: false, Color: Cyan
+   - Reads plain markdown + seed data → generates professional PDF
+   - Report-specific Chart Overview templates (3 templates)
+
+2. ✅ **Chart Overview Templates**:
+   - **Template A (natal)**: Astrological data bullets (sect, ruler, dignities, auto-fill to ~12 items with fixed stars, lots, receptions)
+   - **Template B (life_arc)**: Major Life Events Timeline table with accessible language (NO jargon)
+   - **Template C (transit)**: Current timing context (L1 always included for framing, L2, profections, active transits)
+
+3. ✅ **Updated documentation**:
+   - AGENTS_REFERENCE.md: Added pdf-formatter to Quick Reference table + Support Agents section
+   - Design document exists: docs/pdf_formatter_design.md
+
+**Key Benefits**:
+- **Token Reduction**: Removes 80-100 lines from each interpreter (17-18% reduction)
+- **Single Source of Truth**: All PDF formatting logic in one agent
+- **Easy Maintenance**: Style changes don't require updating 3+ interpreters
+- **Consistent Output**: All report types use same formatting workflow
+
+**Design Highlights**:
+- L1 context ALWAYS included in transit reports (provides "frame" for understanding transits)
+- Life arc timeline translates jargon to accessible language ("Saturn return" → "major crisis and reckoning")
+- Natal Chart Overview auto-fills intelligently (priority: fixed stars > lots > receptions > cazimi > antiscia)
+- Reflection section preserved with ## Reflection heading
+- Separation of concerns: interpreters output simple markdown, pdf-formatter handles HTML/CSS/page breaks
+
+**Next Steps**:
+1. ⏳ Test pdf-formatter with existing reports (Sam_P natal, Darren_S life arc)
+2. ⏳ Simplify one interpreter as proof-of-concept (remove HTML/CSS formatting instructions)
+3. ⏳ Update mode-orchestrator to automatically invoke pdf-formatter after interpretations
+4. ⏳ Migrate remaining interpreters once POC successful
+
+---
+
+## 🎯 Previous Milestone (2025-10-14)
 
 ### Astrology Reference Documentation Review - COMPLETE ✅
 

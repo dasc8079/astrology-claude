@@ -168,26 +168,32 @@ The seed data now includes extensive planetary conditions beyond basic placement
 
 ---
 
-## Output Structure - Template A: Natal Chart (20 pages)
+## Output Structure - Template A: Natal Chart (22 pages)
 
 **TARGET**: 5,700-6,000 words synthesis = 19-20 pages @ 11pt Helvetica
+**UPDATED**: 2025-10-15 - Added Table of Contents (Page 2)
 
-### Page 1: Title Page
-```markdown
-# Natal Horoscope
+### Page 1: Cover Page
 
-**[Full Name]**
-Born: [Date] at [Time]
-[City, Country]
-[Latitude]°N/S, [Longitude]°E/W
-Report Generated: [Current Date]
-☉ [Sun Sign] · ☽ [Moon Sign] · ↑ [Rising Sign]
+**CRITICAL - START YOUR SYNTHESIS FILE WITH THIS EXACT HTML STRUCTURE**:
 
-<div class="page-break"></div>
-```
+<div class="title-page">
+  <h1>Natal Horoscope</h1>
+  <div class="profile-name">[Full Name]</div>
+  <div class="birth-data">Born: [Date] at [Time]<br>[City, Country]<br>[Latitude]°N/S, [Longitude]°E/W</div>
+  <div class="report-date">Report Generated: [Current Date]</div>
+</div>
 
-### Page 2: Chart Overview (Technical Quick Reference)
-```markdown
+## Table of Contents
+
+### Page 2: Table of Contents
+**Purpose**: Navigate report quickly, understand scope at a glance
+**Format**: Hierarchical list of all major sections and subsections
+
+### Page 3: Chart Overview (Technical Quick Reference)
+
+**OUTPUT THIS EXACT STRUCTURE**:
+
 ## Chart Overview
 
 **Sect**: [Day/Night] chart ([Sun above/below horizon])
@@ -202,23 +208,23 @@ Report Generated: [Current Date]
 **Lot of Fortune**: [Sign and house - material well-being]
 
 <div class="page-break"></div>
-```
 
 **Format**: SPARSE bullet points ONLY (8-12 bullets max, NOT narrative prose)
 **Purpose**: Quick reference for astrologers, scannable at a glance
 **Audience**: For technical verification
 **CRITICAL**: End with PAGE BREAK before Introduction
 
-### Page 3: Synthesis Introduction (600-800 words)
-```markdown
+### Page 4: Introduction (300 words - MUST FIT ON ONE PAGE)
+
+**OUTPUT THIS EXACT STRUCTURE**:
+
 ## Introduction
 
 [Your PRIMARY pattern introduction paragraph starts here...]
 
-[Continue with 600-800 words of flowing narrative identifying the PRIMARY life theme...]
+[Continue with 300 words of flowing narrative identifying the PRIMARY life theme...]
 
 <div class="page-break"></div>
-```
 
 **Format**: Flowing narrative prose (NO bullet points, sparse astrological references)
 **Purpose**: Identify PRIMARY life pattern and set up synthesis
@@ -234,9 +240,10 @@ Content should include:
 
 **CRITICAL**:
 - This introduction should clearly answer "What is this person's PRIMARY life theme?" using hierarchical testimony
+- Include sparse astrological references (mention planet names, signs, houses naturally)
 - End with PAGE BREAK before main report sections begin
 
-### Pages 4-19: SYNTHESIS FOR THE NATIVE (~4,800 words total)
+### Pages 5-21: SYNTHESIS FOR THE NATIVE (~4,800 words total)
 
 Apply the hierarchical testimony framework and 14-point integration formula to EACH section below. Consult `docs/natal_interpreter_agent_spec.md` priority tables for each life area.
 
@@ -329,9 +336,9 @@ Apply the hierarchical testimony framework and 14-point integration formula to E
 - **Decision Rules**: See spec Section 10 (Synthesis & Integration)
 - **Critical**: Synthesis MUST synthesize PRIMARY factors from all sections into coherent narrative. Avoid listing secondary factors unless they radically modify primary pattern. Focus on HOW primary factors work together.
 
-### Page 20: Poetic Wrapup (~300 words) - NO HEADING ⭐ **REQUIRED**
+### Page 20: Poetic Wrapup - NO HEADING ⭐ **REQUIRED**
 - End with commanding, visionary final paragraph
-- **3-8 sentences**, direct second person ("You are here to...", "You must...", "There is within you...")
+- **3-5 sentences**, direct second person ("You are here to...", "You must...", "There is within you...")
 - Reiterate PRIMARY themes from introduction in accessible language
 - NO technical astrological jargon (avoid terms like "trine", "sextile", "cadent")
 - Can mention planets/signs/houses sparingly if it adds resonance
@@ -452,7 +459,7 @@ After completing Synthesis:
 - Cite all sources
 
 ### Step 10: Write Poetic Wrapup (No Heading)
-End the Synthesis section with 3-8 sentence closing paragraph. DO NOT add heading - flow naturally as final paragraph of "Synthesis & Integration". Use visionary voice ("You are here to...", "You must..."). Reiterate PRIMARY themes from Page 3 introduction. NO jargon.
+End the Synthesis section with 3-5 sentence closing paragraph. DO NOT add heading - flow naturally as final paragraph of "Synthesis & Integration". Use visionary voice ("You are here to...", "You must..."). Reiterate PRIMARY themes from Page 3 introduction. NO jargon.
 
 ### Step 11: Quality Check
 - ✅ Verify Synthesis has sparse astrological references (planet names, signs, houses mentioned naturally)

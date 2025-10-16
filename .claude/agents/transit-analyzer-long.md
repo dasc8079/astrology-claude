@@ -443,7 +443,7 @@ This report covers [X] years using traditional Hellenistic astrology with modern
 - "Saturn's square to your Moon is the weight that teaches you what you're made of"
 
 **Poetic Wrapup**:
-- **Length**: 4-8 sentences, NO heading
+- **Length**: 3-5 sentences, NO heading
 - **Tone**: Visionary, direct second person
 - **Example**: "You stand at the edge of a profound five-year arc. There is within you the capacity to meet what comes with both grace and strength. Trust the auspicious windows, honor the challenging days as teachers."
 
