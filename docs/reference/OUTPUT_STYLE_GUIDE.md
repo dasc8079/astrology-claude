@@ -381,6 +381,14 @@ All reports follow one of three fundamental structures based on their organizing
 - Prevent chapter breaks mid-page
 - Long flowing paragraphs within each chapter
 
+**Jargon Density for Template B** (Life Arc V3):
+- **Golden Rule**: Maximum 2-3 astrological terms per sentence
+- **Prohibitions**: NO V3 system mentions (convergence scores, period clustering, traditional overlays)
+- **Translation Priority**: "Saturn aftermath years" → "the years following this crisis continued to be challenging"
+- **Examples**:
+  - ✅ GOOD: "The years between 29 and 39 brought sustained pressure, demanding that you prove yourself through difficult circumstances"
+  - ❌ TOO TECHNICAL: "The Saturn aftermath period from ages 29-39 showed elevated convergence scores (+8 points per year) due to profection house overlays and traditional period detection"
+
 **CSS File**: `scripts/css/timeline_based.css`
 
 **Examples**: Life arc reports (Mode 2 in development)

@@ -1,7 +1,7 @@
 # Astrology Application - Session Goals
 
-**Last Updated**: 2025-10-12
-**Status**: Stage 4 - Natal Horoscope Optimization (extended-thinking + antiscia/fixed stars implementation)
+**Last Updated**: 2025-10-16
+**Status**: Stage 4 - Natal Horoscope Optimization (extended-thinking + antiscia/fixed stars implementation) | Life Arc V3 User Refinements COMPLETE ✅
 
 ---
 
@@ -26,6 +26,45 @@ Features we may implement but haven't fully planned yet:
 - optimize system with rag
 
 - **Claude Code API instead of ChatGPT**: Migrate from OpenAI to Claude API
+
+- **Process.md modification tracking system**:
+  - Track conversational modifications/tailoring made during report generation
+  - Store in process.md only (not user-facing synthesis PDF)
+  - Purpose: Maintain record of customizations without cluttering deliverable
+  - Implementation: Add "Custom Modifications" section to process.md template
+  - Format: Date, modification description, reason/context
+  - Example: "2025-10-16: Added technical artistic skill note for Sam's report per user request"
+  - Benefits: Institutional memory of why certain adjustments were made, reproducibility
+
+- **Transit report front matter design**:
+  - Design Chart Overview templates specifically for transit reports
+  - Determine differences between short-term (1-4 months) and long-term (1-5 years) front matter
+  - Create transit-specific "How to Use This Report" blurb
+  - Chart Overview content should include: Current timing context (L1 chapter, profection year, major ongoing transits)
+  - May need different template structure than natal/life arc reports
+  - Consider: Should short-term reports emphasize day-to-day movements vs. long-term emphasize chapter themes?
+  - Integration: Add to pdf_generator.py report-type specific template logic
+
+- **Chart Difficulty Flag System (Adaptive Tone)**:
+  - Add automatic detection of challenging chart configurations in seed data
+  - When significant challenges detected, interpreters use gentler/more therapeutic tone automatically
+  - Detection criteria:
+    - Angular malefics contrary to sect (PRIMARY challenges)
+    - Hard aspects to chart ruler or sect light (core identity tension)
+    - Multiple detriment/fall planets in angular houses
+    - Chiron or Saturn in prominent positions (1st, 10th houses)
+    - Major T-squares or grand crosses affecting angles
+  - Implementation: Add "difficulty_assessment" field to seed_data.json with categories:
+    - "standard" - typical chart, normal tone
+    - "sensitive" - some challenges, softer language recommended
+    - "gentle" - significant challenges, therapeutic approach needed
+  - Benefits:
+    - Appropriate tone automatically applied
+    - Reduces need for manual custom modifications
+    - Compassionate delivery for difficult configurations
+    - Still maintains astrological accuracy and depth
+  - Integration: natal-interpreter checks difficulty flag, adjusts voice accordingly
+  - Testing needed: Determine if automatic detection is accurate enough or requires manual override
 
 
 ### Natal Horoscope Enhancement - Deeper Nuanced Synthesis (20 pages)
@@ -410,7 +449,7 @@ No manual prompts needed.
 **Current Work**: Implementing antiscia + fixed stars calculations, testing enhanced natal horoscopes
 **Next Action**: Complete antiscia calculation, then fixed stars, then test regenerated horoscopes
 
-**Recent Infrastructure Improvements** (2025-10-04 - 2025-10-12):
+**Recent Infrastructure Improvements** (2025-10-04 - 2025-10-16):
 - ✅ Extended-thinking integration (all 4 interpretation agents + 3 meta-agents)
 - ✅ Transit report system complete (dual-level, ZR L2/L3, convergence scoring)
 - ✅ Agent orchestration system (mode-orchestrator + astrology-output-debugger)
@@ -419,6 +458,11 @@ No manual prompts needed.
 - ✅ Documentation cleanup (CURRENT_WORK.md down to 106 lines from 703)
 - ✅ Stage archiving system working (detailed milestones archived to /history/)
 - ✅ Natal optimization planned (antiscia, fixed stars, optimized technique selection)
+- ✅ **Life Arc V3 User Refinements** (2025-10-16):
+  - Jargon reduction enforced (max 2-3 terms/sentence, V3 system mentions prohibited)
+  - Introduction section requirement (300-400 words before chapters)
+  - Cover page symbols (Big Three with zodiac glyphs)
+  - TOC enhancement (H3 headings included)
 
 ---
 

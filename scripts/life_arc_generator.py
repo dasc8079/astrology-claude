@@ -164,21 +164,26 @@ def calculate_progression_sign_changes(profile_name: str, start_age: int = 0, en
     return sign_changes
 
 
-def assess_saturn_return_difficulty(profile_name: str) -> Dict[str, Any]:
+def assess_saturn_return_difficulty(profile_name: str, return_age: float) -> Dict[str, Any]:
     """
-    Assess whether Saturn return will be difficult based on natal condition.
+    Assess Saturn return difficulty based on Saturn's CURRENT condition at return age.
+
+    Uses progressed Saturn position to determine difficulty, allowing first and second
+    returns to have different assessments if Saturn's condition changes over time.
 
     Checks:
-    - House placement (6H/8H/12H = difficult)
-    - Sect (malefic contrary to sect = difficult)
-    - Dignity (detriment/fall = challenged)
-    - Afflictions (difficult aspects from Mars/Saturn)
+    - House placement (6H/8H/12H = difficult) - uses PROGRESSED position
+    - Sect (malefic contrary to sect = difficult) - natal, doesn't change
+    - Dignity (detriment/fall = challenged) - uses PROGRESSED position
+    - Afflictions (difficult aspects from Mars/Saturn) - uses PROGRESSED aspects
 
     Args:
         profile_name: Profile to analyze
+        return_age: Age of Saturn return (typically ~29 or ~59)
 
     Returns:
         {
+            'return_age': float,
             'difficulty_level': 'extreme' | 'difficult' | 'moderate' | 'easy',
             'indicators': [list of difficulty factors],
             'aftermath_years': int (1-5),
@@ -192,6 +197,7 @@ def assess_saturn_return_difficulty(profile_name: str) -> Dict[str, Any]:
     if not seed_data:
         # Default to moderate if can't assess
         return {
+            'return_age': return_age,
             'difficulty_level': 'moderate',
             'indicators': [],
             'aftermath_years': 2,
@@ -202,12 +208,26 @@ def assess_saturn_return_difficulty(profile_name: str) -> Dict[str, Any]:
     difficulty_score = 0
     indicators = []
 
-    # Get Saturn data
-    planets = seed_data.get('planets', [])
-    saturn = next((p for p in planets if p['name'] == 'Saturn'), None)
+    # Calculate progressed Saturn position at return age
+    try:
+        prog_positions = calculate_progressed_positions(profile_name, return_age)
+        prog_planets = prog_positions.get('progressed_planets', [])
+        prog_saturn = next((p for p in prog_planets if p['name'] == 'Saturn'), None)
 
-    if not saturn:
+        if not prog_saturn:
+            # Fall back to natal if progression calculation fails
+            planets = seed_data.get('planets', [])
+            prog_saturn = next((p for p in planets if p['name'] == 'Saturn'), None)
+            indicators.append("Using natal position (progression unavailable)")
+    except Exception as e:
+        # Fall back to natal if any error occurs
+        planets = seed_data.get('planets', [])
+        prog_saturn = next((p for p in planets if p['name'] == 'Saturn'), None)
+        indicators.append("Using natal position (progression error)")
+
+    if not prog_saturn:
         return {
+            'return_age': return_age,
             'difficulty_level': 'moderate',
             'indicators': ['Saturn data not found'],
             'aftermath_years': 2,
@@ -215,26 +235,26 @@ def assess_saturn_return_difficulty(profile_name: str) -> Dict[str, Any]:
             'difficulty_score': 1
         }
 
-    # Get chart framework for sect
+    # Get chart framework for sect (natal - doesn't change)
     framework = seed_data.get('chart_framework', {})
     sect_data = framework.get('sect', {})
     sect_type = sect_data.get('type', 'day')
 
-    # Check house placement (6H/8H/12H = difficult)
-    saturn_house = saturn.get('house')
+    # Check house placement (6H/8H/12H = difficult) - PROGRESSED
+    saturn_house = prog_saturn.get('house')
     if saturn_house in [6, 8, 12]:
         difficulty_score += 2
         house_names = {6: '6H (health/service)', 8: '8H (death/crisis)', 12: '12H (loss/isolation)'}
         indicators.append(house_names.get(saturn_house, f'{saturn_house}H placement'))
 
-    # Check sect (malefic contrary to sect = difficult)
+    # Check sect (malefic contrary to sect = difficult) - NATAL
     # Saturn is malefic of sect in day charts, benefic of sect in night charts
     if sect_type == 'day':
         difficulty_score += 2
         indicators.append("Malefic contrary to sect (Saturn in day chart)")
 
-    # Check dignity (detriment/fall = challenged)
-    dignities = saturn.get('dignities', {})
+    # Check dignity (detriment/fall = challenged) - PROGRESSED
+    dignities = prog_saturn.get('dignities', {})
     essential = dignities.get('essential', {})
 
     if essential.get('detriment'):
@@ -244,23 +264,27 @@ def assess_saturn_return_difficulty(profile_name: str) -> Dict[str, Any]:
         difficulty_score += 1
         indicators.append("Fall (Aries)")
 
-    # Check afflictions (difficult aspects from Mars/Saturn)
-    aspects = seed_data.get('aspects', [])
-    saturn_afflictions = []
+    # Check afflictions (difficult aspects from Mars/Saturn) - PROGRESSED
+    try:
+        prog_aspects = find_progressed_aspects_to_natal(profile_name, return_age, orb=3.0)
+        saturn_afflictions = []
 
-    for aspect in aspects:
-        # Check if Saturn is involved
-        if aspect.get('planet_1') == 'Saturn' or aspect.get('planet_2') == 'Saturn':
-            aspect_type = aspect.get('aspect_type', '')
-            other_planet = aspect.get('planet_2') if aspect.get('planet_1') == 'Saturn' else aspect.get('planet_1')
+        for aspect in prog_aspects:
+            # Check if progressed Saturn is involved in difficult aspects
+            if aspect.get('progressed_planet') == 'Saturn':
+                aspect_type = aspect.get('aspect_type', '')
+                natal_planet = aspect.get('natal_planet')
 
-            # Count difficult aspects from Mars or other malefics
-            if aspect_type in ['square', 'opposition'] and other_planet in ['Mars', 'Saturn']:
-                saturn_afflictions.append(f"{aspect_type} {other_planet}")
+                # Count difficult aspects to Mars or other malefics
+                if aspect_type in ['square', 'opposition'] and natal_planet in ['Mars', 'Saturn']:
+                    saturn_afflictions.append(f"{aspect_type} natal {natal_planet}")
 
-    if len(saturn_afflictions) >= 2:
-        difficulty_score += 1
-        indicators.append(f"{len(saturn_afflictions)} difficult aspects ({', '.join(saturn_afflictions[:2])})")
+        if len(saturn_afflictions) >= 2:
+            difficulty_score += 1
+            indicators.append(f"{len(saturn_afflictions)} difficult aspects ({', '.join(saturn_afflictions[:2])})")
+    except Exception as e:
+        # Skip affliction check if progression aspects fail
+        pass
 
     # Determine level and aftermath based on difficulty score
     if difficulty_score >= 4:
@@ -281,6 +305,7 @@ def assess_saturn_return_difficulty(profile_name: str) -> Dict[str, Any]:
         aftermath_bonus = 3
 
     return {
+        'return_age': return_age,
         'difficulty_level': level,
         'indicators': indicators,
         'aftermath_years': aftermath_years,
@@ -585,22 +610,21 @@ def calculate_convergence_score(age: int, snapshot: Dict[str, Any], timeline: Di
                 break
 
     # SATURN RETURN AFTERMATH - Multi-year difficulty overlay
-    # Check if timeline has saturn_assessment data
-    saturn_assessment = timeline.get('saturn_assessment')
-    if saturn_assessment:
-        # Find Saturn returns in timeline
-        for return_event in timeline.get('planetary_returns', []):
-            if return_event['planet'] == 'Saturn':
-                saturn_return_age = return_event['age']
-                aftermath_years = saturn_assessment['aftermath_years']
-                aftermath_bonus = saturn_assessment['aftermath_bonus']
+    # Check if timeline has saturn_assessments data (list of assessments, one per return)
+    saturn_assessments = timeline.get('saturn_assessments')
+    if saturn_assessments:
+        # Match each assessment to its corresponding return age
+        for assessment in saturn_assessments:
+            return_age = assessment['return_age']
+            aftermath_years = assessment['aftermath_years']
+            aftermath_bonus = assessment['aftermath_bonus']
+            level = assessment['difficulty_level']
 
-                # Check if current age is within aftermath window
-                if saturn_return_age < age <= saturn_return_age + aftermath_years:
-                    score += aftermath_bonus
-                    years_after = age - int(saturn_return_age)
-                    level = saturn_assessment['difficulty_level']
-                    reasons.append(f"Saturn aftermath year {years_after}/{aftermath_years} ({level})")
+            # Check if current age is within aftermath window
+            if return_age < age <= return_age + aftermath_years:
+                score += aftermath_bonus
+                years_after = age - int(return_age)
+                reasons.append(f"Saturn aftermath year {years_after}/{aftermath_years} ({level})")
 
     return score, reasons
 
@@ -893,11 +917,19 @@ def generate_life_arc_timeline(
 
     # TRADITIONAL OVERLAYS - Assess Saturn returns and detect traditional periods
     # Must be calculated AFTER timeline is built (needs ZR data) but BEFORE convergence scoring
-    saturn_assessment = assess_saturn_return_difficulty(profile_name)
+
+    # Assess EACH Saturn return individually based on progressed Saturn condition at that age
+    saturn_returns = [r for r in planetary_returns if r['planet'] == 'Saturn']
+    saturn_assessments = []
+    for saturn_return in saturn_returns:
+        return_age = saturn_return['age']
+        assessment = assess_saturn_return_difficulty(profile_name, return_age)
+        saturn_assessments.append(assessment)
+
     traditional_periods = detect_traditional_periods(timeline)
 
     # Add traditional analysis to timeline (will be used by calculate_convergence_score)
-    timeline['saturn_assessment'] = saturn_assessment
+    timeline['saturn_assessments'] = saturn_assessments  # List of assessments, one per return
     timeline['traditional_periods'] = traditional_periods
 
     # Calculate convergence events (needs complete timeline data)

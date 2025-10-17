@@ -1,8 +1,37 @@
 # PDF Formatter Agent Design Document
 
 **Created**: 2025-10-16
-**Status**: Design Phase
+**Status**: ⚠️ DEPRECATED - Agent approach abandoned in favor of script-based solution
 **Purpose**: Separate interpretation logic from presentation logic for astrology reports
+
+---
+
+## ⚠️ DEPRECATION NOTICE
+
+**This design document describes an agent-based approach that was NOT implemented.**
+
+**What Actually Happened** (2025-10-16):
+- **Agent Approach**: Proposed pdf-formatter agent to handle PDF generation
+- **Script Approach**: Enhanced `scripts/pdf_generator.py` to build all front matter automatically
+- **Result**: Script-based approach chosen (zero token cost, simpler, more maintainable)
+
+**Current Implementation**:
+- Interpreters output plain markdown starting with `# Introduction`
+- `scripts/pdf_generator.py` reads markdown + seed_data.json
+- Script builds all front matter (title, TOC, Chart Overview) automatically
+- mode-orchestrator passes `--seed-data` flag to pdf_generator.py
+- All PDF logic consolidated in one script (not distributed across agents)
+
+**Why Script-Based Won**:
+- Zero token cost (script vs agent invocation)
+- Simpler workflow (one script vs agent coordination)
+- Easier maintenance (update one script vs update agent + mode-orchestrator)
+- Cleaner separation (scripts handle presentation, agents handle content)
+
+**This Document Preserved For**:
+- Historical design rationale
+- Chart Overview template specifications (still used by script)
+- Original problem analysis and benefits (still valid)
 
 ---
 

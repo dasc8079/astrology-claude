@@ -26,8 +26,9 @@
 - [PROFILES_GUIDE.md](docs/PROFILES_GUIDE.md) - Profile creation and management
 - [TRANSITS_GUIDE.md](docs/TRANSITS_GUIDE.md) - Transit concepts and usage
 - [LIFE_ARC_GUIDE.md](docs/LIFE_ARC_GUIDE.md) - Life arc timeline generation and interpretation
-- [AGENTS_REFERENCE.md](docs/AGENTS_REFERENCE.md) - Complete agent catalog with capabilities
-- [SCRIPTS_REFERENCE.md](docs/SCRIPTS_REFERENCE.md) - Script documentation and usage
+- [CUSTOM_MODIFICATIONS_GUIDE.md](docs/CUSTOM_MODIFICATIONS_GUIDE.md) - Custom interpretation adjustments and tracking
+- [AGENTS_REFERENCE.md](docs/technical/AGENTS_REFERENCE.md) - Complete agent catalog with capabilities
+- [SCRIPTS_REFERENCE.md](docs/technical/SCRIPTS_REFERENCE.md) - Script documentation and usage
 - [WORKFLOWS_VISUAL.md](docs/WORKFLOWS_VISUAL.md) - Visual workflow diagrams
 
 **Timing Techniques Guides**:
@@ -68,7 +69,7 @@ This project creates a comprehensive traditional/Hellenistic astrology applicati
 | Mode | Name | Status | Model | Notes |
 |------|------|--------|-------|-------|
 | 1 | Natal Horoscope | ✅ COMPLETE | Opus | Multi-profile, standardized file structure, PDF output |
-| 2 | Life Arc Report | ✅ COMPLETE | Opus | Ages 0-100, convergence detection, narrative chapters |
+| 2 | Life Arc Report | ✅ COMPLETE | Opus | V3 voice matched to V2 standards, Helvetica typography, symbol-based cover |
 | 3 | Transit Report | ✅ COMPLETE | Opus | Short-term (1-4 months) and long-term (1-5 years) analysis |
 | 4+ | Additional Timing | ⏳ PENDING | TBD | Modular timing techniques (profections, ZR, Firdaria built) |
 
@@ -122,8 +123,7 @@ See [CURRENT_WORK.md](CURRENT_WORK.md) for detailed status and next steps.
 - `transit-analyzer-long` - Long-term transit reports, 1-5 years (Mode 3 Level 1)
 - `transit-analyzer-short` - Short-term transit reports, 1-4 months (Mode 3 Level 2)
 
-**Formatting & Output**:
-- `pdf-formatter` - Formats plain markdown reports into professional PDFs with report-specific Chart Overview templates
+**Note**: PDF generation is handled by `scripts/pdf_generator.py` script (zero token cost, automatic front matter generation)
 
 **IMPORTANT**: When creating new interpretation agents, update `mode-orchestrator.md` to add routing logic. astrology-agent-creator automatically invokes docs-updater-astrology. See [AGENT_ORCHESTRATION_GUIDE.md](docs/AGENT_ORCHESTRATION_GUIDE.md) for details.
 
@@ -324,7 +324,7 @@ See [/docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md) for detailed workflo
 
 ## Version & Updates
 
-**Last Updated**: 2025-10-07
+**Last Updated**: 2025-10-16 (Life Arc V3 Voice Refinements + Helvetica Typography)
 **Framework**: Global Claude Code documentation structure (CLAUDE.md as navigation hub)
 **Maintained By**: docs-updater-astrology agent
 

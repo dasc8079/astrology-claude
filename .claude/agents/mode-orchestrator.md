@@ -93,42 +93,35 @@ Intelligently detect which mode the user needs:
    - ❌ WRONG: `profiles/Darren_S/natal_synthesis_Darren_S_2025-10-13.md` (missing output/ subfolder)
    - If files are in wrong location, inform user and correct paths
 9. **Confirm Files Exist**: Verify both process and synthesis files were created by agent
-10. **Invoke pdf-formatter**: Transform plain markdown to formatted PDF-ready markdown:
-    - Input: `{report_type}_synthesis_{name}_{date_identifier}.md` (plain markdown)
-    - Seed data: `profiles/{name}/seed_data/seed_data.json`
+10. **Run Accuracy Checker BEFORE PDF** (OPTIONAL - user can skip):
     - Report type: `{natal|life_arc|transit_short|transit_long}`
-    - Profile name and birth data
-    - pdf-formatter adds: Title page, TOC, Chart Overview, formatting structure
-    - Output: Overwrites synthesis.md with formatted version
-11. **Run Accuracy Checker BEFORE PDF** (OPTIONAL - user can skip):
-    - Report type: `{natal|life_arc|transit_short|transit_long}`
-    - Output file: synthesis markdown file
+    - Output file: synthesis markdown file (plain markdown from interpreter)
     - Data file(s): Appropriate seed data or calculation results
     - Profile name and date range (if applicable)
-12. **Check Accuracy Results** (if accuracy checker was run):
+11. **Check Accuracy Results** (if accuracy checker was run):
     - ❌ **CRITICAL errors**: Stop workflow, display errors, offer to regenerate
     - ⚠️ **WARNINGS**: Display warnings, ask user to proceed or fix
     - ✅ **PASS**: Continue to PDF generation
-13. **Extract Preview Section**: Introduction (natal/life arc) or Summary Synthesis (transits) - print to terminal (200-300 words)
-14. **Generate PDF**: `python scripts/pdf_generator.py {synthesis_md} --report-type {report_type}`
-    - **IMPORTANT**: pdf-formatter already added all structure (title page, TOC, Chart Overview)
-    - **Page 1**: Title page only (centered, professional spacing)
-    - **Page 2**: Table of Contents (hierarchical list)
-    - **Page 3**: Chart Overview / Quick Reference (8-12 sparse bullets, NO narrative prose)
-    - **Page 4**: Introduction (600-800 words, flowing prose)
-    - **Pages 5+**: Main synthesis content
+12. **Extract Preview Section**: Introduction (natal/life arc) or Summary Synthesis (transits) - print to terminal (200-300 words)
+13. **Generate PDF with Front Matter**: `python scripts/pdf_generator.py {synthesis_md} --seed-data profiles/{name}/seed_data/seed_data.json --report-type {report_type}`
+    - **NEW (2025-10-16)**: pdf_generator.py now builds all front matter automatically
+    - **Page 1**: Title page (report title, name, birth data, Sun/Moon/Rising, generation date)
+    - **Page 2**: Table of Contents (hierarchical from markdown headings, life arc includes chapter descriptions)
+    - **Page 3**: How to Use This Report + Chart Overview (report-type specific)
+    - **Page 4**: Introduction section (from markdown)
+    - **Pages 5+**: Main synthesis content (from markdown)
     - **Final Page**: Reflection section (`## Reflection` heading)
-    - PDF generator converts formatted markdown to PDF with appropriate CSS
-15. **Save PDF**: `profiles/{name}/output/{report_type}_synthesis_{name}_{date_identifier}.pdf`
-16. **Return Success**: Display all file paths and completion status
+    - Automatically loads correct CSS (base.css + report-type-specific CSS)
+14. **Confirm PDF Generated**: Verify PDF exists at `profiles/{name}/output/{report_type}_synthesis_{name}_{date_identifier}.pdf`
+15. **Return Success**: Display all file paths and completion status
 
 ### 4. Mode-Specific Parameters
 
-**ARCHITECTURAL NOTE (2025-10-16)**: All interpreters now output plain markdown. After interpretation, invoke `pdf-formatter` agent to add title page, TOC, Chart Overview, and formatting structure. This reduces interpreter prompt sizes by ~240 lines (17-18% token reduction).
+**ARCHITECTURAL NOTE (2025-10-16)**: All interpreters now output plain markdown ONLY. The `pdf_generator.py` script automatically builds all front matter (title page, TOC, Chart Overview) from the plain markdown + seed data. This keeps interpreter prompts focused on content quality without any PDF formatting concerns. Zero token cost for PDF generation.
 
 **Mode 1 (Natal Horoscope)**:
 - Interpreter: `natal-interpreter` (outputs plain markdown)
-- Formatter: `pdf-formatter` (adds structure)
+- PDF Generation: `pdf_generator.py --seed-data ... --report-type natal` (builds front matter from seed data)
 - Report type: `natal`
 - Date identifier: `{date}` (e.g., `2025-10-13`)
 - Calculator: None (seed data sufficient)
@@ -207,9 +200,10 @@ All interpretation reports generate TWO files:
 
 **NEW WORKFLOW (2025-10-16)**:
 - Interpreter agents output TWO SEPARATE plain markdown files (process + synthesis)
-- Synthesis file contains ONLY content (no HTML, no CSS, no formatting)
-- pdf-formatter agent adds all structural elements (title page, TOC, Chart Overview)
-- This separation reduces interpreter prompt size by ~240 lines (17-18% token reduction)
+- Synthesis file contains ONLY content (simple markdown headings and paragraphs)
+- `pdf_generator.py` script builds all front matter automatically (title page, TOC, Chart Overview)
+- Script reads seed data to extract Big Three (Sun/Moon/Rising) and chart highlights
+- Zero token cost for PDF generation - runs as Python script outside Claude context
 
 ### 6. Accuracy Checker Integration
 

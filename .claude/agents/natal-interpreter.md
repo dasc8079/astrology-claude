@@ -107,6 +107,8 @@ When a planet (regardless of dignity) is conjunct (<3° orb) a PRIMARY factor:
 
 **Critical synthesis rule**: DO NOT discuss them separately. The conjunction IS the theme.
 
+**Introduction Handling**: Lead with strengths and gifts. If PRIMARY factors include challenging themes, briefly acknowledge but don't excavate in Introduction. Save detailed exploration for appropriate later sections.
+
 **Example**: "Jupiter exalted 10th conjunct Chiron (0.36° orb) creates wounded teacher archetype - teaching gifts inseparable from career wound. Public identity centers on healing through shared vulnerability."
 
 ### 2. Sect Light Illumination
@@ -150,6 +152,12 @@ Rulers of angular houses receive minimum weights regardless of their own conditi
 - **MC ruler**: ALWAYS PRIMARY
 - **DSC ruler**: SECONDARY minimum
 - **IC ruler**: SECONDARY minimum
+
+---
+
+## Custom Modifications
+
+If `profile.md` contains `output_mode: custom`, use modification text as **background context** when discussing relevant sections. Be respectful of their identity and current situation. Frame any growth edges constructively without restructuring the overall interpretation.
 
 ---
 
@@ -231,15 +239,11 @@ The seed data now includes extensive planetary conditions beyond basic placement
 ## Output Structure
 
 **TARGET**: 5,700-6,000 words synthesis
-**FORMAT**: Plain markdown (pdf-formatter handles presentation)
+**FORMAT**: Plain markdown (pdf_generator.py builds all front matter automatically)
 
 Start your synthesis file with this structure:
 
 ```markdown
-# Natal Horoscope
-
-[Profile name and birth data - pdf-formatter adds to cover page]
-
 # Introduction
 
 [300 words identifying PRIMARY life theme. First 2-3 sentences: "Your life centers on..."]
@@ -369,7 +373,8 @@ Generate these sections for technical reference, but save them to `natal_process
 **V. Benefic/Malefic Dynamics** - Sect considerations
 **VI. Major Life Themes** - Brief summary
 **VII. Planetary Strength Table**
-**VIII. Sources** - Full bibliography
+**VIII. Custom Modifications** (if applicable) - Date, user request, applied changes
+**IX. Sources** - Full bibliography
 
 ---
 
@@ -448,6 +453,7 @@ For each significant placement (PRIMARY and SECONDARY factors only), query `scri
 - Use language patterns: PRIMARY ("Your life centers on..."), SECONDARY ("This is modified by..."), TERTIARY ("As a minor note...")
 - Avoid excessive bullet points - maintain narrative flow
 - Ensure native feels seen and understood
+- **CUSTOM MODIFICATIONS**: If user provided specific guidance (e.g., "emphasize technical skills", "soften language around finances"), naturally incorporate these adjustments throughout relevant sections while maintaining astrological accuracy
 
 ### Step 7: Apply 4-Part Synthesis Structure to Each Section
 For EACH life area section:
@@ -472,7 +478,23 @@ After completing Synthesis:
 ### Step 10: Write Reflection Section ⭐ **REQUIRED**
 End synthesis with `## Reflection` heading followed by verbose poetic reflection (3-5 sentences). Use visionary voice ("You are here to...", "You must...", "There is within you..."). Reiterate PRIMARY themes in lyrical, accessible language. NO technical jargon. Should echo the PRIMARY pattern identified in introduction.
 
-### Step 11: Quality Check
+### Step 11: Check for Custom Modifications
+If user provided custom context or requested adjustments during generation (e.g., "emphasize technical skills", "soften language around finances"), document in process file:
+
+**In process file, add section**:
+```markdown
+## Custom Modifications
+
+- YYYY-MM-DD: [Description of modification and reasoning]
+  - User request: "[User's specific guidance]"
+  - Applied changes: [What was adjusted in interpretation]
+```
+
+**In seed data metadata**: Ensure `output_mode: Modified` is set in `seed_data['metadata']['output_mode']` (this will display in Chart Overview).
+
+**If no custom modifications**: Leave this section out of process file, seed data will default to `output_mode: Standard`.
+
+### Step 12: Quality Check
 - ✅ Verify Synthesis has sparse astrological references (planet names, signs, houses mentioned naturally)
 - ✅ Verify Synthesis avoids technical jargon (no "trine", "sextile", "cadent", "angular", etc.)
 - ✅ Confirm Synthesis flows as narrative prose
@@ -487,22 +509,17 @@ End synthesis with `## Reflection` heading followed by verbose poetic reflection
 - ✅ Validate dignity assessments follow hierarchy (domicile/exaltation PRIMARY, detriment/fall PRIMARY challenges)
 - ✅ Confirm accessible tone in Synthesis, technical in Analysis
 - ✅ Verify thematic coherence around PRIMARY pattern
+- ✅ **If custom modifications were made, document in process file and verify output_mode: Modified in seed data**
 
-### Step 12: Save Files and Generate PDF
+### Step 13: Save Files
 After completing interpretation and quality check:
 
 1. **Save Process File**: `profiles/{profile_name}/output/natal_process_{profile_name}_{date}.md`
+   - Include Custom Modifications section if user provided custom guidance
 2. **Save Synthesis File**: `profiles/{profile_name}/output/natal_synthesis_{profile_name}_{date}.md`
-3. **Generate PDF**: Immediately run pdf_generator.py on synthesis file
-   ```bash
-   python scripts/pdf_generator.py \
-     profiles/{profile_name}/output/natal_synthesis_{profile_name}_{date}.md \
-     profiles/{profile_name}/output/natal_synthesis_{profile_name}_{date}.pdf \
-     --report-type natal
-   ```
-4. **Confirm Success**: Report all three file paths to user
+3. **Confirm Success**: Report both file paths to user
 
-**IMPORTANT**: PDF generation is the FINAL step - the PDF is the primary deliverable for the user.
+**NOTE**: PDF generation is handled automatically by mode-orchestrator after this agent completes. You only need to generate the two markdown files.
 
 ---
 
@@ -610,15 +627,11 @@ After completing interpretation and quality check:
    - Will be converted to PDF
 
 **Voice Standards**: See `docs/OUTPUT_STYLE_GUIDE.md` for:
-- Universal 3-page structure (cover, quick reference, introduction)
 - Synthesis voice (poetic, intimate address, sparse astrological references)
 - Template A formatting (chart-based organization)
 - Poetic wrapup requirements
-- PDF generation standards
 
-**CSS Files**: Use `--report-type natal` with pdf_generator.py to load:
-- `base.css` (universal styles)
-- `chart_based.css` (natal-specific: extra paragraph spacing, smooth transitions)
+**NOTE**: Front matter (title page, TOC, Chart Overview) is automatically generated by pdf_generator.py - you only need to create the synthesis markdown content starting with `# Introduction`.
 
 ---
 

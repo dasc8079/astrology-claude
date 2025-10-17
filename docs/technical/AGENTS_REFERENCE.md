@@ -2,7 +2,7 @@
 
 **Purpose**: User-facing documentation for all astrology interpretation agents
 
-**Last Updated**: 2025-10-11
+**Last Updated**: 2025-10-16
 
 **Note**: This is reference documentation explaining WHAT each agent does. The actual agent instructions (prompts) are in `.claude/agents/*.md` files.
 
@@ -17,7 +17,7 @@
 | life-arc-interpreter | Lifetime timeline (ages 0-100) | Want to see life chapters and major transitions | Life arc report (markdown + PDF) |
 | transit-analyzer-short | Dual-mode: (1) 1-4 month transit report (2) Period-of-interest cluster analysis | Need near-term timing OR zoom into high-score periods | Short transit report OR cluster deep-dive |
 | transit-analyzer-long | 1-5 year transit report | Need strategic life planning | Long transit report with chapters |
-| pdf-formatter | Format markdown to styled PDF | After interpretation completes OR reformatting needed | Professional PDF with cover/TOC/chart overview |
+| scripts/pdf_generator.py | Format markdown to styled PDF | After interpretation completes (auto-invoked) | Professional PDF with cover/TOC/chart overview |
 | astrology-output-debugger | Verify interpretation quality | Output seems wrong or inconsistent | Diagnostic report |
 
 ---
@@ -97,6 +97,7 @@
 
 **What You Get**:
 - **Title Page**: Profile name, birth data, date generated
+- **Chart Overview**: Displays "Output Mode: Standard" or "Modified" (if custom adjustments applied)
 - **Overview**: 2-3 paragraph synthesis of chart's main themes
 - **Core Sections**:
   - Sect (Day/Night chart)
@@ -116,6 +117,7 @@
 - Classical aspects only (conjunction, sextile, square, trine, opposition)
 - RAG-integrated (queries astrology reference database)
 - Psychological depth voice (intimate, witnessing, poetic)
+- **Custom Modifications Support**: Can apply custom adjustments (emphasis, tone, context-specific guidance)
 
 **Requirements**:
 - Profile must exist with birth data
@@ -139,6 +141,7 @@
 
 **What You Get**:
 - **Title Page**: "Life Arc Report 0-100", name, birth data
+- **Chart Overview**: Displays "Output Mode: Standard" or "Modified" (if custom adjustments applied)
 - **Overview**: High-level life story synthesis (2-3 pages)
 - **Chapters** (organized by Zodiacal Releasing L1 periods):
   - Each major life chapter (8-30 year periods)
@@ -157,6 +160,7 @@
 - **Convergence Detection**: Point-based scoring (25+ = MAJOR event)
 - **Narrative Structure**: Story chapters, not technique-by-technique listing
 - **Voice**: Psychological depth, life-story narrative
+- **Custom Modifications Support**: Can apply custom adjustments (emphasis, tone, context-specific guidance)
 
 **Requirements**:
 - Profile must exist with birth data
@@ -277,72 +281,64 @@
 
 ---
 
-## Support Agents
+## Support Scripts & Tools
 
-### pdf-formatter
+### PDF Generation (scripts/pdf_generator.py)
 
-**What It Does**: Formats plain markdown astrology reports into professionally styled PDFs with cover pages, table of contents, report-specific chart overview, and proper page layout. Separates presentation logic from interpretation logic.
+**What It Does**: Automated script-based PDF generation with zero token cost. Builds professional PDFs with standardized front matter from plain markdown synthesis files.
 
-**When to Use** (triggers automatically or manually):
+**When to Use** (auto-invoked by mode-orchestrator):
 - After any interpretation agent completes markdown output
-- mode-orchestrator completes interpretation and needs PDF generation
-- User requests PDF formatting for existing markdown report
-- Reformatting needed after style changes
+- mode-orchestrator automatically passes `--seed-data` flag
+- Script reads seed_data.json for chart information
+- No agent invocation needed - fully automated
 
 **How It Works**:
-1. Reads plain markdown synthesis file + seed data
-2. Builds HTML title page structure
-3. Generates Table of Contents from markdown headings
-4. Creates report-specific Chart Overview:
-   - **Template A (natal)**: Astrological data bullets (sect, ruler, dignities, auto-fill to ~12 items)
-   - **Template B (life_arc)**: Major Life Events Timeline table with accessible descriptions
-   - **Template C (transit)**: Current timing context (L1, L2, profections, active transits)
-5. Formats Introduction section (~300 words with page break)
-6. Formats main content (converts headings, adds strategic page breaks)
-7. Formats Reflection section (poetic wrapup with ## Reflection heading)
-8. Generates PDF using pdf_generator.py with appropriate --report-type
+1. Reads plain markdown synthesis file (starting with `# Introduction`)
+2. Reads seed_data.json for chart data
+3. Builds standardized 4-page front matter:
+   - **Page 1**: Title page (name, report type, date range, generation date)
+   - **Page 2**: Table of Contents (auto-generated from markdown headings)
+   - **Page 3-4**: Chart Overview (report-specific template)
+4. Appends interpretation content starting at Page 5+
+5. Applies report-specific CSS styling
+6. Generates final PDF
 
-**Key Features**:
-- **Separation of Concerns**: Interpreters focus on content, pdf-formatter handles presentation
-- **Report-Type Specific**: Different Chart Overview templates for natal/life_arc/transit reports
-- **Auto-Fill Intelligence**: Natal Chart Overview fills to ~12 bullets (fixed stars, lots, receptions, etc.)
-- **Accessible Language**: Life arc timeline uses NO jargon (translates "Saturn return" to "major crisis and reckoning")
-- **L1 Context**: Transit reports ALWAYS include L1 chapter for framing
+**Chart Overview Templates** (automatic based on --report-type):
+- **natal**: Astrological data bullets (sect, ruler, dignities, auto-filled to ~12 items with fixed stars, lots, receptions)
+- **life_arc**: Major Life Events Timeline table with accessible descriptions (NO jargon)
+- **transit**: Current timing context (L1 always included for framing, L2, profections, active transits)
 
-**Technical Details**:
-- Model: Sonnet (fast, efficient for formatting tasks)
-- Extended Thinking: false (straightforward formatting logic)
-- Color: Cyan (utility/infrastructure agent)
-- CSS Loading: base.css + report-specific CSS (chart_based/timeline_based/movement_based)
+**Architecture Change** (2025-10-16):
+- **Before**: Interpreter agents included PDF formatting instructions → pdf-formatter agent → PDF
+- **After**: Interpreters output plain markdown → pdf_generator.py script → PDF
+- **Benefit**: Zero token cost, cleaner separation of concerns, ~17-18% token reduction per interpreter
 
-**Output**: Formatted markdown + professional PDF with:
-- Title page with birth data
-- Hierarchical Table of Contents
-- Report-specific Chart Overview
-- ~300 word Introduction
-- Main content with strategic page breaks
-- Reflection section with proper heading
-
-**Coordination**:
+**Command**:
+```bash
+python scripts/pdf_generator.py \
+  --markdown /path/to/synthesis.md \
+  --output /path/to/output.pdf \
+  --report-type natal \
+  --seed-data /path/to/seed_data.json
 ```
-interpreter completes → passes to pdf-formatter:
-  - markdown_file path
-  - seed_data_file path
-  - report_type (natal/life_arc/transit_short/transit_long)
-  - profile info
 
-pdf-formatter generates → confirms success:
-  - formatted markdown path
-  - final PDF path
-```
+**CSS Styling**:
+- base.css (universal formatting)
+- chart_based.css (natal reports)
+- timeline_based.css (life arc reports)
+- movement_based.css (transit reports)
+
+**Output**: Professional PDF with standardized 4-page front matter + interpretation content
 
 **Benefits**:
-- Reduces interpreter token count by ~80-100 lines (17-18% reduction)
-- Single source of truth for PDF formatting
-- Easy style changes without touching interpreters
-- Consistent output across all report types
+- **Zero Token Cost**: Script-based, not agent-based
+- **Token Reduction**: ~17-18% reduction per interpreter (~240 lines removed)
+- **Single Source of Truth**: All PDF logic in one script
+- **Easy Maintenance**: Style changes require updating one script, not 4+ agents
+- **Consistent Output**: Standardized front matter across all report types
 
-**See**: `docs/pdf_formatter_design.md` for complete specification
+**See**: `docs/pdf_formatter_design.md` for design history (NOTE: Agent approach deprecated, replaced by script-based approach)
 
 ---
 

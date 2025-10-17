@@ -1,16 +1,99 @@
 # Current Work - Astrology Application
 
 **Last Updated**: 2025-10-16
-**Current Focus**: Life Arc Report V3 - COMPLETE ✅ (All Deliverables Finished)
+**Current Focus**: Life Arc Report V3 - User Feedback Refinements Complete ✅
 **Default Profile**: Darren_S (use this profile for all analyses unless specified otherwise)
 
 ---
 
 ## 🎯 Current Milestone (2025-10-16)
 
+### Life Arc V3 Voice Refinements - COMPLETE ✅
+
+**Major Achievement**: V3 voice standardized to match V2's successful approach + Helvetica font adoption
+
+**What Was Completed** (October 16, 2025):
+
+1. ✅ **Voice Instructions Simplified** (.claude/agents/life-arc-interpreter-v3.md, lines 506-523):
+   - REMOVED detailed jargon prohibitions (was over-instructing)
+   - MATCHED V2's simple voice approach: "Use traditional terms naturally, explain them immediately"
+   - V2 analysis showed perfect balance: jargon + immediate translation worked great
+   - V3 now uses same successful pattern as V2
+
+2. ✅ **CSS Font Update** (scripts/css/base.css):
+   - Changed font-family to Helvetica for body and all headings (h1-h4)
+   - Previous: Generic sans-serif stack
+   - Now: `font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;`
+   - Cleaner, more professional typography
+
+**Design Decision**: V2 output PDF showed perfect jargon balance without detailed prohibitions. The over-detailed voice instructions added to V3 were unnecessary and contradictory to V2's successful simple approach. Simplified V3 to match V2's effective pattern.
+
+**Result**: V3 voice now matches V2's proven approach
+- Simple natural-language-first guidance (no over-detailed restrictions)
+- Terms explained immediately when used
+- Helvetica typography for professional presentation
+- CSS already had bold headings (no change needed)
+
+**Previous V3 Refinements** (October 16, 2025):
+
+1. ✅ **Introduction Section Requirement** (life-arc-interpreter-v3.md):
+   - Synthesis file MUST start with `# Introduction` heading (300-400 words)
+   - Front matter: Cover → TOC → Chart Overview → **Introduction** → Main chapters
+
+2. ✅ **PDF Generator Cover Page Enhancements** (scripts/pdf_generator.py):
+   - Big Three displays with symbols: `☉ ♑ • ☽ ♉ • ↗ ♐`
+   - Zodiac symbol mapping for all 12 signs
+
+3. ✅ **Table of Contents Enhancement** (scripts/pdf_generator.py):
+   - H3 headings included for better navigation
+
+**Next**: Ready for production use with V2-matched voice standards
+
+---
+
+## 🎯 Previous Milestone (2025-10-16)
+
+### Custom Modifications Tracking System - COMPLETE ✅
+
+**Major Achievement**: Complete institutional memory system for tracking custom interpretation adjustments
+
+**What Was Completed**:
+1. ✅ **PDF Generator Enhancement** (scripts/pdf_generator.py):
+   - Added "Output Mode" field to Chart Overview (displays "Standard" or "Modified")
+   - Extracts from seed_data metadata: `output_mode` field
+   - Displays as first field in Chart Overview on Page 2
+
+2. ✅ **All Interpretation Agents Updated**:
+   - **natal-interpreter.md**: Custom modifications application (Step 6), documentation (Step 11), quality check (Step 12), save files (Step 13)
+   - **natal-interpreter-experiential.md**: Same updates as standard natal-interpreter
+   - **life-arc-interpreter.md**: Custom modifications application (Step 6), documentation (Step 9)
+   - **life-arc-interpreter-v3.md**: Same updates as standard life-arc-interpreter
+
+3. ✅ **Documentation Created**:
+   - `docs/CUSTOM_MODIFICATIONS_GUIDE.md`: Complete guide with use cases, workflow, benefits, agent instructions
+   - Future enhancement added to session_goals.md: Chart Difficulty Flag System for automatic tone adjustment
+
+**How It Works**:
+- User provides custom instructions when requesting report (e.g., "emphasize technical skills, soften money language")
+- Agent applies adjustments naturally during synthesis
+- Agent documents modifications in process file with date, user request, applied changes
+- Chart Overview displays "Output Mode: Modified" (cryptic professional indicator)
+- Seed data metadata stores `output_mode: Modified` for automatic display
+
+**Benefits**:
+- **Institutional Memory**: Track what was customized and why across multiple reports
+- **Professional Presentation**: Recipient sees "Modified" indicator without knowing specifics
+- **Quality Control**: Verify modifications were applied correctly, maintain consistency
+
+**Next**: Ready for production use - test with Sam_P profile using financial sensitivity guidance
+
+---
+
+## 🎯 Previous Milestone (2025-10-16)
+
 ### Life Arc Report V3 - Complete Implementation ✅
 
-**Current Status**: ALL V3 enhancements complete - Implementation, agent creation, testing, and documentation all finished.
+**Status**: ALL V3 enhancements complete - Implementation, agent creation, testing, and documentation all finished.
 
 **What Was Completed**:
 1. ✅ **15 Lots System** (seed_data_generator.py):
@@ -88,43 +171,53 @@
 
 ## 🎯 Recent Milestone (2025-10-16)
 
-### PDF Formatter Agent - COMPLETE ✅
+### PDF Workflow Automation - COMPLETE ✅
 
-**Major Achievement**: Separation of interpretation logic from presentation logic
+**Major Achievement**: Fully automated PDF generation with zero-token-cost script-based approach
 
 **What Was Completed**:
-1. ✅ **Created pdf-formatter agent** (.claude/agents/pdf-formatter.md):
-   - Model: Sonnet (fast formatting), Extended thinking: false, Color: Cyan
-   - Reads plain markdown + seed data → generates professional PDF
-   - Report-specific Chart Overview templates (3 templates)
+1. ✅ **Enhanced pdf_generator.py script** (scripts/pdf_generator.py):
+   - Automatically builds all front matter (title page, TOC, Chart Overview)
+   - Report-specific Chart Overview templates (natal, life_arc, transit)
+   - Reads seed_data.json for chart data
+   - Zero token cost (script-based, not agent-based)
 
-2. ✅ **Chart Overview Templates**:
-   - **Template A (natal)**: Astrological data bullets (sect, ruler, dignities, auto-fill to ~12 items with fixed stars, lots, receptions)
-   - **Template B (life_arc)**: Major Life Events Timeline table with accessible language (NO jargon)
-   - **Template C (transit)**: Current timing context (L1 always included for framing, L2, profections, active transits)
+2. ✅ **Updated mode-orchestrator** (.claude/agents/mode-orchestrator.md):
+   - Passes `--seed-data` flag to pdf_generator.py
+   - Script-based PDF generation instead of agent invocation
+   - Standardized workflow across all report types
 
-3. ✅ **Updated documentation**:
-   - AGENTS_REFERENCE.md: Added pdf-formatter to Quick Reference table + Support Agents section
-   - Design document exists: docs/pdf_formatter_design.md
+3. ✅ **Cleaned up ALL interpreter agents** (removed PDF formatting logic):
+   - natal-interpreter.md (~240 lines removed, ~17-18% token reduction)
+   - natal-interpreter-experiential.md (~240 lines removed)
+   - life-arc-interpreter.md (~240 lines removed)
+   - life-arc-interpreter-v3.md (~240 lines removed)
+   - transit-analyzer-long.md (PDF formatting removed)
+   - All interpreters now output plain markdown starting with `# Introduction`
 
-**Key Benefits**:
-- **Token Reduction**: Removes 80-100 lines from each interpreter (17-18% reduction)
-- **Single Source of Truth**: All PDF formatting logic in one agent
-- **Easy Maintenance**: Style changes don't require updating 3+ interpreters
-- **Consistent Output**: All report types use same formatting workflow
+4. ✅ **Deleted unused pdf-formatter agent** (.claude/agents/pdf-formatter.md):
+   - 483 lines removed (never integrated)
+   - Agent-based approach replaced by superior script-based approach
 
-**Design Highlights**:
-- L1 context ALWAYS included in transit reports (provides "frame" for understanding transits)
-- Life arc timeline translates jargon to accessible language ("Saturn return" → "major crisis and reckoning")
-- Natal Chart Overview auto-fills intelligently (priority: fixed stars > lots > receptions > cazimi > antiscia)
-- Reflection section preserved with ## Reflection heading
-- Separation of concerns: interpreters output simple markdown, pdf-formatter handles HTML/CSS/page breaks
+**Architecture Change**:
+- **Before**: Interpreters included PDF formatting instructions (HTML, CSS, page breaks) → PDF formatter agent
+- **After**: Interpreters output plain markdown → pdf_generator.py script builds PDF
+- **Benefit**: Cleaner separation of concerns, zero token cost for formatting
 
-**Next Steps**:
-1. ⏳ Test pdf-formatter with existing reports (Sam_P natal, Darren_S life arc)
-2. ⏳ Simplify one interpreter as proof-of-concept (remove HTML/CSS formatting instructions)
-3. ⏳ Update mode-orchestrator to automatically invoke pdf-formatter after interpretations
-4. ⏳ Migrate remaining interpreters once POC successful
+**Result**:
+- **Token Reduction**: ~17-18% reduction per interpreter (~240 lines each)
+- **Standardized Front Matter**: All PDFs have consistent 4-page front matter (title, TOC, Chart Overview, interpretation start)
+- **Zero Token Cost**: PDF generation uses scripts, not agents
+- **Single Source of Truth**: All PDF logic in pdf_generator.py script
+- **Easy Maintenance**: Style changes require updating one script, not 4+ agents
+
+**Front Matter Structure** (automatic for all report types):
+- Page 1: Title page (name, report type, date range, generation date)
+- Page 2: Table of Contents (auto-generated from markdown headings)
+- Page 3-4: Chart Overview (report-specific template)
+- Page 5+: Interpretation content (starting with `# Introduction`)
+
+**Next Steps**: PDF workflow complete - ready for production use
 
 ---
 
