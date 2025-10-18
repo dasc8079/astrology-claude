@@ -109,6 +109,8 @@ When a planet (regardless of dignity) is conjunct (<3° orb) a PRIMARY factor:
 
 **Critical synthesis rule**: DO NOT discuss them separately. The conjunction IS the theme.
 
+**Introduction Handling**: Lead with strengths and gifts. If PRIMARY factors include challenging themes, briefly acknowledge but don't excavate in Introduction. Save detailed exploration for appropriate later sections.
+
 **Example**: "Jupiter exalted 10th conjunct Chiron (0.36° orb) creates wounded teacher archetype - teaching gifts inseparable from career wound. Public identity centers on healing through shared vulnerability."
 
 ### 2. Sect Light Illumination
@@ -152,6 +154,12 @@ Rulers of angular houses receive minimum weights regardless of their own conditi
 - **MC ruler**: ALWAYS PRIMARY
 - **DSC ruler**: SECONDARY minimum
 - **IC ruler**: SECONDARY minimum
+
+---
+
+## Custom Modifications
+
+If `profile.md` contains `output_mode: custom`, use modification text as **background awareness** - translate it into astrological/psychological language naturally. Don't repeat the user's words. Show the pattern through the chart in relevant sections. Frame as developmental edges, not deficiencies.
 
 ---
 
@@ -233,14 +241,13 @@ The seed data now includes extensive planetary conditions beyond basic placement
 ## Output Structure
 
 **TARGET**: 5,700-6,000 words synthesis
-**FORMAT**: Plain markdown (pdf_generator.py builds all front matter automatically)
-
-Start your synthesis file with this structure:
+**FIRST LINE**: `# Introduction`
+**LAST SECTION**: `## Reflection`
 
 ```markdown
 # Introduction
 
-[300 words identifying PRIMARY life theme. First 2-3 sentences: "Your life centers on..."]
+[300-400 words - one full page. Overall synthesis of who they are and how they experience themselves. Capture the essence of their character deeply. Structure: Start with strengths, aspirations, and gifts (first 60-70%). Build the picture with supporting themes (20-30%). If PRIMARY factors include central tensions or challenges, mention briefly in final 10-20% to prepare them for what's explored in the report (not to scare). End on integrative/hopeful note. First 2-3 sentences: "Your life centers on..."]
 
 # Inner Life
 
@@ -256,7 +263,7 @@ Start your synthesis file with this structure:
 
 ## Reflection
 
-[3-5 sentence poetic wrapup]
+[3-5 sentence verbose poetic reflection]
 ```
 
 ### Content Sections (~5,700-6,000 words total)
@@ -400,22 +407,6 @@ Apply the 15-point hierarchical integration formula to EACH subsection below. Us
 
 ---
 
-## Technical Sections (Separate Process File)
-
-Generate these sections for technical reference, but save them to `natal_process_{profile_name}_{date}.md`:
-
-**I. Chart Overview** - Sect, chart ruler, angular planets, stelliums, patterns
-**II. Hierarchical Testimony Analysis** - PRIMARY/SECONDARY/TERTIARY factors for each life area
-**III. Core Identity** - Sun/Moon/ASC with technical language
-**IV. Planetary Placements** - Signs, houses, dignities, aspects
-**V. Benefic/Malefic Dynamics** - Sect considerations
-**VI. Major Life Themes** - Brief summary
-**VII. Planetary Strength Table**
-**VIII. Custom Modifications** (if applicable) - Date, user request, applied changes
-**IX. Sources** - Full bibliography
-
----
-
 ## Workflow
 
 ### Step 1: Receive Chart Data
@@ -500,23 +491,7 @@ After completing Synthesis:
 ### Step 10: Write Reflection Section ⭐ **REQUIRED**
 End synthesis with `## Reflection` heading followed by verbose poetic reflection (3-5 sentences). Use visionary voice ("You are here to...", "You must...", "There is within you..."). Reiterate PRIMARY themes in lyrical, accessible language. NO technical jargon. Should echo the PRIMARY pattern identified in introduction.
 
-### Step 11: Check for Custom Modifications
-If user provided custom context or requested adjustments during generation (e.g., "emphasize technical skills", "soften language around finances"), document in process file:
-
-**In process file, add section**:
-```markdown
-## Custom Modifications
-
-- YYYY-MM-DD: [Description of modification and reasoning]
-  - User request: "[User's specific guidance]"
-  - Applied changes: [What was adjusted in interpretation]
-```
-
-**In seed data metadata**: Ensure `output_mode: Modified` is set in `seed_data['metadata']['output_mode']` (this will display in Chart Overview).
-
-**If no custom modifications**: Leave this section out of process file, seed data will default to `output_mode: Standard`.
-
-### Step 12: Quality Check
+### Step 11: Quality Check
 - ✅ Verify Synthesis has sparse astrological references (planet names, signs, houses mentioned naturally)
 - ✅ Verify Synthesis avoids technical jargon (no "trine", "sextile", "cadent", "angular", etc.)
 - ✅ Confirm Synthesis flows as narrative prose
@@ -529,7 +504,7 @@ If user provided custom context or requested adjustments during generation (e.g.
 - ✅ Check Hellenistic foundation is clear
 - ✅ Ensure sect-based interpretations correct
 - ✅ Validate dignity assessments follow hierarchy (domicile/exaltation PRIMARY, detriment/fall PRIMARY challenges)
-- ✅ Confirm accessible tone in Synthesis, technical in Analysis
+- ✅ Confirm accessible tone in Synthesis
 - ✅ Verify thematic coherence around PRIMARY pattern
 
 ---

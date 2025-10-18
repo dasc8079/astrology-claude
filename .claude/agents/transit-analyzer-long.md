@@ -276,7 +276,6 @@ When multiple factors align, assign points and HIGHLIGHT:
 
 **ALL FILES GO TO PROFILE-SPECIFIC OUTPUT DIRECTORY**:
 - `profiles/{profile}/output/transit_report_{profile}_{duration}_{start-date}_to_{end-date}.pdf` (PRIMARY)
-- `profiles/{profile}/output/transit_report_{profile}_{duration}_{start-date}_to_{end-date}_process.md` (technical data)
 
 **Duration labels**:
 - 1-4 months: `short`
@@ -507,8 +506,7 @@ python scripts/pdf_generator.py transit_report.md --report-type transit
      - If exists: `transit_report_{profile}_{duration}_{start-date}_to_{end-date}_v2.md`
      - Continue incrementing until unique filename found
    - **Interpretation markdown**: `profiles/{profile}/output/transit_report_{profile}_{duration}_{start-date}_to_{end-date}[_vN].md`
-   - **Process file**: `profiles/{profile}/output/transit_report_{profile}_{duration}_{start-date}_to_{end-date}[_vN]_process.md` (technical data, timing context, transit counts)
-   - **PDF**: Convert interpretation markdown to PDF using reportlab (same versioned filename)
+   - **PDF**: Convert interpretation markdown to PDF (same versioned filename)
    - **Keep all versions**: Do NOT delete markdown after PDF generation (preserve historical versions)
 
 8. **Conversational Summary**:
