@@ -15,7 +15,9 @@
 **Design Documents**: See [/docs/](docs/) for detailed specifications and implementation plans
 
 **Reference Guides**:
-- [ASTROLOGY_REFERENCE.md](docs/ASTROLOGY_REFERENCE.md) - Astrology systems and terminology
+- [ASTROLOGY_REFERENCE.md](docs/ASTROLOGY_REFERENCE.md) - Astrology systems and terminology we USE
+- [ASTROLOGY_EXCLUSIONS.md](docs/ASTROLOGY_EXCLUSIONS.md) - Astrology methods we DON'T use and why
+- [hierarchical_weighting_specification.md](docs/hierarchical_weighting_specification.md) - Complete PRIMARY/SECONDARY/TERTIARY weighting system for all chart factors
 - [OUTPUT_STYLE_GUIDE.md](docs/OUTPUT_STYLE_GUIDE.md) - Output format standards for all report types
 - [DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md) - Development workflow and agent creation
 - [DATA_FORMATS.md](docs/DATA_FORMATS.md) - Complete JSON schemas and data structures
@@ -241,8 +243,10 @@ This project adheres strictly to traditional/Hellenistic astrological systems:
 **Sect**: Day/night chart analysis with sect light and benefic/malefic of sect
 **Aspects**: Classical only - conjunction (0°), sextile (60°), square (90°), trine (120°), opposition (180°)
 **Planetary Set**: Traditional Seven primary (Sun through Saturn); modern planets (Uranus, Neptune, Pluto) secondary context only
+**Lots**: 4 essential Hermetic lots for natal interpretation (Fortune, Spirit, Eros, Necessity); 7 Hermetic lots for life arc (adds Courage, Victory, Saturn)
+**Hierarchical Weighting**: PRIMARY/SECONDARY/TERTIARY system for all chart factors (see hierarchical_weighting_specification.md)
 
-See [/docs/ASTROLOGY_REFERENCE.md](docs/ASTROLOGY_REFERENCE.md) for complete astrological systems reference.
+See [/docs/ASTROLOGY_REFERENCE.md](docs/ASTROLOGY_REFERENCE.md) for systems we USE and [/docs/ASTROLOGY_EXCLUSIONS.md](docs/ASTROLOGY_EXCLUSIONS.md) for systems we DON'T use.
 
 ---
 
@@ -324,7 +328,7 @@ See [/docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md) for detailed workflo
 
 ## Version & Updates
 
-**Last Updated**: 2025-10-16 (Life Arc V3 Voice Refinements + Helvetica Typography)
+**Last Updated**: 2025-10-18 (Process File Removal - 30-35% Token Optimization)
 **Framework**: Global Claude Code documentation structure (CLAUDE.md as navigation hub)
 **Maintained By**: docs-updater-astrology agent
 

@@ -1,5 +1,24 @@
 /* Base CSS - Applied to ALL astrology reports */
 
+/* Custom Font for Zodiac Symbols (OPTIONAL) */
+/*
+   To use a custom font for monochrome zodiac symbols:
+   1. Uncomment the @font-face declaration below
+   2. Update the font path to point to your custom font file
+   3. Set USE_CUSTOM_ZODIAC_FONT = True in pdf_generator.py
+   4. The font file should be in one of these formats: .ttf, .otf, .woff, .woff2
+   5. Font should contain zodiac glyphs at Unicode positions U+2648 - U+2653
+*/
+
+/*
+@font-face {
+    font-family: 'ZodiacFont';
+    src: url('file:///Users/darrenschaeffer/Documents/Claude/Astrogy_Claude/scripts/fonts/YourFontFile.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+*/
+
 /* Page Setup */
 @page {
     size: letter;
@@ -77,6 +96,39 @@ body {
     font-size: 10pt;
     color: #666;
     margin-top: 3em;
+}
+
+/* Zodiac symbols */
+/*
+   Two modes:
+   1. TEXT ABBREVIATIONS (current default): CAP, LEO, ARI, etc.
+      - Reliable, works without custom fonts
+      - Set USE_CUSTOM_ZODIAC_FONT = False in pdf_generator.py
+
+   2. CUSTOM FONT SYMBOLS (optional): ♈ ♉ ♊ ♋ ♌ ♍ ♎ ♏ ♐ ♑ ♒ ♓
+      - Requires a custom font with zodiac glyphs
+      - Set USE_CUSTOM_ZODIAC_FONT = True in pdf_generator.py
+      - Uncomment @font-face declaration above and set font path
+      - Font must have glyphs at Unicode U+2648 - U+2653
+*/
+.zodiac-symbol {
+    font-size: 16pt;
+    color: #000000;
+    font-style: normal;
+    font-weight: 600;
+    /* For text abbreviations mode (default) */
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    letter-spacing: 0.05em;
+    /* For custom font mode - uncomment line below and comment line above */
+    /* font-family: 'ZodiacFont', 'Helvetica', 'Arial', sans-serif; */
+}
+
+/* Astronomical symbols (sun, moon, rising) */
+.astro-symbol {
+    font-size: 16pt;
+    color: #000000;
+    font-weight: normal;
+    margin-right: 0.2em;
 }
 
 /* Headings */
@@ -159,6 +211,7 @@ table {
     width: 100%;
     margin-bottom: 1.5em;
     page-break-inside: avoid;
+    break-inside: avoid;
 }
 
 th {

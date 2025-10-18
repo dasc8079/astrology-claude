@@ -95,7 +95,7 @@
 - Need complete birth chart interpretation
 - Want psychological profile based on chart placements
 
-**What You Get**:
+**What You Get** (synthesis-only, markdown + PDF):
 - **Title Page**: Profile name, birth data, date generated
 - **Chart Overview**: Displays "Output Mode: Standard" or "Modified" (if custom adjustments applied)
 - **Overview**: 2-3 paragraph synthesis of chart's main themes
@@ -107,8 +107,9 @@
   - Modern Planets (Uranus, Neptune, Pluto) - secondary context
   - Houses
   - Major aspects
-- **Synthesis**: Poetic wrap-up integrating themes
+- **Reflection**: 3-5 sentence poetic wrap-up
 - **Format**: Markdown + PDF (chart-based CSS styling)
+- **Technical Data**: All calculations in `seed_data.json`
 
 **Technical Details**:
 - Uses whole-sign houses (traditional/Hellenistic)
@@ -139,7 +140,7 @@
 - Identify significant transition points
 - See when different life themes are active
 
-**What You Get**:
+**What You Get** (synthesis-only, markdown + PDF):
 - **Title Page**: "Life Arc Report 0-100", name, birth data
 - **Chart Overview**: Displays "Output Mode: Standard" or "Modified" (if custom adjustments applied)
 - **Overview**: High-level life story synthesis (2-3 pages)
@@ -148,7 +149,9 @@
   - Convergence points (when multiple timing techniques align)
   - "Current Situation" sub-chapter for present age
 - **Major Events**: Automatically flagged significant transitions
+- **Reflection**: 3-5 sentence poetic wrap-up
 - **Format**: Markdown + PDF (timeline-based CSS styling)
+- **Technical Data**: All calculations in `seed_data.json`
 
 **Technical Details**:
 - **5 Core Timing Techniques**:
@@ -194,27 +197,26 @@
 
 **What You Get**:
 
-**Multi-Movement Mode**:
+**Multi-Movement Mode** (synthesis-only, markdown + PDF):
 - **Summary Synthesis**: Overview connecting all movements
 - **Movements** (2-4 thematic sections):
   - Evocative titles ("The Catalyst", "Inner Reckoning")
   - Narrative weaving all transits in that timeframe
   - Key dates highlighted in bold within text
-- **Technical Appendix**:
-  - Transit list by date
-  - Most auspicious/challenging days
-  - Movement boundary explanations
+- **Reflection**: 3-5 sentence poetic wrap-up
 - **Format**: Markdown + PDF (movement-based CSS styling)
+- **Technical Data**: All calculations in `seed_data.json` and transit calculation outputs
 
-**Period of Interest Mode**:
+**Period of Interest Mode** (synthesis-only, markdown + PDF):
 - **At a Glance**: Cluster period + score + key dates + convergent factors
 - **Summary Synthesis**: Why this period was flagged, what creates significance (200-300 words)
 - **The Cluster Period**: Complete narrative arc (800-1200 words)
   - Buildup phase (applying transits, tension building)
   - Peak concentration (multiple exactness dates close together)
   - Resolution phase (separating transits, integration period)
-- **Technical Appendix**: All transits + daily scores + timing activations
+- **Reflection**: 3-5 sentence poetic wrap-up
 - **Format**: Markdown + PDF (movement-based CSS styling)
+- **Technical Data**: All calculations in `seed_data.json` and transit calculation outputs
 
 **Technical Details**:
 - **Planets**: ALL 10 (Sun through Pluto)
@@ -247,7 +249,7 @@
 - Planning long-term goals or major decisions
 - Want to see big-picture timing patterns
 
-**What You Get**:
+**What You Get** (synthesis-only, markdown + PDF):
 - **Title Page**: Date range, name, birth data
 - **Quick Reference Tables**:
   - Most auspicious days (top dates)
@@ -259,7 +261,9 @@
   - **Sub-chapters** (H2): Zodiacal Releasing L3 periods (1-5 months)
   - Narrative synthesis weaving transits into story
   - Bold dates integrated naturally
+- **Reflection**: 3-5 sentence poetic wrap-up
 - **Format**: Markdown + PDF (movement-based CSS styling)
+- **Technical Data**: All calculations in `seed_data.json` and transit calculation outputs
 
 **Technical Details**:
 - **Planets**: 6 slower planets only (Mars through Pluto)

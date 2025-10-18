@@ -10,52 +10,27 @@ This guide defines the default tone, style, and format for all agent-generated i
 
 ---
 
-## Two-File Standard: Content Separation
+## Synthesis-Only Workflow (Updated 2025-10-18)
 
-### Process File (.md) - Technical/Astrological
+**IMPORTANT**: As of October 2025, the project uses a **synthesis-only workflow** for aggressive token optimization.
 
-**Purpose**: For astrologers and technical verification
-**Audience**: Someone who understands astrological jargon
-**Content**: All technical data, calculations, and traditional terminology
+### Current Architecture: Single-File Output
 
-**Includes**:
-- Planetary positions (longitude, sign, degree, house)
-- Aspect calculations with orbs
-- Dignity assessments (domicile, exaltation, detriment, fall)
-- House cusps and rulers
-- Zodiacal releasing periods with dates
-- Profection years with time lords
-- Secondary progression positions
-- Solar return chart data
-- Transit positions and aspects
-- Technical timelines with ages/dates
-- Citations to traditional sources
-- All astrological terminology and jargon
+**What Changed**:
+- **Before**: Agents generated two files (process.md technical + synthesis.pdf narrative)
+- **After**: Agents generate synthesis-only (single markdown → PDF)
+- **Reason**: 30-35% token reduction (7,500-11,500 tokens saved per report)
 
-**Tone**: Professional, technical, precise
-**Format**: Tables, lists, structured data, technical language welcome
+**Technical Data Source**:
+- All technical information (planetary positions, aspects, dignities, calculations) stored in `seed_data.json`
+- Quality verification via `accuracy-checker` agent using seed_data directly
+- No need for redundant process file generation
 
-**Example**:
-```
-ZODIACAL RELEASING - FORTUNE
-L1 Period: Capricorn (Ages 12-39)
-  Ruler: Saturn (domicile in Capricorn 6H)
-  Duration: 27 years
-  L2 Period: Scorpio (Ages 35.5-37.4)
-    Ruler: Mars (domicile in Aries 9H)
-    Duration: 1.95 years
-
-PROFECTIONS
-Age 36: 1st House (Leo)
-  Time Lord: Sun (in Capricorn 6H, conjunct Saturn)
-  Theme: Identity, new cycle beginning
-```
-
-### Synthesis File (.pdf) - Narrative/Psychological
+### Synthesis File (.md → .pdf) - For End Users
 
 **Purpose**: For the native (person receiving the reading)
 **Audience**: Someone with NO astrological knowledge
-**Content**: Pure psychological narrative with ZERO astrological jargon
+**Content**: Pure psychological narrative with SPARSE astrological references
 
 **Includes**:
 - Life story and major chapters
@@ -67,11 +42,11 @@ Age 36: 1st House (Leo)
 - Accessible, validating, insightful narrative
 
 **Excludes**:
-- ❌ Astrological terminology ("Mars square Saturn", "Sun in 10th house")
-- ❌ Technical references ("ZR Fortune L2", "Profection year")
-- ❌ Planet names in interpretations
-- ❌ House numbers or aspects
-- ❌ Jargon of any kind
+- ❌ Excessive astrological terminology (use sparingly, translate immediately)
+- ❌ Technical jargon without explanation
+- ❌ Bare planet names without context
+- ❌ House numbers without meaning
+- ❌ Unexplained technical references
 
 **Tone**: Warm, insightful, psychologically rich, validating
 **Format**: Flowing narrative prose, minimal subsections
@@ -88,6 +63,17 @@ Your professional life has always demanded that you prove yourself through
 concrete achievement. There's an inner tension between taking bold action
 and feeling the weight of responsibility...
 ```
+
+### Technical Data Verification
+
+**For Astrologers/Technical Verification**:
+- Read `seed_data.json` in profile folder - contains ALL astronomical calculations
+- Use `accuracy-checker` agent for systematic quality verification
+- Archived process file generation prompts available at `docs/archive/process_file_generation_prompts.md`
+
+**If Process Files Needed Again**:
+- Restoration instructions in `docs/archive/design/process_file_removal_specification_v2.md`
+- All removed prompts archived for future use
 
 ---
 
@@ -241,26 +227,26 @@ and feeling the weight of responsibility...
 | "Capricorn ZR Fortune L1 period" | "A 27-year chapter focused on discipline, mastery, and building lasting structures" |
 | "Profection to the 1st house" | "A year focused on identity, new beginnings, and redefining who you are" |
 
-### For Process/MD (Astrologers)
+### For Technical Verification (seed_data.json)
 
-**Sound like**: A traditional astrologer documenting technical analysis
-**Audience**: Someone validating the astrological basis of the interpretation
+**NOTE**: Process files no longer generated (removed October 2025).
 
-#### ✅ DO:
-- Use proper astrological terminology
-- Include technical details (signs, houses, degrees, orbs)
-- Cite traditional sources with footnotes
-- Assess dignities and planetary strength
-- Reference aspects, house rulers, time lords
-- Use structured format (tables, lists, sections)
-- Be precise and technically accurate
+**Technical Data Location**: All astronomical calculations and astrological assessments stored in `seed_data.json`
 
-#### ❌ DON'T:
-- Avoid technical language (this section NEEDS it)
-- Omit dignity assessments or planetary positions
-- Skip source citations
-- Ignore sect considerations
-- Use modern astrological methods (unless explicitly added as context)
+**Quality Verification**: Use `accuracy-checker` agent to validate:
+- Planetary positions (longitude, sign, degree, house)
+- Aspect calculations with orbs
+- Dignity assessments (domicile, exaltation, detriment, fall)
+- House cusps and rulers
+- Zodiacal releasing periods with dates
+- Profection years with time lords
+- Traditional source citations (via RAG database)
+- Sect considerations
+- Traditional methods only (no modern methods as primary)
+
+**Archived Resources**:
+- Process file generation prompts: `docs/archive/process_file_generation_prompts.md`
+- Restoration guide: `docs/archive/design/process_file_removal_specification_v2.md`
 
 ---
 
@@ -549,32 +535,90 @@ All reports follow one of three fundamental structures based on their organizing
 - Page break after title page (no page number on title page)
 - Professional, clean layout
 
-### Process/MD Structure
+#### Big Three Display Format
 
-**Flexible** based on tool, but typically:
+Every report title page includes the "Big Three" (Sun, Moon, Rising signs) with astronomical symbols and zodiac abbreviations.
+
+**Display Example**:
+```
+☉ CAP • ☽ LEO • ↑ LEO
+```
+
+**Components**:
+
+1. **Astronomical Symbols**:
+   - ☉ (Sun) - Unicode U+2609
+   - ☽ (Moon) - Unicode U+263D
+   - ↑ (Ascendant/Rising) - Unicode U+2191
+
+2. **Zodiac Sign Abbreviations** (3 letters, uppercase):
+   - **ARI** (Aries), **TAU** (Taurus), **GEM** (Gemini)
+   - **CAN** (Cancer), **LEO** (Leo), **VIR** (Virgo)
+   - **LIB** (Libra), **SCO** (Scorpio), **SAG** (Sagittarius)
+   - **CAP** (Capricorn), **AQU** (Aquarius), **PIS** (Pisces)
+
+3. **Separator**: Bullet character (•) between elements
+
+**Technical Implementation**:
+- Generated automatically by `pdf_generator.py` function `build_title_page()`
+- Extracts Sun, Moon, Rising from seed data via `extract_big_three()`
+- Converts sign names to abbreviations via `zodiac_sign_to_symbol()`
+- CSS styling: `.astro-symbol` (astronomical symbols), `.zodiac-symbol` (sign abbreviations)
+
+**Why Text Abbreviations?**
+
+WeasyPrint (our PDF rendering library) cannot style Unicode zodiac symbols (♈ ♉ ♊ ♋ ♌ ♍ ♎ ♏ ♐ ♑ ♒ ♓) as monochrome—they always render as colored emojis regardless of CSS filters. Text abbreviations provide clean, professional black-and-white appearance.
+
+**Custom Font Option** (Advanced):
+
+For users who want actual zodiac glyphs instead of text abbreviations:
+1. Place a font file with monochrome zodiac glyphs in `scripts/fonts/`
+2. Uncomment the `@font-face` declaration in `base.css` (lines 3-20)
+3. Update the font path in `@font-face` to your font file
+4. Uncomment the `.zodiac-symbol` font-family override in `base.css` (line 123)
+5. Font must contain zodiac glyphs at Unicode positions U+2648 through U+2653
+
+**Agent Instructions**:
+- Agents do NOT generate zodiac symbols in markdown
+- Title page is automatically built by pdf_generator.py from seed data
+- Agents only need to provide correct seed data with Sun, Moon, Rising signs
+
+### Technical Data (seed_data.json)
+
+**NOTE**: Process files are no longer generated (removed October 2025 for token optimization).
+
+All technical data resides in `seed_data.json` files:
 
 1. **Chart/Data Overview**
-   - Birth data or calculation parameters
+   - Birth data and calculation parameters
    - Sect, chart ruler, angular planets
    - Key technical facts
 
-2. **Technique-by-Technique Breakdown**
+2. **Planetary Data**
+   - Planetary positions (longitude, latitude, speed)
+   - Houses and cusps
+   - Essential dignities (domicile, exaltation, triplicity, terms, decans)
+   - Accidental dignities (angularity, sect, speed, hayz)
+
+3. **Aspect Data**
+   - Complete aspect tables with orbs
+   - Aspect patterns (T-squares, grand trines, etc.)
+   - Reception and bonification analysis
+
+4. **Timing Data**
    - Profections timeline
-   - Zodiacal Releasing periods (L1 and L2)
-   - Secondary Progressions data
-   - Solar Return chart
-   - Transits
+   - Zodiacal Releasing periods (L1, L2, L3)
+   - Firdaria periods
+   - Planetary returns
+   - Secondary progressions (if calculated)
+   - Solar returns (if calculated)
 
-3. **Tables & Structured Data**
-   - Planetary positions
-   - Aspect tables
-   - Dignity assessments
-   - Timeline data
+5. **Synthesis Metadata**
+   - Output mode (standard/modified)
+   - Generation date and version
+   - Report configuration
 
-4. **Technical Notes**
-   - Calculation methods
-   - Source citations
-   - Traditional references
+**For Quality Verification**: Use `accuracy-checker` agent to systematically validate seed data against astronomical calculations and interpretation outputs.
 
 ---
 
@@ -1002,29 +1046,30 @@ this manifests as a quest for meaning through direct experience and action.[2]
 Before delivering any interpretation, verify:
 
 ### Synthesis/PDF:
-- ✅ Zero astrological jargon (no planet names, houses, aspects)
+- ✅ SPARSE astrological references (use naturally, translate immediately)
 - ✅ Flowing narrative prose (not excessive bullet points)
 - ✅ Psychologically rich and insightful
 - ✅ Validates the native's experience
 - ✅ Sounds like a therapist, not an astrologer
 - ✅ Native would feel deeply understood
-- ✅ Readable by someone with no astrology knowledge
+- ✅ Readable by someone with minimal astrology knowledge
 - ✅ Helvetica font, left-aligned, professional formatting
 
-### Process/MD:
-- ✅ All technical data included
-- ✅ Astrological terminology used correctly
-- ✅ Traditional methods documented
-- ✅ Sources cited with footnotes
-- ✅ Calculations verifiable
-- ✅ Structured for astrologer review
+### Technical Verification (seed_data.json):
+- ✅ All astronomical calculations present in seed_data.json
+- ✅ Planetary positions accurate (verified via Swiss Ephemeris)
+- ✅ Dignity assessments correct (domicile, exaltation, triplicity, terms, decans)
+- ✅ Aspect calculations accurate with proper orbs
+- ✅ Traditional methods applied correctly
+- ✅ Sect considerations included
+- ✅ Use `accuracy-checker` agent for systematic validation
 
-### Both:
+### Overall:
 - ✅ Sect-aware interpretation
 - ✅ Dignity-based strength assessment
 - ✅ House ruler insights integrated
 - ✅ Thematic coherence throughout
-- ✅ No contradictions between files
+- ✅ Synthesis matches seed_data technical facts
 - ✅ Professional tone maintained
 
 ---
@@ -1035,19 +1080,19 @@ Before delivering any interpretation, verify:
 
 **Synthesis/PDF**: "Who you are at your essence—your character, strengths, challenges, and life path based on your birth chart."
 
-**Process/MD**: Complete technical breakdown of planetary positions, aspects, houses, dignities, with traditional source citations.
+**Technical Data**: `seed_data.json` contains complete planetary positions, aspects, houses, dignities, with traditional source references.
 
 ### Mode 2: Life Arc Timeline
 
 **Synthesis/PDF**: "Your life story in major chapters—where you've been, where you are now, and what's ahead, showing the arc of your development over decades."
 
-**Process/MD**: Technical timeline showing profections, ZR Fortune/Spirit L1/L2 periods, progressions, solar returns, transits with exact dates and ages.
+**Technical Data**: `seed_data.json` contains technical timeline showing profections, ZR Fortune/Spirit L1/L2 periods, progressions, solar returns, transits with exact dates and ages.
 
-### Mode 3: Transit Report (Future)
+### Mode 3: Transit Report
 
-**Synthesis/PDF**: "What's coming in the next 6 months to 3 years—major themes, timing windows, and how current sky movements activate your natal chart."
+**Synthesis/PDF**: "What's coming in the next period—major themes, timing windows, and how current sky movements activate your natal chart."
 
-**Process/MD**: Chronological transit timeline with exact dates, orb windows, aspect types, retrograde cycles, and technical data.
+**Technical Data**: `seed_data.json` contains chronological transit timeline with exact dates, orb windows, aspect types, retrograde cycles, and technical data.
 
 ---
 
@@ -1075,22 +1120,22 @@ Before delivering any interpretation, verify:
    - Bad: "All your challenges are blessings!"
    - Good: "Your challenges have refined you, though they've been genuinely difficult"
 
-### ❌ In Process/MD:
+### ❌ In Technical Data (seed_data.json):
 
-1. **Avoiding technical language**
-   - This file NEEDS astrological terminology
+1. **Missing calculations**
+   - Ensure all required calculations present (planets, houses, aspects, dignities)
 
-2. **Omitting source citations**
-   - Always cite traditional sources
+2. **Incorrect astronomical data**
+   - Verify against Swiss Ephemeris
 
 3. **Skipping dignity assessments**
-   - Document planetary strength
+   - Document planetary strength (domicile, exaltation, triplicity, terms, decans)
 
 4. **Ignoring sect**
-   - Day/night charts interpret differently
+   - Day/night charts require sect calculations
 
 5. **Using modern methods as primary**
-   - Hellenistic base, modern context only
+   - Traditional Seven (Sun-Saturn) PRIMARY, modern planets (Uranus-Pluto) SECONDARY
 
 ---
 
@@ -1123,12 +1168,14 @@ Every agent that generates interpretations MUST:
 
 ## Summary: The Core Principle
 
-**Two audiences, two files, two voices:**
+**Single-file synthesis with technical verification via seed_data:**
 
-1. **For the native (PDF)**: Psychological narrative with zero jargon
-2. **For the astrologer (MD)**: Technical data with full terminology
+1. **For the native (Synthesis PDF)**: Psychological narrative with SPARSE astrological references (translated immediately)
+2. **For verification (seed_data.json)**: All technical calculations and astrological assessments
 
 The native should feel **deeply understood**.
-The astrologer should be able to **verify every claim**.
+The astrologer should be able to **verify every claim** via seed_data.json and accuracy-checker.
 
-Both should feel they received a **professional, thorough, insightful** interpretation grounded in traditional astrology but expressed in the appropriate voice for each audience.
+The synthesis should be **professional, thorough, insightful** - grounded in traditional astrology but expressed in accessible psychological language.
+
+**Token Optimization**: Synthesis-only workflow saves 7,500-11,500 tokens per report (30-35% reduction) while maintaining quality via seed_data technical verification.

@@ -9,7 +9,16 @@
 
 Features we may implement but haven't fully planned yet:
 
--  add scoring system to natal interpreter?
+- **Hierarchical scoring optimization (token efficiency)**:
+  - **Current**: Agents calculate PRIMARY/SECONDARY/TERTIARY weights from seed_data (~150 lines in prompt)
+  - **Option A (Python-only)**: Move all scoring to seed_data_generator.py - saves 60-80% tokens but rigid/inflexible
+  - **Option B (Hybrid - RECOMMENDED)**: Python calculates "scoring hints" (base_weight, elevation_triggers, suggested_weight), agent makes final interpretive decision
+  - **Benefits**: ~60% token reduction, transparent debugging, retains agent flexibility for narrative coherence
+  - **Implementation effort**: Medium (~3-5 hours to add scoring hints function)
+  - **Decision**: Keep current approach until token costs become measurable problem, then implement hybrid
+  - **Documentation**: See hierarchical_weighting_specification.md for complete scoring rules
+
+-  add scoring system to natal interpreter? (DUPLICATE - see above)
 - update agents/orchistrator so the agetns outpout the final files
 - make poetic wrap up more poetic and 3-5 sentences
 - refactor docs folder for current spec, future plans, and archive
@@ -98,7 +107,7 @@ Features we may implement but haven't fully planned yet:
    - Page 3: Synthesis Introduction (600-800 words) - essential you overview, flowing narrative
    - Pages 4-19: Main Synthesis (~4,800 words) - woven narrative
    - Page 20: Synthesis & Integration (300 words) - poetic wrapup at END of document
-   - Remove all technical sections (goes to separate process file)
+   - **NOTE**: Technical sections removed (synthesis-only workflow as of October 2025)
    - Target: 5,700-6,000 words = 19-20 pages
 
 3. **Content Enhancements** (weaving techniques together):
@@ -144,7 +153,7 @@ Features we may implement but haven't fully planned yet:
    - Add complete 13-point integration formula
    - Add word count targets per section (total 5,700-6,000 words)
    - Add weaving examples for each section type
-   - Remove instructions to generate technical sections III-VIII (goes to separate process file)
+   - **NOTE**: Technical section instructions removed (synthesis-only workflow as of October 2025)
 
 3. **Optional Section Expansion** (if needed for 20 pages):
    - Add "Relationships & Intimacy" (separate from Love & Relating)

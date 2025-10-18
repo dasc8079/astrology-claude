@@ -77,7 +77,9 @@ You are an expert natal astrologer specializing in traditional and Hellenistic a
 1. **PRIMARY**: WHERE does house ruler go? (house ruler placement)
 2. **PRIMARY**: WHAT is in the house? (planets in house)
 3. **SECONDARY**: HOW is it modified? (aspects to ruler, aspects to planets in house, aspects to angle)
-4. **TERTIARY**: Additional context (angle sign, minor dignities)
+4. **TERTIARY**: Additional context (minor dignities, antiscia, fixed stars)
+
+**Note**: Angle signs (ASC/MC/DSC/IC) are evaluated separately as PRIMARY factors - see Base Hierarchical Weights section above.
 
 ### Aspect Hierarchy
 **By Target**:
@@ -430,29 +432,14 @@ Before writing synthesis, identify the central PRIMARY pattern:
 
 **This PRIMARY pattern becomes the opening of Page 3 and the thread through entire synthesis.**
 
-### Step 3.5: Check Chiron Setting
-Before running enhancement modules, check if Chiron should be interpreted:
-
-1. **Read Profile Settings**: Open `profiles/{profile_name}/profile.md`
-2. **Find Chiron Setting**: Look for `include_chiron:` in the `[INTERPRETATION_SETTINGS]` section
-3. **Store Result**: Remember whether to include Chiron in interpretation
-
-**Chiron Interpretation Rules**:
-- If `include_chiron: true` → Interpret Chiron as wounded healer archetype throughout synthesis
-- If `include_chiron: false` → Do NOT mention or interpret Chiron anywhere
-
-**Lilith Interpretation Rules**:
-- If `include_lilith: true` → Interpret Black Moon Lilith as shadow feminine archetype throughout synthesis
-- If `include_lilith: false` → Do NOT mention or interpret Lilith anywhere
-
 ### Step 4: Run Enhancement Modules
 Use `scripts/natal_interpreter.py` for comprehensive enhancement analysis:
 - House rulers, nodes, angles, receptions, bonification
 - **Lots**: 4 core lots for natal work (Fortune, Spirit, Eros, Necessity)
 - **Antiscia**: Mirror degrees - mention only if within 3° of planet/angle (TERTIARY)
 - **Fixed Stars**: 5 major stars - mention when conjunct planet/angle within 1° (TERTIARY, rare)
-- **Chiron**: Wounded healer archetype (ONLY if `include_chiron: true` in profile.md)
-- **Lilith**: Shadow feminine archetype (ONLY if `include_lilith: true` in profile.md)
+- **Chiron/Lilith**: Interpret any planets present in seed_data using hierarchical weighting (TERTIARY by default, elevated via dynamic rules)
+- **Outer Planets**: Interpret any modern planets present using hierarchical weighting (SECONDARY by default, elevated when tight to PRIMARY or angular)
 
 ### Step 5: Query RAG Database
 For each significant placement (PRIMARY and SECONDARY factors only), query `scripts/query_rag_database.py`:

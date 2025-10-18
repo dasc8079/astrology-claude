@@ -516,8 +516,23 @@ def calculate_angle_aspects(planet_data, asc_longitude, mc_longitude):
     return angle_aspects
 
 
-def calculate_lots(jd, asc_longitude, planet_data, sect_type):
-    """Calculate Hermetic lots (Fortune, Spirit, and 13 additional lots - 15 total)."""
+def calculate_lots(jd, asc_longitude, planet_data, sect_type, lot_set='natal'):
+    """
+    Calculate Hermetic lots based on specified lot_set.
+
+    Args:
+        jd: Julian day
+        asc_longitude: Ascendant longitude
+        planet_data: List of planet dictionaries
+        sect_type: 'day' or 'night'
+        lot_set: Which lots to calculate:
+            - 'natal': 4 essential Hermetic lots (Fortune, Spirit, Eros, Necessity)
+            - 'life_arc': 7 Hermetic lots (adds Courage, Victory, Saturn)
+            - 'full': All 15 lots (adds 8 life-area lots: Exaltation, Marriage, Children, Father, Mother, Siblings, Accusation, Friends)
+
+    Returns:
+        List of lot dictionaries with position and calculation data
+    """
     sun = next(p for p in planet_data if p['name'] == 'Sun')
     moon = next(p for p in planet_data if p['name'] == 'Moon')
     mercury = next(p for p in planet_data if p['name'] == 'Mercury')
@@ -699,223 +714,256 @@ def calculate_lots(jd, asc_longitude, planet_data, sect_type):
         friends_lon = (asc_longitude + mercury_lon - moon_lon) % 360
     friends_sign, friends_degree = get_sign_and_degree(friends_lon)
 
-    return [
-        {
-            'name': 'Lot of Fortune',
-            'symbol': '⊗',
-            'position': {
-                'sign': fortune_sign,
-                'degree': round(fortune_degree, 4),
-                'dms': decimal_to_dms(fortune_degree),
-            },
-            'calculation': {
-                'formula': 'ASC + Moon - Sun (day) / ASC + Sun - Moon (night)',
-                'day_formula': 'ASC + Moon - Sun',
-                'night_formula': 'ASC + Sun - Moon',
-            }
+    # Build lot dictionaries (always calculated, but conditionally returned)
+    lot_fortune = {
+        'name': 'Lot of Fortune',
+        'symbol': '⊗',
+        'position': {
+            'sign': fortune_sign,
+            'degree': round(fortune_degree, 4),
+            'dms': decimal_to_dms(fortune_degree),
         },
-        {
-            'name': 'Lot of Spirit',
-            'symbol': '⊙',
-            'position': {
-                'sign': spirit_sign,
-                'degree': round(spirit_degree, 4),
-                'dms': decimal_to_dms(spirit_degree),
-            },
-            'calculation': {
-                'formula': 'ASC + Sun - Moon (day) / ASC + Moon - Sun (night)',
-                'day_formula': 'ASC + Sun - Moon',
-                'night_formula': 'ASC + Moon - Sun',
-            }
-        },
-        {
-            'name': 'Lot of Eros',
-            'symbol': '♡',
-            'position': {
-                'sign': eros_sign,
-                'degree': round(eros_degree, 4),
-                'dms': decimal_to_dms(eros_degree),
-            },
-            'calculation': {
-                'formula': 'ASC + Venus - Spirit (day) / ASC + Spirit - Venus (night)',
-                'day_formula': 'ASC + Venus - Spirit',
-                'night_formula': 'ASC + Spirit - Venus',
-            }
-        },
-        {
-            'name': 'Lot of Necessity',
-            'symbol': '⚙',
-            'position': {
-                'sign': necessity_sign,
-                'degree': round(necessity_degree, 4),
-                'dms': decimal_to_dms(necessity_degree),
-            },
-            'calculation': {
-                'formula': 'ASC + Fortune - Mercury (day) / ASC + Mercury - Fortune (night)',
-                'day_formula': 'ASC + Fortune - Mercury',
-                'night_formula': 'ASC + Mercury - Fortune',
-            }
-        },
-        {
-            'name': 'Lot of Courage',
-            'symbol': '⚔',
-            'position': {
-                'sign': courage_sign,
-                'degree': round(courage_degree, 4),
-                'dms': decimal_to_dms(courage_degree),
-            },
-            'calculation': {
-                'formula': 'ASC + Fortune - Mars (day) / ASC + Mars - Fortune (night)',
-                'day_formula': 'ASC + Fortune - Mars',
-                'night_formula': 'ASC + Mars - Fortune',
-            }
-        },
-        {
-            'name': 'Lot of Victory',
-            'symbol': '🏆',
-            'position': {
-                'sign': victory_sign,
-                'degree': round(victory_degree, 4),
-                'dms': decimal_to_dms(victory_degree),
-            },
-            'calculation': {
-                'formula': 'ASC + Spirit - Jupiter (day) / ASC + Jupiter - Spirit (night)',
-                'day_formula': 'ASC + Spirit - Jupiter',
-                'night_formula': 'ASC + Jupiter - Spirit',
-            }
-        },
-        {
-            'name': 'Lot of Saturn',
-            'symbol': '⚓',
-            'position': {
-                'sign': basis_sign,
-                'degree': round(basis_degree, 4),
-                'dms': decimal_to_dms(basis_degree),
-            },
-            'calculation': {
-                'formula': 'ASC + Fortune - Saturn (day) / ASC + Saturn - Fortune (night)',
-                'day_formula': 'ASC + Fortune - Saturn',
-                'night_formula': 'ASC + Saturn - Fortune',
-            },
-            'interpretation': {
-                'type': saturn_interpretation,
-                'themes': saturn_themes,
-                'determined_by': f"Saturn in {saturn_sign} ({'dignified' if is_dignified and not is_debilitated else 'debilitated' if is_debilitated else 'peregrine'})"
-            }
-        },
-        {
-            'name': 'Lot of Exaltation',
-            'symbol': '👑',
-            'position': {
-                'sign': exaltation_sign,
-                'degree': round(exaltation_degree, 4),
-                'dms': decimal_to_dms(exaltation_degree),
-            },
-            'calculation': {
-                'formula': 'ASC + Mars - Sun',
-                'day_formula': 'ASC + Mars - Sun',
-                'night_formula': 'ASC + Mars - Sun',
-            }
-        },
-        {
-            'name': 'Lot of Marriage',
-            'symbol': '💍',
-            'position': {
-                'sign': marriage_sign,
-                'degree': round(marriage_degree, 4),
-                'dms': decimal_to_dms(marriage_degree),
-            },
-            'calculation': {
-                'formula': 'ASC + Venus - Saturn',
-                'day_formula': 'ASC + Venus - Saturn',
-                'night_formula': 'ASC + Venus - Saturn',
-            }
-        },
-        {
-            'name': 'Lot of Children',
-            'symbol': '👶',
-            'position': {
-                'sign': children_sign,
-                'degree': round(children_degree, 4),
-                'dms': decimal_to_dms(children_degree),
-            },
-            'calculation': {
-                'formula': 'ASC + Jupiter - Saturn (day) / ASC + Saturn - Jupiter (night)',
-                'day_formula': 'ASC + Jupiter - Saturn',
-                'night_formula': 'ASC + Saturn - Jupiter',
-            }
-        },
-        {
-            'name': 'Lot of Father',
-            'symbol': '👨',
-            'position': {
-                'sign': father_sign,
-                'degree': round(father_degree, 4),
-                'dms': decimal_to_dms(father_degree),
-            },
-            'calculation': {
-                'formula': 'ASC + Sun - Saturn (day) / ASC + Saturn - Sun (night)',
-                'day_formula': 'ASC + Sun - Saturn',
-                'night_formula': 'ASC + Saturn - Sun',
-            }
-        },
-        {
-            'name': 'Lot of Mother',
-            'symbol': '👩',
-            'position': {
-                'sign': mother_sign,
-                'degree': round(mother_degree, 4),
-                'dms': decimal_to_dms(mother_degree),
-            },
-            'calculation': {
-                'formula': 'ASC + Moon - Venus (day) / ASC + Venus - Moon (night)',
-                'day_formula': 'ASC + Moon - Venus',
-                'night_formula': 'ASC + Venus - Moon',
-            }
-        },
-        {
-            'name': 'Lot of Siblings',
-            'symbol': '👥',
-            'position': {
-                'sign': siblings_sign,
-                'degree': round(siblings_degree, 4),
-                'dms': decimal_to_dms(siblings_degree),
-            },
-            'calculation': {
-                'formula': 'ASC + Jupiter - Saturn (day) / ASC + Saturn - Jupiter (night)',
-                'day_formula': 'ASC + Jupiter - Saturn',
-                'night_formula': 'ASC + Saturn - Jupiter',
-            }
-        },
-        {
-            'name': 'Lot of Accusation',
-            'symbol': '⚖️',
-            'position': {
-                'sign': accusation_sign,
-                'degree': round(accusation_degree, 4),
-                'dms': decimal_to_dms(accusation_degree),
-            },
-            'calculation': {
-                'formula': 'ASC + Mars - Saturn (day) / ASC + Saturn - Mars (night)',
-                'day_formula': 'ASC + Mars - Saturn',
-                'night_formula': 'ASC + Saturn - Mars',
-            }
-        },
-        {
-            'name': 'Lot of Friends',
-            'symbol': '🤝',
-            'position': {
-                'sign': friends_sign,
-                'degree': round(friends_degree, 4),
-                'dms': decimal_to_dms(friends_degree),
-            },
-            'calculation': {
-                'formula': 'ASC + Moon - Mercury (day) / ASC + Mercury - Moon (night)',
-                'day_formula': 'ASC + Moon - Mercury',
-                'night_formula': 'ASC + Mercury - Moon',
-            }
+        'calculation': {
+            'formula': 'ASC + Moon - Sun (day) / ASC + Sun - Moon (night)',
+            'day_formula': 'ASC + Moon - Sun',
+            'night_formula': 'ASC + Sun - Moon',
         }
-    ]
+    }
+
+    lot_spirit = {
+        'name': 'Lot of Spirit',
+        'symbol': '⊙',
+        'position': {
+            'sign': spirit_sign,
+            'degree': round(spirit_degree, 4),
+            'dms': decimal_to_dms(spirit_degree),
+        },
+        'calculation': {
+            'formula': 'ASC + Sun - Moon (day) / ASC + Moon - Sun (night)',
+            'day_formula': 'ASC + Sun - Moon',
+            'night_formula': 'ASC + Moon - Sun',
+        }
+    }
+
+    lot_eros = {
+        'name': 'Lot of Eros',
+        'symbol': '♡',
+        'position': {
+            'sign': eros_sign,
+            'degree': round(eros_degree, 4),
+            'dms': decimal_to_dms(eros_degree),
+        },
+        'calculation': {
+            'formula': 'ASC + Venus - Spirit (day) / ASC + Spirit - Venus (night)',
+            'day_formula': 'ASC + Venus - Spirit',
+            'night_formula': 'ASC + Spirit - Venus',
+        }
+    }
+
+    lot_necessity = {
+        'name': 'Lot of Necessity',
+        'symbol': '⚙',
+        'position': {
+            'sign': necessity_sign,
+            'degree': round(necessity_degree, 4),
+            'dms': decimal_to_dms(necessity_degree),
+        },
+        'calculation': {
+            'formula': 'ASC + Fortune - Mercury (day) / ASC + Mercury - Fortune (night)',
+            'day_formula': 'ASC + Fortune - Mercury',
+            'night_formula': 'ASC + Mercury - Fortune',
+        }
+    }
+
+    lot_courage = {
+        'name': 'Lot of Courage',
+        'symbol': '⚔',
+        'position': {
+            'sign': courage_sign,
+            'degree': round(courage_degree, 4),
+            'dms': decimal_to_dms(courage_degree),
+        },
+        'calculation': {
+            'formula': 'ASC + Fortune - Mars (day) / ASC + Mars - Fortune (night)',
+            'day_formula': 'ASC + Fortune - Mars',
+            'night_formula': 'ASC + Mars - Fortune',
+        }
+    }
+
+    lot_victory = {
+        'name': 'Lot of Victory',
+        'symbol': '🏆',
+        'position': {
+            'sign': victory_sign,
+            'degree': round(victory_degree, 4),
+            'dms': decimal_to_dms(victory_degree),
+        },
+        'calculation': {
+            'formula': 'ASC + Spirit - Jupiter (day) / ASC + Jupiter - Spirit (night)',
+            'day_formula': 'ASC + Spirit - Jupiter',
+            'night_formula': 'ASC + Jupiter - Spirit',
+        }
+    }
+
+    lot_saturn = {
+        'name': 'Lot of Saturn',
+        'symbol': '⚓',
+        'position': {
+            'sign': basis_sign,
+            'degree': round(basis_degree, 4),
+            'dms': decimal_to_dms(basis_degree),
+        },
+        'calculation': {
+            'formula': 'ASC + Fortune - Saturn (day) / ASC + Saturn - Fortune (night)',
+            'day_formula': 'ASC + Fortune - Saturn',
+            'night_formula': 'ASC + Saturn - Fortune',
+        },
+        'interpretation': {
+            'type': saturn_interpretation,
+            'themes': saturn_themes,
+            'determined_by': f"Saturn in {saturn_sign} ({'dignified' if is_dignified and not is_debilitated else 'debilitated' if is_debilitated else 'peregrine'})"
+        }
+    }
+
+    lot_exaltation = {
+        'name': 'Lot of Exaltation',
+        'symbol': '👑',
+        'position': {
+            'sign': exaltation_sign,
+            'degree': round(exaltation_degree, 4),
+            'dms': decimal_to_dms(exaltation_degree),
+        },
+        'calculation': {
+            'formula': 'ASC + Mars - Sun',
+            'day_formula': 'ASC + Mars - Sun',
+            'night_formula': 'ASC + Mars - Sun',
+        }
+    }
+
+    lot_marriage = {
+        'name': 'Lot of Marriage',
+        'symbol': '💍',
+        'position': {
+            'sign': marriage_sign,
+            'degree': round(marriage_degree, 4),
+            'dms': decimal_to_dms(marriage_degree),
+        },
+        'calculation': {
+            'formula': 'ASC + Venus - Saturn',
+            'day_formula': 'ASC + Venus - Saturn',
+            'night_formula': 'ASC + Venus - Saturn',
+        }
+    }
+
+    lot_children = {
+        'name': 'Lot of Children',
+        'symbol': '👶',
+        'position': {
+            'sign': children_sign,
+            'degree': round(children_degree, 4),
+            'dms': decimal_to_dms(children_degree),
+        },
+        'calculation': {
+            'formula': 'ASC + Jupiter - Saturn (day) / ASC + Saturn - Jupiter (night)',
+            'day_formula': 'ASC + Jupiter - Saturn',
+            'night_formula': 'ASC + Saturn - Jupiter',
+        }
+    }
+
+    lot_father = {
+        'name': 'Lot of Father',
+        'symbol': '👨',
+        'position': {
+            'sign': father_sign,
+            'degree': round(father_degree, 4),
+            'dms': decimal_to_dms(father_degree),
+        },
+        'calculation': {
+            'formula': 'ASC + Sun - Saturn (day) / ASC + Saturn - Sun (night)',
+            'day_formula': 'ASC + Sun - Saturn',
+            'night_formula': 'ASC + Saturn - Sun',
+        }
+    }
+
+    lot_mother = {
+        'name': 'Lot of Mother',
+        'symbol': '👩',
+        'position': {
+            'sign': mother_sign,
+            'degree': round(mother_degree, 4),
+            'dms': decimal_to_dms(mother_degree),
+        },
+        'calculation': {
+            'formula': 'ASC + Moon - Venus (day) / ASC + Venus - Moon (night)',
+            'day_formula': 'ASC + Moon - Venus',
+            'night_formula': 'ASC + Venus - Moon',
+        }
+    }
+
+    lot_siblings = {
+        'name': 'Lot of Siblings',
+        'symbol': '👥',
+        'position': {
+            'sign': siblings_sign,
+            'degree': round(siblings_degree, 4),
+            'dms': decimal_to_dms(siblings_degree),
+        },
+        'calculation': {
+            'formula': 'ASC + Jupiter - Saturn (day) / ASC + Saturn - Jupiter (night)',
+            'day_formula': 'ASC + Jupiter - Saturn',
+            'night_formula': 'ASC + Saturn - Jupiter',
+        }
+    }
+
+    lot_accusation = {
+        'name': 'Lot of Accusation',
+        'symbol': '⚖️',
+        'position': {
+            'sign': accusation_sign,
+            'degree': round(accusation_degree, 4),
+            'dms': decimal_to_dms(accusation_degree),
+        },
+        'calculation': {
+            'formula': 'ASC + Mars - Saturn (day) / ASC + Saturn - Mars (night)',
+            'day_formula': 'ASC + Mars - Saturn',
+            'night_formula': 'ASC + Saturn - Mars',
+        }
+    }
+
+    lot_friends = {
+        'name': 'Lot of Friends',
+        'symbol': '🤝',
+        'position': {
+            'sign': friends_sign,
+            'degree': round(friends_degree, 4),
+            'dms': decimal_to_dms(friends_degree),
+        },
+        'calculation': {
+            'formula': 'ASC + Moon - Mercury (day) / ASC + Mercury - Moon (night)',
+            'day_formula': 'ASC + Moon - Mercury',
+            'night_formula': 'ASC + Mercury - Moon',
+        }
+    }
+
+    # Return appropriate lot set based on lot_set parameter
+    if lot_set == 'natal':
+        # 4 essential Hermetic lots for natal interpretation
+        return [lot_fortune, lot_spirit, lot_eros, lot_necessity]
+    elif lot_set == 'life_arc':
+        # 7 Hermetic lots for life arc timing
+        return [lot_fortune, lot_spirit, lot_eros, lot_necessity, lot_courage, lot_victory, lot_saturn]
+    elif lot_set == 'full':
+        # All 15 lots for comprehensive analysis (7 Hermetic + 8 life-area)
+        return [
+            lot_fortune, lot_spirit, lot_eros, lot_necessity,
+            lot_courage, lot_victory, lot_saturn,
+            lot_exaltation, lot_marriage, lot_children,
+            lot_father, lot_mother, lot_siblings,
+            lot_accusation, lot_friends
+        ]
+    else:
+        # Invalid lot_set, default to natal
+        return [lot_fortune, lot_spirit, lot_eros, lot_necessity]
 
 
 def calculate_nodes(jd):
@@ -1422,8 +1470,9 @@ def generate_seed_data(args):
     # Calculate angle aspects (aspects from planets to ASC/MC/DSC/IC)
     angle_aspects = calculate_angle_aspects(planet_data, house_info['ascendant']['longitude'], house_info['midheaven']['longitude'])
 
-    # Calculate lots
-    lots = calculate_lots(jd, house_info['ascendant']['longitude'], planet_data, sect['type'])
+    # Calculate lots (using lot_set from args if available, default to 'natal')
+    lot_set = getattr(args, 'lot_set', 'natal')
+    lots = calculate_lots(jd, house_info['ascendant']['longitude'], planet_data, sect['type'], lot_set=lot_set)
 
     # Calculate nodes
     nodes = calculate_nodes(jd)
@@ -1495,6 +1544,8 @@ def main():
     parser.add_argument('--lon', type=float, required=True, help='Longitude (decimal)')
     parser.add_argument('--timezone', required=True, help='Timezone (e.g., America/New_York)')
     parser.add_argument('--output', help='Output file path (default: profiles/<name>/seed_data/master_seed_data.yaml)')
+    parser.add_argument('--lot-set', choices=['natal', 'life_arc', 'full'], default='natal',
+                        help='Which lot set to calculate: natal (4 essential), life_arc (7 Hermetic), full (all 16)')
 
     args = parser.parse_args()
 
@@ -1519,6 +1570,7 @@ def main():
     print(f"   Sect: {seed_data['chart_framework']['sect']['type']}")
     print(f"   Ascendant: {seed_data['chart_framework']['ascendant']['sign']}")
     print(f"   Planets: {len([p for p in seed_data['planets'] if p['traditional']])} traditional + {len([p for p in seed_data['planets'] if not p['traditional']])} modern")
+    print(f"   Lots: {len(seed_data['lots'])} ({args.lot_set} set)")
 
 
 if __name__ == '__main__':

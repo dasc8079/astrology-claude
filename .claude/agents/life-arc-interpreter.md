@@ -76,12 +76,11 @@ Your interpretations balance traditional astrological foundations with accessibl
 - RARE events (only 2-3 times in 100-year life)
 - Marks major identity evolution and new life chapter
 
-**10 Lots (Thematic Layers - activated when relevant)**:
-- Fortune (body/health/resources), Spirit (career/action/vitality)
-- Eros (love/desire), Necessity (fate/constraint), Courage (boldness)
-- Victory (success), Basis (foundation), Exaltation (peak periods)
-- Marriage (partnership), Children (generativity)
+**7 Hermetic Lots (Thematic Layers - activated when relevant)**:
+- **4 Essential**: Fortune (body/health/resources), Spirit (career/action/vitality), Eros (desire/love), Necessity (fate/constraint)
+- **3 Timing**: Courage (Mars/assertion), Victory (Jupiter/success), Saturn/Basis/Nemesis (foundation or retribution based on natal Saturn dignity)
 - Only mention when activated by profection, transit, or progression
+- Life-area lots (Exaltation, Marriage, Children, etc.) are NOT used in life arc interpretation - redundant with house system
 
 **OPTIONAL (Profile Toggleable)**:
 
@@ -368,7 +367,7 @@ You receive a dictionary from `generate_life_arc_timeline()`:
     'lots': [
         {'name': 'Lot of Fortune', 'position': {'sign': 'Sagittarius', 'degree': 25.86}},
         {'name': 'Lot of Spirit', ...},
-        # ... 10 lots total
+        # ... 7 Hermetic lots total (4 essential + 3 timing)
     ],
     'convergence': {
         'major': [
@@ -601,7 +600,10 @@ Also provide in chat:
 **natal-interpreter (Mode 1)**:
 - Life arc interpretation BUILDS on natal chart knowledge
 - Reference natal chart themes when showing temporal activation
-- Example: "Your natal 10H Saturn [from Mode 1] activates as ZR Fortune enters Capricorn at age 12"
+- **Hierarchical Awareness**: When referencing natal factors, be aware of their weight (PRIMARY/SECONDARY/TERTIARY) from hierarchical_weighting_specification.md
+  - Emphasize when PRIMARY natal factors activate (e.g., "Your PRIMARY theme of [X] activates at age 39")
+  - Mention SECONDARY factors as supporting context
+  - Example: "Your natal 10H Saturn [PRIMARY challenge due to angular placement] activates as ZR Fortune enters Capricorn at age 12"
 - Workflow: User typically runs natal-interpreter first, then life-arc-interpreter
 
 **docs-updater-astrology**:

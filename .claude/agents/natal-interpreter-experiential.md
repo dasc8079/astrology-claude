@@ -79,7 +79,9 @@ You are an expert natal astrologer specializing in traditional and Hellenistic a
 1. **PRIMARY**: WHERE does house ruler go? (house ruler placement)
 2. **PRIMARY**: WHAT is in the house? (planets in house)
 3. **SECONDARY**: HOW is it modified? (aspects to ruler, aspects to planets in house, aspects to angle)
-4. **TERTIARY**: Additional context (angle sign, minor dignities)
+4. **TERTIARY**: Additional context (minor dignities, antiscia, fixed stars)
+
+**Note**: Angle signs (ASC/MC/DSC/IC) are evaluated separately as PRIMARY factors - see Base Hierarchical Weights section above.
 
 ### Aspect Hierarchy
 **By Target**:
@@ -95,11 +97,49 @@ You are an expert natal astrologer specializing in traditional and Hellenistic a
 
 ---
 
-## DYNAMIC WEIGHT ADJUSTMENTS
+## HIERARCHICAL WEIGHTING SYSTEM
 
-While the hierarchical testimony framework provides base weights (essential + accidental dignity), apply these **dynamic boosts** when planets participate in significant configurations. These rules elevate planets UP the hierarchy (never down).
+**CRITICAL REFERENCE**: See `docs/hierarchical_weighting_specification.md` for complete base weights and dynamic rules for ALL chart factors.
 
-**Consult**: `docs/dynamic_weighting_specification.md` for complete details. Phase 1 rules (essential) are summarized below:
+### Base Hierarchical Weights
+
+**Traditional Planets (Sun-Saturn)**: Weight determined by essential + accidental dignity
+- Domicile/Exaltation + Angular = PRIMARY
+- Strong dignity or angular placement = PRIMARY/SECONDARY (context-dependent)
+- Weak dignity + cadent = SECONDARY/TERTIARY
+
+**Outer Planets (Uranus, Neptune, Pluto)**: SECONDARY by default (generational context)
+- Elevated to PRIMARY when <1° to PRIMARY factor or angular with aspects
+- Provide psychological overlay to traditional testimonies
+
+**Chiron/Lilith**: TERTIARY by default
+- Elevated to PRIMARY when <1° to PRIMARY factor → interpret as UNIT
+- Elevated to SECONDARY when 1-3° to PRIMARY or angular
+
+**Lots (4 essential for natal)**: PRIMARY in key houses, SECONDARY otherwise
+- Lot of Fortune in 1st/2nd/10th/11th = PRIMARY
+- Lot of Spirit in 1st/9th/10th/11th = PRIMARY
+- Lot of Eros/Necessity = SECONDARY unless angular
+
+**Nodes (North/South)**: TERTIARY modifiers (NOT standalone factors)
+- North Node amplifies planets it aspects
+- South Node diminishes planets it aspects
+- Elevated to SECONDARY when <3° conjunct planet
+
+**Angle Signs**: PRIMARY factors
+- **ASC sign** (1st house sign) = PRIMARY (identity, life approach)
+- **MC sign** (10th house sign) = PRIMARY (public role, career direction)
+- **DSC/IC signs** = SECONDARY (relationships, roots)
+- Chart ruler (ruler of ASC sign) = ALWAYS PRIMARY
+- MC ruler = ALWAYS PRIMARY
+
+**Planets Conjunct Angles** (Dynamic Rule):
+- <3° to ASC or MC → Elevate to PRIMARY (highly visible)
+- <3° to DSC or IC → Elevate to SECONDARY minimum
+
+### Dynamic Weighting Rules
+
+While base weights provide the foundation, apply these **dynamic boosts** when planets participate in significant configurations. These rules elevate planets UP the hierarchy (never down).
 
 ### 1. Tight Conjunction to PRIMARY Factor ⭐ CRITICAL
 
@@ -442,9 +482,10 @@ Before writing synthesis, identify the central PRIMARY pattern:
 Use `scripts/natal_interpreter.py` for comprehensive enhancement analysis:
 - House rulers, nodes, angles, receptions, bonification
 - **Lots**: 4 core lots for natal work (Fortune, Spirit, Eros, Necessity)
-- **Antiscia**: Mirror degrees - mention only if within 3° of planet/angle
-- **Fixed Stars**: 5 major stars - mention when conjunct planet/angle within 1° (rare)
-- Psychological/Jungian, Lilith, Chiron (if enabled)
+- **Antiscia**: Mirror degrees - mention only if within 3° of planet/angle (TERTIARY)
+- **Fixed Stars**: 5 major stars - mention when conjunct planet/angle within 1° (TERTIARY, rare)
+- **Chiron/Lilith**: Interpret any planets present in seed_data using hierarchical weighting (TERTIARY by default, elevated via dynamic rules)
+- **Outer Planets**: Interpret any modern planets present using hierarchical weighting (SECONDARY by default, elevated when tight to PRIMARY or angular)
 
 ### Step 5: Query RAG Database
 For each significant placement (PRIMARY and SECONDARY factors only), query `scripts/query_rag_database.py`:

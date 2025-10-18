@@ -21,6 +21,47 @@ The astrology project uses two key orchestration agents that should be used **pr
 
 The mode-orchestrator should handle **all astrology interpretation requests**. It manages the complete workflow from profile loading through calculation and interpretation to final output generation.
 
+### Default Workflow (Standard Process)
+
+When generating astrology reports, follow this standard workflow:
+
+**Step 1: Invoke mode-orchestrator**
+```
+User: "Generate natal horoscope for Sam_P"
+Assistant: Uses Task tool to invoke mode-orchestrator
+```
+
+**Step 2: mode-orchestrator manages the pipeline**
+- Loads profile from `profiles/{name}/profile.md`
+- Checks for `output_mode` setting (standard/custom)
+- Loads seed data from `profiles/{name}/seed_data/seed_data.json`
+  - **Seed data already exists** from initial profile creation
+  - **NO need to regenerate** unless birth data changed
+  - Contains all astronomical calculations (planets, houses, aspects, dignities)
+
+**Step 3: mode-orchestrator invokes interpreter agent**
+- For Mode 1 (Natal): Invokes `natal-interpreter` or `natal-interpreter-experiential`
+- For Mode 2 (Life Arc): Invokes `life-arc-interpreter`
+- For Mode 3 (Transits): Invokes `transit-analyzer-short` or `transit-analyzer-long`
+- Passes seed data + profile settings to interpreter
+
+**Step 4: Interpreter agent generates output**
+- Creates synthesis file (accessible narrative): `natal_synthesis_{name}_{date}.md`
+- **NOTE**: Process files no longer generated (removed October 2025 for 30-35% token reduction)
+- All technical data resides in `seed_data.json`
+- Returns synthesis file to mode-orchestrator
+
+**Step 5: mode-orchestrator saves files**
+- Saves to `profiles/{name}/output/` directory
+- Returns file paths to user
+- Offers PDF generation option
+
+**Key Points**:
+- **Always use mode-orchestrator** - Don't manually invoke interpreter agents
+- **Seed data persists** - No need to regenerate unless birth data changes
+- **Custom mods handled automatically** - Interpreter reads `output_mode` from profile.md
+- **Consistent file naming** - Orchestrator ensures standard naming conventions
+
 ### When to Use (Proactively)
 
 **Direct Report Requests**:

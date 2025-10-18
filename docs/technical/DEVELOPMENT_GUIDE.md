@@ -349,10 +349,11 @@ All interpretation agents MUST include these sections in their instructions:
 1. **Output Format Standards**:
 ```
 Follow OUTPUT_STYLE_GUIDE.md for all output:
-- Two-file system: process.md (technical) + synthesis.pdf (narrative)
+- Synthesis-only workflow (removed October 2025 for 30-35% token reduction)
+- Single markdown file → PDF (technical data in seed_data.json)
 - Report structure templates based on type (Chart-Based, Timeline-Based, Movement-Based)
 - Title page with metadata
-- Voice standards (psychological depth, second-person, minimal jargon)
+- Voice standards (psychological depth, second-person, SPARSE astrological references)
 ```
 
 2. **PDF Generation**:
@@ -390,7 +391,7 @@ Specify which template from OUTPUT_STYLE_GUIDE.md:
 - [ ] References ASTROLOGY_REFERENCE.md (not duplicating content)
 - [ ] Includes title page generation instructions
 - [ ] Specifies voice standards (psychological depth, therapeutic tone)
-- [ ] Defines two-file output (process.md + synthesis.pdf)
+- [ ] Generates synthesis-only output (markdown → PDF via pdf_generator.py)
 - [ ] Uses appropriate report structure template
 
 ### Example Agent Instruction Block
@@ -402,8 +403,8 @@ Follow [OUTPUT_STYLE_GUIDE.md](docs/OUTPUT_STYLE_GUIDE.md) standards:
 
 **Report Type**: Timeline-Based (Template B)
 **Structure**: ZR L1 chapters → H2 headings, convergence events → H3 subheadings
-**Voice**: Psychological depth, second-person, minimal jargon
-**Files**: life_arc_process.md (technical) + life_arc_synthesis.pdf (narrative)
+**Voice**: Psychological depth, second-person, SPARSE astrological references
+**Output**: life_arc_synthesis.md → life_arc_synthesis.pdf (technical data in seed_data.json)
 
 ## PDF Generation
 

@@ -26,6 +26,28 @@ import markdown
 from weasyprint import HTML, CSS
 
 
+# ============================================================================
+# ZODIAC SYMBOL CONFIGURATION
+# ============================================================================
+
+# Set to True to use custom font with Unicode zodiac symbols (♈ ♉ ♊ etc.)
+# Set to False to use text abbreviations (ARI, TAU, GEM, etc.)
+USE_CUSTOM_ZODIAC_FONT = False
+
+# INSTRUCTIONS FOR CUSTOM FONT MODE:
+# 1. Set USE_CUSTOM_ZODIAC_FONT = True above
+# 2. Place your custom font file in scripts/fonts/ directory
+#    - Supported formats: .ttf, .otf, .woff, .woff2
+#    - Font must contain zodiac glyphs at Unicode U+2648 - U+2653
+# 3. Edit scripts/css/base.css:
+#    - Uncomment the @font-face declaration (lines ~14-19)
+#    - Update font path to match your font file name
+#    - Uncomment the font-family line in .zodiac-symbol class (line ~123)
+# 4. Test by regenerating a report
+
+# ============================================================================
+
+
 def load_seed_data(seed_data_path: Path) -> dict:
     """
     Load seed data from JSON or YAML file.
@@ -72,6 +94,9 @@ def extract_big_three(seed_data: dict) -> tuple:
     sun_sign = planets.get('Sun', {}).get('sign', 'Unknown')
     moon_sign = planets.get('Moon', {}).get('sign', 'Unknown')
     rising_sign = seed_data.get('chart_framework', {}).get('ascendant', {}).get('sign', 'Unknown')
+
+    # Debug output to verify extraction
+    print(f"DEBUG extract_big_three: Sun={sun_sign}, Moon={moon_sign}, Rising={rising_sign}")
 
     return sun_sign, moon_sign, rising_sign
 
@@ -260,6 +285,62 @@ def parse_markdown_headings(md_content: str) -> list:
     return headings
 
 
+def zodiac_sign_to_symbol(sign: str) -> str:
+    """
+    Convert zodiac sign name to symbol or text abbreviation.
+
+    Two modes controlled by USE_CUSTOM_ZODIAC_FONT constant:
+    1. Custom font mode (USE_CUSTOM_ZODIAC_FONT = True):
+       - Returns Unicode zodiac symbols (♈ ♉ ♊ etc.)
+       - Requires custom font with zodiac glyphs
+       - Font must be configured in base.css
+
+    2. Text abbreviation mode (USE_CUSTOM_ZODIAC_FONT = False, default):
+       - Returns 3-letter text abbreviations (ARI, TAU, GEM, etc.)
+       - Works without custom fonts
+       - WeasyPrint renders Unicode zodiac symbols as colored emojis
+         which cannot be styled to monochrome, hence text abbreviations
+    """
+    if USE_CUSTOM_ZODIAC_FONT:
+        # Custom font mode - Unicode zodiac symbols
+        symbol_map = {
+            'Aries': '♈',       # U+2648
+            'Taurus': '♉',      # U+2649
+            'Gemini': '♊',      # U+264A
+            'Cancer': '♋',      # U+264B
+            'Leo': '♌',         # U+264C
+            'Virgo': '♍',       # U+264D
+            'Libra': '♎',       # U+264E
+            'Scorpio': '♏',     # U+264F
+            'Sagittarius': '♐', # U+2650
+            'Capricorn': '♑',   # U+2651
+            'Aquarius': '♒',    # U+2652
+            'Pisces': '♓'       # U+2653
+        }
+        symbol = symbol_map.get(sign, '?')
+        print(f"DEBUG zodiac_sign_to_symbol (CUSTOM FONT MODE): sign='{sign}' -> symbol='{symbol}'")
+        return f'<span class="zodiac-symbol">{symbol}</span>'
+    else:
+        # Text abbreviation mode (default)
+        abbrev_map = {
+            'Aries': 'ARI',
+            'Taurus': 'TAU',
+            'Gemini': 'GEM',
+            'Cancer': 'CAN',
+            'Leo': 'LEO',
+            'Virgo': 'VIR',
+            'Libra': 'LIB',
+            'Scorpio': 'SCO',
+            'Sagittarius': 'SAG',
+            'Capricorn': 'CAP',
+            'Aquarius': 'AQU',
+            'Pisces': 'PIS'
+        }
+        abbrev = abbrev_map.get(sign, '???')
+        print(f"DEBUG zodiac_sign_to_symbol (TEXT MODE): sign='{sign}' -> abbrev='{abbrev}'")
+        return f'<span class="zodiac-symbol">{abbrev}</span>'
+
+
 def build_title_page(seed_data: dict, report_type: str, sun_sign: str, moon_sign: str, rising_sign: str) -> str:
     """
     Build HTML for title page (Page 1).
@@ -272,18 +353,10 @@ def build_title_page(seed_data: dict, report_type: str, sun_sign: str, moon_sign
     Returns:
         HTML string for title page
     """
-    # Zodiac sign symbols
-    sign_symbols = {
-        'Aries': '♈', 'Taurus': '♉', 'Gemini': '♊',
-        'Cancer': '♋', 'Leo': '♌', 'Virgo': '♍',
-        'Libra': '♎', 'Scorpio': '♏', 'Sagittarius': '♐',
-        'Capricorn': '♑', 'Aquarius': '♒', 'Pisces': '♓'
-    }
-
-    # Convert sign names to symbols
-    sun_symbol = sign_symbols.get(sun_sign, sun_sign)
-    moon_symbol = sign_symbols.get(moon_sign, moon_sign)
-    rising_symbol = sign_symbols.get(rising_sign, rising_sign)
+    # Convert sign names to Unicode symbols with CSS filter
+    sun_symbol = zodiac_sign_to_symbol(sun_sign)
+    moon_symbol = zodiac_sign_to_symbol(moon_sign)
+    rising_symbol = zodiac_sign_to_symbol(rising_sign)
 
     # Report title mapping
     title_map = {
@@ -315,6 +388,13 @@ def build_title_page(seed_data: dict, report_type: str, sun_sign: str, moon_sign
     # Generation date
     gen_date = datetime.now().strftime('%B %d, %Y')
 
+    # Debug: Print what we're about to insert
+    print(f"DEBUG HTML template symbols:")
+    print(f"  sun_symbol = {sun_symbol}")
+    print(f"  moon_symbol = {moon_symbol}")
+    print(f"  rising_symbol = {rising_symbol}")
+
+    # Use Unicode symbols with CSS filter for black/white rendering
     html = f'''
     <div class="title-page">
         <h1 class="report-title">{title}</h1>
@@ -325,12 +405,24 @@ def build_title_page(seed_data: dict, report_type: str, sun_sign: str, moon_sign
             {coords}
         </div>
         <div class="big-three">
-            ☉ {sun_symbol} • ☽ {moon_symbol} • ↗ {rising_symbol}
+            <span class="astro-symbol">☉</span>{sun_symbol} • <span class="astro-symbol">☽</span>{moon_symbol} • <span class="astro-symbol">↑</span>{rising_symbol}
         </div>
         <div class="generation-date">Report Generated: {gen_date}</div>
     </div>
-    <div class="page-break"></div>
     '''
+
+    # Debug: Print the complete big-three section (opening tag + content + closing tag)
+    print(f"DEBUG Generated HTML big-three section:")
+    lines = html.split('\n')
+    in_big_three = False
+    for i, line in enumerate(lines):
+        if 'big-three' in line:
+            in_big_three = True
+            # Print this line and the next 2 lines (content + closing tag)
+            for j in range(3):
+                if i + j < len(lines):
+                    print(f"  {lines[i + j].strip()}")
+            break
 
     return html
 
@@ -444,7 +536,7 @@ def build_chart_overview_page(seed_data: dict, report_type: str) -> str:
 
     overview_html += '</div>\n'
 
-    # Combine into full page
+    # Combine into full page (no page break - flows naturally in front matter)
     html = f'''
     <div class="overview-page">
         <h2>How to Use This Report</h2>
@@ -454,7 +546,6 @@ def build_chart_overview_page(seed_data: dict, report_type: str) -> str:
 
         {overview_html}
     </div>
-    <div class="page-break"></div>
     '''
 
     return html
@@ -462,7 +553,7 @@ def build_chart_overview_page(seed_data: dict, report_type: str) -> str:
 
 def build_full_html_with_front_matter(md_content: str, seed_data: dict, report_type: str, title: str) -> str:
     """
-    Build complete HTML with 4-page front matter + main content.
+    Build complete HTML with front matter + main content.
 
     Args:
         md_content: Raw markdown content from interpreter
@@ -476,17 +567,32 @@ def build_full_html_with_front_matter(md_content: str, seed_data: dict, report_t
     # Extract Big Three
     sun_sign, moon_sign, rising_sign = extract_big_three(seed_data)
 
-    # Parse headings for TOC
-    headings = parse_markdown_headings(md_content)
+    # Strip redundant header from markdown (first ~10 lines with title/birth data)
+    # Since cover page already shows this info from seed data
+    md_lines = md_content.split('\n')
+
+    # Find where main content starts (after initial header block)
+    content_start = 0
+    for i, line in enumerate(md_lines):
+        # Look for the first heading after initial metadata (usually "## Quick Reference")
+        if i > 5 and line.startswith('##'):
+            content_start = i
+            break
+
+    # If we found content start, strip header; otherwise use full content
+    if content_start > 0:
+        md_content_cleaned = '\n'.join(md_lines[content_start:])
+    else:
+        md_content_cleaned = md_content
 
     # Build front matter pages
     title_page = build_title_page(seed_data, report_type, sun_sign, moon_sign, rising_sign)
-    toc_page = build_table_of_contents(headings, report_type)
+    # TOC page removed per user request - not useful for these reports
     overview_page = build_chart_overview_page(seed_data, report_type)
 
     # Convert markdown to HTML
     main_content_html = markdown.markdown(
-        md_content,
+        md_content_cleaned,
         extensions=[
             'tables',
             'fenced_code',
@@ -497,7 +603,7 @@ def build_full_html_with_front_matter(md_content: str, seed_data: dict, report_t
         ]
     )
 
-    # Assemble full HTML
+    # Assemble full HTML (removed TOC page, added page break before main content)
     full_html = f'''
     <!DOCTYPE html>
     <html>
@@ -507,9 +613,11 @@ def build_full_html_with_front_matter(md_content: str, seed_data: dict, report_t
     </head>
     <body>
         {title_page}
-        {toc_page}
         {overview_page}
-        {main_content_html}
+        <div class="page-break"></div>
+        <div class="main-report-content">
+            {main_content_html}
+        </div>
     </body>
     </html>
     '''
@@ -620,7 +728,7 @@ def markdown_to_pdf(
     print(f"✅ PDF generated: {pdf_path}")
     print(f"   Report type: {report_type}")
     print(f"   CSS files loaded: base.css + {report_type}-specific")
-    print(f"   Front matter: Title page, TOC, Chart Overview, Introduction")
+    print(f"   Front matter: Title page, Chart Overview")
     print(f"   Size: {pdf_path.stat().st_size / 1024:.1f} KB")
 
     return str(pdf_path)
