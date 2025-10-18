@@ -280,12 +280,24 @@ The seed data now includes extensive planetary conditions beyond basic placement
 
 **TARGET**: 5,700-6,000 words synthesis
 **FIRST LINE**: `# Introduction`
-**LAST SECTION**: `## Reflection`
+**LAST SECTION**: `## Closing Reflection` ⚠️ **MANDATORY - FINAL SECTION**
 
 ```markdown
 # Introduction
 
-[300-400 words - one full page. Overall synthesis of who they are and how they experience themselves. Capture the essence of their character deeply. Structure: Start with strengths, aspirations, and gifts (first 60-70%). Build the picture with supporting themes (20-30%). If PRIMARY factors include central tensions or challenges, mention briefly in final 10-20% to prepare them for what's explored in the report (not to scare). End on integrative/hopeful note. First 2-3 sentences: "Your life centers on..."]
+⚠️ **CRITICAL: 300-400 words minimum - VALIDATE WORD COUNT BEFORE SUBMISSION**
+
+[**DIRECT SECOND PERSON VOICE** from first sentence: "Your life centers on..." NOT "This chart describes a person..."
+
+300-400 words - exactly one full page. Overall synthesis of who YOU ARE (second person address throughout) and how YOU experience yourself. Capture the essence of YOUR character deeply.
+
+Structure:
+- Start with strengths, aspirations, and gifts (first 60-70%)
+- Build the picture with supporting themes (20-30%)
+- If PRIMARY factors include central tensions or challenges, mention briefly in final 10-20% to prepare them for what's explored in the report (not to scare)
+- End on integrative/hopeful note
+
+Opening: "Your life centers on..." (direct second person from first sentence)]
 
 # Core Personality & Character
 
@@ -391,13 +403,15 @@ Apply the hierarchical testimony framework and 14-point integration formula to E
 - **Decision Rules**: See spec Section 10 (Synthesis & Integration)
 - **Critical**: Synthesis MUST synthesize PRIMARY factors from all sections into coherent narrative. Avoid listing secondary factors unless they radically modify primary pattern. Focus on HOW primary factors work together.
 
-### Reflection Section ⭐ **REQUIRED**
-- End synthesis with `## Reflection` heading
-- **Verbose poetic reflection**: 3-5 sentences, direct second person
-- Use visionary, commanding voice ("You are here to...", "You must...", "There is within you...")
-- Reiterate PRIMARY themes in accessible, lyrical language
-- NO astrological jargon
-- Speak about purpose, challenges, and path with poetic authority
+### Closing Reflection ⚠️ **REQUIRED - FINAL SECTION**
+- **CRITICAL**: End entire synthesis with `## Closing Reflection` heading
+- This is SEPARATE from the final integration section - comes AFTER everything else
+- **3-5 sentences**: Verbose poetic wrapup of the entire chart in one paragraph
+- **Voice**: Direct second person, visionary, commanding ("You are here to...", "You must...", "There is within you...")
+- **Content**: Reiterate PRIMARY themes in accessible, lyrical language
+- **NO astrological jargon** whatsoever - pure poetry
+- **Purpose**: Speak about their purpose, challenges, and path with poetic authority
+- **Format**: One flowing paragraph (not bullet points)
 
 ---
 
@@ -483,24 +497,46 @@ After completing Synthesis:
 - Include Planetary Strength Table showing dignity scores
 - Cite all sources
 
-### Step 10: Write Reflection Section ⭐ **REQUIRED**
-End synthesis with `## Reflection` heading followed by verbose poetic reflection (3-5 sentences). Use visionary voice ("You are here to...", "You must...", "There is within you..."). Reiterate PRIMARY themes in lyrical, accessible language. NO technical jargon. Should echo the PRIMARY pattern identified in introduction.
+### Step 10: Write Closing Reflection ⚠️ **REQUIRED - FINAL SECTION**
+**CRITICAL**: After completing all life area sections, end the ENTIRE synthesis with:
 
-### Step 11: Quality Check
+- `## Closing Reflection` heading (H2 level)
+- One flowing paragraph of 3-5 sentences
+- Verbose poetic wrapup of the entire chart
+- Direct second person, visionary voice ("You are here to...", "You must...", "There is within you...")
+- Reiterate PRIMARY themes in lyrical, accessible language
+- NO technical jargon whatsoever - pure accessible poetry
+- Should echo the PRIMARY pattern identified in Introduction
+
+**This is the LAST thing in the synthesis file** - nothing comes after Closing Reflection.
+
+### Step 11: Quality Check ⚠️ CRITICAL VALIDATIONS
+
+**Voice & Structure (NON-NEGOTIABLE)**:
+- ✅ **Introduction word count: 300-400 words minimum** (COUNT BEFORE SUBMISSION)
+- ✅ **Introduction voice**: Direct second person from first sentence ("Your life centers on..." NOT "This chart describes a person...")
+- ✅ **NO third person throughout synthesis**: Search for "This chart describes" / "they/their" (should be "you/your")
+- ✅ **Closing Reflection present**: `## Closing Reflection` as FINAL section with 3-5 sentence poetic wrapup
+
+**Content Quality**:
 - ✅ Verify Synthesis has sparse astrological references (planet names, signs, houses mentioned naturally)
 - ✅ Verify Synthesis avoids technical jargon (no "trine", "sextile", "cadent", "angular", etc.)
 - ✅ Confirm Synthesis flows as narrative prose
 - ✅ **Verify PRIMARY factors get 70-80% of word count in each section**
-- ✅ **Confirm PRIMARY life pattern identified in introduction**
+- ✅ **Confirm PRIMARY life pattern identified in Introduction**
 - ✅ **Check that each section follows 4-part structure (opening, development, supporting, integration)**
 - ✅ Verify house ruler insights naturally integrated with hierarchical weighting
-- ✅ **Confirm Reflection section with verbose poetic reflection (3-5 sentences) echoes PRIMARY pattern from introduction**
+- ✅ **Confirm Closing Reflection echoes PRIMARY pattern from Introduction**
+
+**Technical Validation**:
 - ✅ Confirm technical sections cite traditional methods
 - ✅ Check Hellenistic foundation is clear
 - ✅ Ensure sect-based interpretations correct
 - ✅ Validate dignity assessments follow hierarchy (domicile/exaltation PRIMARY, detriment/fall PRIMARY challenges)
 - ✅ Confirm accessible tone in Synthesis
 - ✅ Verify thematic coherence around PRIMARY pattern
+
+⚠️ **IF ANY CRITICAL VALIDATION FAILS, DO NOT SUBMIT. FIX FIRST.**
 
 ### Step 12: Save File
 After completing interpretation and quality check:

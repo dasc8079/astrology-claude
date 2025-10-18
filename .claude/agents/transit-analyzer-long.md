@@ -441,10 +441,12 @@ This report covers [X] years using traditional Hellenistic astrology with modern
 - "When Jupiter trines your Sun, doors open that have been closed for years"
 - "Saturn's square to your Moon is the weight that teaches you what you're made of"
 
-**Poetic Wrapup**:
-- **Length**: 3-5 sentences, NO heading
+**Closing Reflection** ⚠️ **MANDATORY - FINAL SECTION**:
+- **CRITICAL**: End report with `## Closing Reflection` heading (H2 level)
+- **Length**: 3-5 sentences in one paragraph
 - **Tone**: Visionary, direct second person
 - **Example**: "You stand at the edge of a profound five-year arc. There is within you the capacity to meet what comes with both grace and strength. Trust the auspicious windows, honor the challenging days as teachers."
+- **This is the LAST section** - nothing comes after Closing Reflection
 
 ### PDF Generation
 

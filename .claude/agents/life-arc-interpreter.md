@@ -521,18 +521,20 @@ Write narrative broken into sections by L1 periods (8-30 year chapters). Use H3 
 
 **Key Principle #2**: If in hard times, show WHEN relief comes and what it will feel like. Don't leave them without hope or timeline.
 
-### Poetic Wrapup (NO HEADING)
+### Closing Reflection ⚠️ **REQUIRED - FINAL SECTION**
 
-[After completing full narrative, add blank line and write poetic closing paragraph]
+**CRITICAL**: After completing the full narrative timeline, end the ENTIRE report with:
 
-**Requirements**:
-- 3-5 sentences
+- `## Closing Reflection` heading (H2 level)
+- One flowing paragraph of 3-5 sentences
+- Verbose poetic wrapup of the entire life arc
+- Second person direct address ("You are...", "At age X you entered...", "These years...")
 - HIGHLY poetic - use metaphor, imagery, lyrical language
-- Visionary and commanding voice
-- Reiterate key themes from reading
-- Zero astrological jargon
-- Accessible psychological language
-- Should feel like profound truth spoken with authority and beauty
+- NO astrological jargon (no planet names, no ZR, no technical terms)
+- Synthesize PRIMARY life pattern across entire timeline
+- Acknowledge both past journey and future horizon
+- Commanding, visionary voice ("You are here to...", "You must...", "There is within you...")
+- End on note of purpose, challenge, and path forward
 
 **Examples of poetic quality**:
 - Use nature metaphors: "You are the seed that split stone to grow"
@@ -541,7 +543,7 @@ Write narrative broken into sections by L1 periods (8-30 year chapters). Use H3 
 - Rhythm and cadence matter - read it aloud, it should have flow
 - Make them FEEL the depth of their journey
 
-[This wrapup comes AFTER narrative, ends the document]
+**This is the LAST thing in the synthesis file** - nothing comes after Closing Reflection.
 
 ## Interpretation Notes
 
@@ -729,7 +731,7 @@ Also provide in chat:
      - Title page: "Life Arc Report 0-100" + name + birth data + date
      - Narrative chapters organized by ZR L1 periods
      - Convergence-based subheadings
-     - Poetic wrapup at end
+     - Closing Reflection at end (with `## Closing Reflection` heading)
      - Interpretation notes (techniques used, sources cited)
 
 8. **Generate PDF**:
@@ -797,8 +799,8 @@ Your goal: Reveal the grand narrative arc of a person's life through decades-lon
    - Upcoming transitions
    - Next major chapter (if approaching)
 
-6. **Poetic Wrapup** (final paragraph - NO heading)
-   - 4-8 sentences, direct second person
+6. **Closing Reflection** (final section - WITH `## Closing Reflection` heading)
+   - 3-5 sentences, direct second person
    - Reiterate journey themes
    - NO astrological jargon
 
@@ -820,13 +822,14 @@ Your goal: Reveal the grand narrative arc of a person's life through decades-lon
 - ❌ "At age 39, Fortune shifts to Aquarius L1"
 - ✅ "At age 39, you'll step into an entirely new 27-year chapter. The weight of proving yourself through relentless discipline will lift, and you'll enter a phase where innovation, collaboration, and freedom become primary"
 
-**Poetic Wrapup Requirements**:
-- **Length**: 3-5 sentences
+**Closing Reflection Requirements** ⚠️ **MANDATORY**:
+- **Heading**: `## Closing Reflection` (H2 level) - REQUIRED
+- **Length**: 3-5 sentences in one paragraph
 - **Tone**: Visionary, commanding voice
 - **Voice**: Direct second person ("You stand at...", "The journey ahead...")
 - **Purpose**: Reiterate life arc themes
 - **Language**: Accessible psychological language - NO astrological jargon
-- **NO HEADING**: Flows naturally as final paragraph
+- **FINAL SECTION**: Nothing comes after Closing Reflection
 
 **Example Wrapup**:
 ```
